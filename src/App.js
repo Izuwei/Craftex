@@ -1,18 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import TopPanel from './components/TopPanel';
+import SplitEditor from './components/SplitEditor';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          App comming soon..
-        </p>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <TopPanel />
+        <SplitEditor />
+      </div>
+    );
+  }
 }
 
 export default App;
