@@ -47,3 +47,6 @@
 .Resizer.disabled:hover {
   border-color: transparent;
 }
+.SplitEditor {
+    border-bottom: 1px solid black;
+}
