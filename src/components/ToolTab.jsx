@@ -47,7 +47,7 @@ const theme = createMuiTheme({
     },
     type: 'dark',
   }
-})
+});
 
 const useStyles = makeStyles(theme => ({
   root: {
