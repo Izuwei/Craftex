@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import AceEditor from "react-ace";
 
-import "ace-builds/src-min-noconflict/theme-idle_fingers"
+import "ace-builds/src-noconflict/theme-idle_fingers";
  
 function onChange(newValue) {
   console.log("change", newValue);

@@ -8,7 +8,7 @@ class SplitEditor extends Component {
     state = {  }
     render() { 
         return ( 
-            <SplitPane className="SplitEditor" split="vertical" style={{height: "700px"}} minSize={200} defaultSize={"50%"} onChange={ size => localStorage.setItem('splitPos', size) }>
+            <SplitPane className="SplitEditor" split="vertical" style={{height: "700px", position: "static"}} minSize={200} defaultSize={"50%"} onChange={ size => localStorage.setItem('splitPos', size) }>
                 <div className="Editor1">
                     <EditorIn />
                 </div>
