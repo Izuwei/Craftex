@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import AceEditor from "react-ace";
 
-import 'ace-builds/src-noconflict/ext-searchbox';
+import "ace-builds/webpack-resolver";
+import "ace-builds/src-noconflict/ext-searchbox";
 import "ace-builds/src-noconflict/theme-idle_fingers";
- 
+
 
 class EditorIn extends Component {
   onChange(newValue) {
@@ -29,6 +30,7 @@ class EditorIn extends Component {
             onChange={this.onChange}
             onSelectionChange={this.onSelectionChange}
             ref="ace"
+            mode="plain_text"
             name="EditorIn"
             height="700px"
             width="100%"

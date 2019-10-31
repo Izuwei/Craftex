@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import AceEditor from "react-ace";
 
+import "ace-builds/webpack-resolver";
+import 'ace-builds/src-noconflict/ext-searchbox';
 import "ace-builds/src-noconflict/theme-idle_fingers";
  
 function onChange(newValue) {
@@ -18,6 +20,7 @@ class EditorOut extends Component {
             name="EditorOut"
             height="700px"
             width="100%"
+            mode="plain_text"
             readOnly={true}
             placeholder="Your output will be here"
             showPrintMargin={false}
