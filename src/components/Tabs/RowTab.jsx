@@ -44,16 +44,16 @@ const styles = theme => ({
 
 class RowTab extends Component {
   state = { 
-    text: '',
+    matchPattern: '',
     matchError: false,
   }
   
   handleMatch(){
-    if (this.state.text === '')
+    if (this.state.matchPattern === '')
       this.setState({ matchError: true});
     else {
       this.setState({ matchError: false});
-      console.log(this.state.text);
+      console.log(this.state.matchPattern);
     }
   }
 
@@ -75,8 +75,8 @@ class RowTab extends Component {
                     <TextField
                       id="match-pattern"
                       label="Pattern"
-                      value={this.state.text}
-                      onChange={event => this.setState({ text: event.target.value, matchError: false })}
+                      value={this.state.matchPattern}
+                      onChange={event => this.setState({ matchPattern: event.target.value, matchError: false })}
                       error={this.state.matchError === true}
                       helperText={this.state.matchError === true ? 'Pattern cannot be empty!' : ' '}
                       className={classes.textField}

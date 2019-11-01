@@ -11,25 +11,35 @@ function onChange(newValue) {
 
 //<button onClick={()=> {this.refs.AceOut.editor.find("a")}}>Undo</button>
 class EditorOut extends Component {
-    state = {  }
-    render() { 
-        return ( <div>
-        <AceEditor
-            theme="idle_fingers"
-            fontSize="20px"
-            ref="AceOut"
-            onChange={onChange}
-            name="EditorOut"
-            height="700px"
-            width="100%"
-            mode="plain_text"
-            readOnly={true}
-            placeholder="Your output will be here"
-            showPrintMargin={false}
-            hScrollBarAlwaysVisible={true}
-            editorProps={{ $blockScrolling: true }}
-          /> </div>);
-    }
+  state = {  }
+  
+  constructor(props) {
+    super(props);
+    this.resize = this.resize.bind(this);
+  }
+
+  resize() {
+    this.refs.aceOut.editor.resize();
+  }
+
+  render() { 
+    return (
+      <AceEditor
+        theme="idle_fingers"
+        fontSize="20px"
+        ref="aceOut"
+        onChange={onChange}
+        name="EditorOut"
+        height="100%"
+        width="100%"
+        mode="plain_text"
+        readOnly={true}
+        placeholder="Your output will be here"
+        showPrintMargin={false}
+        hScrollBarAlwaysVisible={true}
+        editorProps={{ $blockScrolling: true }}
+      />);
+  }
 }
  
 export default EditorOut;

@@ -6,15 +6,22 @@ import './SplitEditor.css';
 
 class SplitEditor extends Component {
     state = {  }
+
+    constructor(props) {
+        super(props);
+        this.handleResize = this.handleResize.bind(this);
+    }
+
+    handleResize(){
+        this.aceIn.resize();
+        this.aceOut.resize();
+    }
+
     render() { 
         return ( 
-            <SplitPane className="SplitEditor" split="vertical" style={{height: "700px", position: "static"}} minSize={200} defaultSize={"50%"} onChange={ size => localStorage.setItem('splitPos', size) }>
-                <div className="Editor1">
-                    <EditorIn />
-                </div>
-                <div className="Editor2">
-                    <EditorOut />
-                </div>
+            <SplitPane className="SplitEditor" split="vertical" style={{height: "700px", position: "static"}} minSize={200} maxSize={-200} defaultSize={"50%"} onChange={ () => this.handleResize() }>
+                <EditorIn ref={ instance => { this.aceIn = instance; }}/>
+                <EditorOut ref={ instance => { this.aceOut = instance; }}/>
             </SplitPane>
          );
     }
