@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import { Tabs, Tab } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { lightBlue } from '@material-ui/core/colors';
+import { Reorder, ViewColumn, FindReplace, YoutubeSearchedFor, Transform } from '@material-ui/icons';
+import RowTab from './Tabs/RowTab';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,10 +50,24 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     marginTop: '20px',
-    width: '100%',
+    marginBottom: '20px',
+    width: '95%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     backgroundColor: theme.palette.background.paper,
     color: 'white',
   },
+  /*toolTitle: {
+    marginLeft: '10px',
+    color: 'orange',
+    position: 'relative',
+    bottom: '15px',
+    paddingLeft: '5px',
+    paddingRight: '5px',
+    paddingBottom: '2px',
+    backgroundColor: theme.palette.background.paper,
+  },*/
+
 }));
 
 export default function ScrollableTabsButtonAuto() {
@@ -80,11 +91,11 @@ export default function ScrollableTabsButtonAuto() {
             aria-label="tabs"
             centered
           >
-            <Tab label="Reverse" {...a11yProps(0)} />
-            <Tab label="Replace" {...a11yProps(1)} />
-            <Tab label="Rows" {...a11yProps(2)} />
-            <Tab label="Columns" {...a11yProps(3)} />
-            <Tab label="Convert" {...a11yProps(4)} />
+            <Tab icon={<YoutubeSearchedFor />} label="Reverse" {...a11yProps(0)} />
+            <Tab icon={<FindReplace />} label="Replace" {...a11yProps(1)} />
+            <Tab icon={<Reorder />} label="Rows" {...a11yProps(2)} />
+            <Tab icon={<ViewColumn />} label="Columns" {...a11yProps(3)} />
+            <Tab icon={<Transform />} label="Convert" {...a11yProps(4)} />
           </Tabs>
         </AppBar>
         <TabPanel theme={theme} value={value} index={0}>
@@ -94,7 +105,7 @@ export default function ScrollableTabsButtonAuto() {
           TBD
         </TabPanel>
         <TabPanel value={value} index={2}>
-          TBD
+          <RowTab />
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD

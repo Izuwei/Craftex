@@ -1,0 +1,104 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Paper, Grid, Button, withStyles, Typography, TextField, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { green, lightBlue } from '@material-ui/core/colors';
+import { Add } from '@material-ui/icons';
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: lightBlue[800],
+            light: lightBlue[600],
+            dark: lightBlue[900],
+          },
+        secondary: {
+            main: green[800],
+            light: green[200],
+            dark: green[900],
+        },
+        type: 'dark',
+    },
+  });
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing(1),
+    },
+    paper: {
+        padding: "10px",
+        backgroundColor: '#333333',
+        borderRadius: '0px',
+    },
+    textField: {
+        flex: 1,
+    },
+    flexContent: {
+        display: "flex",
+        alignItems: "center",
+    },
+    toolName: {
+        color: '#d9d9d9',
+        fontWeight: 'bold',
+    },
+  })
+
+class RowTab extends Component {
+  state = { 
+    text: '',
+    matchError: false,
+  }
+  
+  handleMatch(){
+    if (this.state.text === '')
+      this.setState({ matchError: true});
+    else {
+      this.setState({ matchError: false});
+      console.log(this.state.text);
+    }
+  }
+
+  constructor(props) {
+    super(props);
+    this.handleMatch = this.handleMatch.bind(this);
+  }
+
+  render() { 
+    const { classes } = this.props;
+
+    return ( 
+      <MuiThemeProvider theme={theme}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5" className={classes.toolName}>Match</Typography>
+                    <div className={classes.flexContent}>
+                    <TextField
+                      id="match-pattern"
+                      label="Pattern"
+                      value={this.state.text}
+                      onChange={event => this.setState({ text: event.target.value, matchError: false })}
+                      error={this.state.matchError === true}
+                      helperText={this.state.matchError === true ? 'Pattern cannot be empty!' : ' '}
+                      className={classes.textField}
+                    />
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      className={classes.button}
+                      onClick={() => this.handleMatch()}
+                      startIcon={<Add />}
+                    >Add</Button>
+                    </div>
+                  </Paper>
+                </Grid>
+            </Grid>
+        </MuiThemeProvider>
+     );
+  }
+}
+
+RowTab.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
+
+export default withStyles(styles)(RowTab);

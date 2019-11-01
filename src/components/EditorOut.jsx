@@ -9,13 +9,15 @@ function onChange(newValue) {
   console.log("change", newValue);
 }
 
+//<button onClick={()=> {this.refs.AceOut.editor.find("a")}}>Undo</button>
 class EditorOut extends Component {
     state = {  }
     render() { 
-        return ( 
+        return ( <div>
         <AceEditor
             theme="idle_fingers"
             fontSize="20px"
+            ref="AceOut"
             onChange={onChange}
             name="EditorOut"
             height="700px"
@@ -26,7 +28,7 @@ class EditorOut extends Component {
             showPrintMargin={false}
             hScrollBarAlwaysVisible={true}
             editorProps={{ $blockScrolling: true }}
-          /> );
+          /> </div>);
     }
 }
  
