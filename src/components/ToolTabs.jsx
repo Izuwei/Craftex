@@ -70,7 +70,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function ScrollableTabsButtonAuto() {
+export default function ToolTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -105,7 +105,7 @@ export default function ScrollableTabsButtonAuto() {
           TBD
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <RowTab />
+          <RowTab showSB={props.showSB}/>
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD

@@ -54,6 +54,7 @@ class RowTab extends Component {
     else {
       this.setState({ matchError: false});
       console.log(this.state.matchPattern);
+      this.props.showSB("Match successfully added into pipeline", "success");
     }
   }
 
