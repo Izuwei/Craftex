@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
 import TopPanel from './components/TopPanel';
@@ -88,9 +88,9 @@ CustomSnackbarContent.propTypes = {
 };
 
 function App() {
-  const [showSnackbar, setShowSnackbar] = React.useState(false);
-  const [snackbarInfo, setSnackbarInfo] = React.useState(undefined);
-  const snackbarQueue = React.useRef([]);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarInfo, setSnackbarInfo] = useState(undefined);
+  const snackbarQueue = useRef([]);
 
   const processSnackbarQueue = () => {
     if (snackbarQueue.current.length > 0) {
@@ -99,8 +99,8 @@ function App() {
     }
   };
 
-  const openSnackbar = (message, variant) => {
-    snackbarQueue.current.push({ message, variant, key: new Date().getTime() });
+  const openSnackbar = (variant, message) => {
+    snackbarQueue.current.push({ variant, message, key: new Date().getTime() });
 
     if (showSnackbar) {
       setShowSnackbar(false);
@@ -121,31 +121,31 @@ function App() {
     processSnackbarQueue();
   };
 
-    return (
-      <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <TopPanel />
-        <SplitEditor />
-        <ToolTabs showSB={openSnackbar} />
-        
-        <Snackbar
-          key={snackbarInfo ? snackbarInfo.key : undefined}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          open={showSnackbar}
-          autoHideDuration={2000}
+  return (
+    <MuiThemeProvider theme={theme}>
+    <div className="App">
+      <TopPanel />
+      <SplitEditor />
+      <ToolTabs displaySnackbar={openSnackbar} />
+      
+      <Snackbar
+        key={snackbarInfo ? snackbarInfo.key : undefined}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={showSnackbar}
+        autoHideDuration={2000}
+        onClose={closeSnackbar}
+        onExited={handleExited}
+        ContentProps={{ 'aria-describedby': 'message-id' }} 
+      >
+        <CustomSnackbarContent
+          message={snackbarInfo ? snackbarInfo.message : undefined}
+          variant={snackbarInfo ? snackbarInfo.variant : undefined}
           onClose={closeSnackbar}
-          onExited={handleExited}
-          ContentProps={{ 'aria-describedby': 'message-id' }} 
-        >
-          <CustomSnackbarContent
-            message={snackbarInfo ? snackbarInfo.message : undefined}
-            variant={snackbarInfo ? snackbarInfo.variant : undefined}
-            onClose={closeSnackbar}
-          />
-        </Snackbar>
-      </div>
-      </MuiThemeProvider>
-    );
-  }
+        />
+      </Snackbar>
+    </div>
+    </MuiThemeProvider>
+  );
+}
 
 export default App;

@@ -105,7 +105,7 @@ export default function ToolTabs(props) {
           TBD
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <RowTab showSB={props.showSB}/>
+          <RowTab displaySnackbar={props.displaySnackbar}/>
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD

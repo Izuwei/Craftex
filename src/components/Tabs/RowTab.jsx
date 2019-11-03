@@ -44,17 +44,19 @@ const styles = theme => ({
 
 class RowTab extends Component {
   state = { 
-    matchPattern: '',
+    matchPattern: "",
     matchError: false,
   }
   
   handleMatch(){
-    if (this.state.matchPattern === '')
+    if (this.state.matchPattern === ""){
       this.setState({ matchError: true});
+      this.props.displaySnackbar("error", "Error: Match pattern is empty!");
+    }
     else {
       this.setState({ matchError: false});
-      console.log(this.state.matchPattern);
-      this.props.showSB("Match successfully added into pipeline", "success");
+      this.props.displaySnackbar("success", "Success: Match added into the pipeline.");
+      this.setState({matchPattern: ""});
     }
   }
 

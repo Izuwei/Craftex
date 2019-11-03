@@ -10,7 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Description, GitHub } from '@material-ui/icons';
+import { Description, GitHub, Videocam, CardMembership } from '@material-ui/icons';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
@@ -111,9 +111,25 @@ export default function DenseAppBar() {
                     <a className={classes.link} href="https://github.com/Izuwei/production">
                         <StyledMenuItem>
                           <ListItemIcon>
+                            <Videocam fontSize="small" className={classes.itemIcon}/>
+                          </ListItemIcon>
+                          <ListItemText primary="Video" />
+                        </StyledMenuItem>
+                    </a>
+                    <a className={classes.link} href="https://github.com/Izuwei/production">
+                        <StyledMenuItem>
+                          <ListItemIcon>
                             <GitHub fontSize="small" className={classes.itemIcon}/>
                           </ListItemIcon>
                           <ListItemText primary="GitHub" />
+                        </StyledMenuItem>
+                    </a>
+                    <a className={classes.link} href="https://github.com/Izuwei/production">
+                        <StyledMenuItem>
+                          <ListItemIcon>
+                            <CardMembership fontSize="small" className={classes.itemIcon}/>
+                          </ListItemIcon>
+                          <ListItemText primary="Credits" />
                         </StyledMenuItem>
                     </a>
                 </StyledMenu>
