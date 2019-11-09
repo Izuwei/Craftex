@@ -8,6 +8,20 @@ import { MuiThemeProvider, createMuiTheme, makeStyles, Snackbar, SnackbarContent
 import { grey, green, amber, blue } from '@material-ui/core/colors';
 import { CheckCircle, Close, Warning, Error, Info } from '@material-ui/icons';
 import clsx from 'clsx';
+import ToolList from './components/ToolList';
+
+const pipeline = [];
+
+function addTool(tool) {
+  tool.id = pipeline.length + 1;
+  pipeline.push(tool);
+};
+
+/*addTool.propTypes = {
+  tool: PropTypes.shape({
+    tool: PropTypes.string.isRequired,
+  })
+}*/
 
 const theme = createMuiTheme({
   palette: {
@@ -16,7 +30,7 @@ const theme = createMuiTheme({
     },
     type: 'dark',
   }
-})
+});
 
 const variantIcon = {
   success: CheckCircle,
@@ -126,8 +140,8 @@ function App() {
     <div className="App">
       <TopPanel />
       <SplitEditor />
-      <ToolTabs displaySnackbar={openSnackbar} />
-      
+      <ToolList tools={pipeline}/>
+      <ToolTabs displaySnackbar={openSnackbar} addTool={addTool}/>
       <Snackbar
         key={snackbarInfo ? snackbarInfo.key : undefined}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

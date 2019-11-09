@@ -38,8 +38,8 @@ function a11yProps(index) {
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: lightBlue[800],
-      light: lightBlue[200],
+      main: lightBlue[600],
+      light: lightBlue[300],
       dark: lightBlue[900],
     },
     type: 'dark',
@@ -105,7 +105,7 @@ export default function ToolTabs(props) {
           TBD
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <RowTab displaySnackbar={props.displaySnackbar}/>
+          <RowTab displaySnackbar={props.displaySnackbar} addTool={props.addTool}/>
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD

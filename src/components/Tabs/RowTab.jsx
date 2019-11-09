@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Paper, Grid, Button, withStyles, Typography, TextField, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { green, lightBlue } from '@material-ui/core/colors';
 import { Add } from '@material-ui/icons';
@@ -55,6 +54,7 @@ class RowTab extends Component {
     }
     else {
       this.setState({ matchError: false});
+      this.props.addTool({tool: "Match", pattern: this.state.matchPattern});
       this.props.displaySnackbar("success", "Success: Match added into the pipeline.");
       this.setState({matchPattern: ""});
     }
@@ -99,9 +99,9 @@ class RowTab extends Component {
      );
   }
 }
-
+/*
 RowTab.propTypes = {
   classes: PropTypes.object.isRequired,
-}
+}*/
 
 export default withStyles(styles)(RowTab);
