@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
 import TopPanel from './components/TopPanel';
@@ -10,12 +10,17 @@ import { CheckCircle, Close, Warning, Error, Info } from '@material-ui/icons';
 import clsx from 'clsx';
 import ToolList from './components/ToolList';
 
-const pipeline = [];
+/*const pipeline = [];
 
 function addTool(tool) {
   tool.id = pipeline.length + 1;
   pipeline.push(tool);
 };
+
+function removeTool(tool){
+  pipeline.splice(pipeline.indexOf(tool), 1);
+  console.log(pipeline);
+}
 
 /*addTool.propTypes = {
   tool: PropTypes.shape({
@@ -105,6 +110,27 @@ function App() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarInfo, setSnackbarInfo] = useState(undefined);
   const snackbarQueue = useRef([]);
+  const [pipeline, setPipeline] = useState([]);
+
+  const addTool = (tool) => {
+    tool.id = pipeline.length + 1;
+    setPipeline([...pipeline, tool]);
+    //pipeline.push(tool);
+  };
+
+  const removeTool = (tool) => {
+    setPipeline(pipeline.filter(each => each.id !== tool.id));
+    //pipeline.splice(pipeline.indexOf(tool), 1);
+  }
+
+  // Do dokumentace napsat proc neni async/await ale useEffect
+  useEffect(() => {
+    for (var i = 0; i < pipeline.length; i++){
+      if (pipeline[i].id !== (i + 1))
+        pipeline[i].id = (i + 1);
+    }
+    console.log(pipeline);
+  });
 
   const processSnackbarQueue = () => {
     if (snackbarQueue.current.length > 0) {
@@ -140,7 +166,7 @@ function App() {
     <div className="App">
       <TopPanel />
       <SplitEditor />
-      <ToolList tools={pipeline}/>
+      <ToolList tools={pipeline} removeTool={removeTool}/>
       <ToolTabs displaySnackbar={openSnackbar} addTool={addTool}/>
       <Snackbar
         key={snackbarInfo ? snackbarInfo.key : undefined}

@@ -4,6 +4,7 @@ import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, creat
 import { lightBlue } from '@material-ui/core/colors';
 import { Reorder, ViewColumn, FindReplace, YoutubeSearchedFor, Transform } from '@material-ui/icons';
 import RowTab from './Tabs/RowTab';
+import ReplaceTab from './Tabs/ReplaceTab';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -102,7 +103,7 @@ export default function ToolTabs(props) {
           TBD
         </TabPanel>
         <TabPanel value={value} index={1}>
-          TBD
+          <ReplaceTab displaySnackbar={props.displaySnackbar} addTool={props.addTool}/>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <RowTab displaySnackbar={props.displaySnackbar} addTool={props.addTool}/>

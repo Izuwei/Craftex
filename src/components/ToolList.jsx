@@ -1,7 +1,7 @@
 import React from "react";
-import { List, ListItem, makeStyles } from "@material-ui/core";
+import { List, ListItem, makeStyles, IconButton } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { Build } from "@material-ui/icons"
+import { Build, Delete } from "@material-ui/icons"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,11 +40,46 @@ const useStyles = makeStyles(theme => ({
         color: "#ff6a1a",
         fontWeight: "bold",
         marginRight: "10px",
-    }
+    },
+    conword: {
+        color: "#b500d1",
+        fontWeight: "bold",
+        marginRight: "10px",
+        marginLeft: "10px",
+    },
 }));
 
 function ToolList(props) {
     const classes = useStyles();
+
+    const mapTool = (tool) => {
+        switch (tool.tool) {
+            case "Match":
+                return (
+                    <ListItem button key={tool.id}>
+                        <IconButton size="small" onClick={() => props.removeTool(tool)}>
+                            <Delete />
+                        </IconButton>
+                            <span className={classes.toolName}>{tool.tool}</span> 
+                            {tool.pattern}
+                    </ListItem>
+                );
+            case "Replace":
+                return (
+                    <ListItem button key={tool.id}>
+                        <IconButton size="small" onClick={() => props.removeTool(tool)}>
+                            <Delete />
+                        </IconButton>
+                            <span className={classes.toolName}>{tool.tool}</span> 
+                            {tool.find}
+                            <span className={classes.conword}>with</span> 
+                            {tool.replace}
+                    </ListItem>
+                );
+            default:
+                return;
+        }
+    }
 
     return (
         <div className={classes.root}>
@@ -54,10 +89,8 @@ function ToolList(props) {
             </div>
             <div className={classes.content}>
             <List component="ul" className={classes.list}>
-                {props.tools.map((tools) =>
-                <ListItem button key={tools.id}>
-                    <span className={classes.toolName}>{tools.tool}</span> {tools.pattern}
-                </ListItem>
+                {props.tools.map((tool) =>
+                    mapTool(tool)
                 )}
             </List>
             </div>
