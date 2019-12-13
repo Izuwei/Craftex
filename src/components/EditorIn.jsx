@@ -21,7 +21,7 @@ class EditorIn extends Component {
   }
 
   onChange(newValue) {
-    console.log("change", newValue);
+    this.props.edit(newValue);
   }
   
   onSelectionChange(newValue, event) {
@@ -38,6 +38,7 @@ class EditorIn extends Component {
         onChange={this.onChange}
         onSelectionChange={this.onSelectionChange}
         ref="aceIn"
+        value={this.props.content}
         mode="plain_text"
         name="EditorIn"
         height="100%"

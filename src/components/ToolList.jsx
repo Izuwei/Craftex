@@ -47,6 +47,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: "10px",
         marginLeft: "10px",
     },
+    deleteIcon: {
+        marginRight: "15px",
+        color: "#e0e0e0",
+    },
 }));
 
 function ToolList(props) {
@@ -56,8 +60,8 @@ function ToolList(props) {
         switch (tool.tool) {
             case "Match":
                 return (
-                    <ListItem button key={tool.id}>
-                        <IconButton size="small" onClick={() => props.removeTool(tool)}>
+                    <ListItem key={tool.id}>
+                        <IconButton className={classes.deleteIcon} size="small" onClick={() => props.removeTool(tool)}>
                             <Delete />
                         </IconButton>
                             <span className={classes.toolName}>{tool.tool}</span> 
@@ -66,8 +70,8 @@ function ToolList(props) {
                 );
             case "Replace":
                 return (
-                    <ListItem button key={tool.id}>
-                        <IconButton size="small" onClick={() => props.removeTool(tool)}>
+                    <ListItem key={tool.id}>
+                        <IconButton className={classes.deleteIcon} size="small" onClick={() => props.removeTool(tool)}>
                             <Delete />
                         </IconButton>
                             <span className={classes.toolName}>{tool.tool}</span> 

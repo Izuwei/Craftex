@@ -20,8 +20,8 @@ class SplitEditor extends Component {
     render() { 
         return ( 
             <SplitPane className="SplitEditor" split="vertical" style={{height: "700px", position: "static"}} minSize={200} maxSize={-200} defaultSize={"50%"} onChange={ () => this.handleResize() }>
-                <EditorIn ref={ instance => { this.aceIn = instance; }}/>
-                <EditorOut ref={ instance => { this.aceOut = instance; }}/>
+                <EditorIn ref={ instance => { this.aceIn = instance; }} content={this.props.editorContent} edit={this.props.editText}/>
+                <EditorOut ref={ instance => { this.aceOut = instance; }} content={this.props.editorResult}/>
             </SplitPane>
          );
     }

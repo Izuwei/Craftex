@@ -4,10 +4,6 @@ import AceEditor from "react-ace";
 import "ace-builds/webpack-resolver";
 import 'ace-builds/src-noconflict/ext-searchbox';
 import "ace-builds/src-noconflict/theme-idle_fingers";
- 
-function onChange(newValue) {
-  console.log("change", newValue);
-}
 
 //<button onClick={()=> {this.refs.AceOut.editor.find("a")}}>Undo</button>
 class EditorOut extends Component {
@@ -28,7 +24,7 @@ class EditorOut extends Component {
         theme="idle_fingers"
         fontSize="20px"
         ref="aceOut"
-        onChange={onChange}
+        value={this.props.content}
         name="EditorOut"
         height="100%"
         width="100%"

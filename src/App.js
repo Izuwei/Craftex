@@ -112,22 +112,58 @@ function App() {
   const snackbarQueue = useRef([]);
   const [pipeline, setPipeline] = useState([]);
 
+  const [editorContent, setEditorContent] = useState("");
+  const [editorResult, setEditorResult] = useState("");
+
+  const modify = useRef(false);
+
   const addTool = (tool) => {
     tool.id = pipeline.length + 1;
     setPipeline([...pipeline, tool]);
+    modify.current = true;
     //pipeline.push(tool);
   };
 
   const removeTool = (tool) => {
     setPipeline(pipeline.filter(each => each.id !== tool.id));
+    modify.current = true;
     //pipeline.splice(pipeline.indexOf(tool), 1);
-  }
+  };
+
+  const editText = (newValue) => {
+    setEditorContent(newValue);
+    modify.current = true;
+  };
+
+  const runPipeline = () => {
+    var tempResult = editorContent;
+
+    for (var i = 0; i < pipeline.length; i++) {
+      switch (pipeline[i].tool) {
+        case "Replace":
+          tempResult = tempResult.replace(new RegExp(pipeline[i].find, 'g'), pipeline[i].replace);
+          break;
+        case "Match":
+          tempResult = tempResult.match(new RegExp(".*" + pipeline[i].pattern + ".*", 'g'));
+          tempResult === null ? tempResult = "" : tempResult = tempResult.join('\n');
+          break;
+        default:
+          break;
+      }
+    }
+    setEditorResult(tempResult);
+  };
 
   // Do dokumentace napsat proc neni async/await ale useEffect
   useEffect(() => {
     for (var i = 0; i < pipeline.length; i++){
       if (pipeline[i].id !== (i + 1))
         pipeline[i].id = (i + 1);
+    }
+
+    if (modify.current === true) {
+      runPipeline();
+      modify.current = false;
     }
     console.log(pipeline);
   });
@@ -165,7 +201,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
     <div className="App">
       <TopPanel />
-      <SplitEditor />
+      <SplitEditor editorContent={editorContent} editText={editText} editorResult={editorResult} />
       <ToolList tools={pipeline} removeTool={removeTool}/>
       <ToolTabs displaySnackbar={openSnackbar} addTool={addTool}/>
       <Snackbar
