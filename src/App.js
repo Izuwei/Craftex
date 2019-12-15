@@ -106,6 +106,10 @@ CustomSnackbarContent.propTypes = {
   variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']),
 };
 
+function regexEscape(regex) {
+  return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 function App() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarInfo, setSnackbarInfo] = useState(undefined);
@@ -141,10 +145,10 @@ function App() {
     for (var i = 0; i < pipeline.length; i++) {
       switch (pipeline[i].tool) {
         case "Replace":
-          tempResult = tempResult.replace(new RegExp(pipeline[i].find, 'g'), pipeline[i].replace);
+          tempResult = tempResult.replace(new RegExp(regexEscape(pipeline[i].find), 'g'), pipeline[i].replace);
           break;
         case "Match":
-          tempResult = tempResult.match(new RegExp(".*" + pipeline[i].pattern + ".*", 'g'));
+          tempResult = tempResult.match(new RegExp(".*" + regexEscape(pipeline[i].pattern) + ".*", 'g'));
           tempResult === null ? tempResult = "" : tempResult = tempResult.join('\n');
           break;
         default:
