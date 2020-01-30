@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/production/static/css/main.833757e6.chunk.css",
-    "main.js": "/production/static/js/main.dcdc3441.chunk.js",
-    "main.js.map": "/production/static/js/main.dcdc3441.chunk.js.map",
+    "main.js": "/production/static/js/main.b980ae0b.chunk.js",
+    "main.js.map": "/production/static/js/main.b980ae0b.chunk.js.map",
     "runtime-main.js": "/production/static/js/runtime-main.98282ae4.js",
     "runtime-main.js.map": "/production/static/js/runtime-main.98282ae4.js.map",
     "static/js/2.166bcddd.chunk.js": "/production/static/js/2.166bcddd.chunk.js",
@@ -409,7 +409,7 @@
     "theme-gruvbox.js": "/production/feff703ce532f20391dfed8199b6971e.js",
     "jsx.js": "/production/ff7acf7df3cdb56d704a5bd29f08fd55.js",
     "index.html": "/production/index.html",
-    "precache-manifest.cd3a754113ea95965e8d4365b815898c.js": "/production/precache-manifest.cd3a754113ea95965e8d4365b815898c.js",
+    "precache-manifest.f6fe79a620c3258d7ac1f868e3f4bd3b.js": "/production/precache-manifest.f6fe79a620c3258d7ac1f868e3f4bd3b.js",
     "service-worker.js": "/production/service-worker.js",
     "static/css/main.833757e6.chunk.css.map": "/production/static/css/main.833757e6.chunk.css.map"
   },
@@ -417,6 +417,6 @@
     "static/js/runtime-main.98282ae4.js",
     "static/js/2.166bcddd.chunk.js",
     "static/css/main.833757e6.chunk.css",
-    "static/js/main.dcdc3441.chunk.js"
+    "static/js/main.b980ae0b.chunk.js"
   ]
 }
