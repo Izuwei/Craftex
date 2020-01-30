@@ -106,6 +106,7 @@ CustomSnackbarContent.propTypes = {
   variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']),
 };
 
+// https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
 function regexEscape(regex) {
   return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }

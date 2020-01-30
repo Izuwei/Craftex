@@ -1,7 +1,7 @@
 import React from "react";
 import { List, ListItem, makeStyles, IconButton } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { Build, Delete } from "@material-ui/icons"
+import { Build, Delete } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
     root: {
