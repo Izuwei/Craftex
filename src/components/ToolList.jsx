@@ -1,7 +1,8 @@
 import React from "react";
 import { List, ListItem, makeStyles, IconButton } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { Build, Delete } from "@material-ui/icons";
+import { Build, Delete, Visibility, VisibilityOff } from "@material-ui/icons";
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,15 +32,24 @@ const useStyles = makeStyles(theme => ({
         marginLeft: "10px",
         marginRight: "10px",
     },
+    listItem: {
+        paddingTop: "0px",
+        paddingBottom: "0px",
+    },
     content: {
         height: "182px",
         overflow: "auto",
-
     },
     toolName: {
         color: "#ff6a1a",
         fontWeight: "bold",
         marginRight: "10px",
+    },
+    toolText: {
+        paddingTop: "13px",
+        paddingBottom: "13px",
+        height: "100%",
+        width: "100%",
     },
     conword: {
         color: "#b500d1",
@@ -47,7 +57,7 @@ const useStyles = makeStyles(theme => ({
         marginRight: "10px",
         marginLeft: "10px",
     },
-    deleteIcon: {
+    listIcon: {
         marginRight: "15px",
         color: "#e0e0e0",
     },
@@ -60,30 +70,50 @@ function ToolList(props) {
         switch (tool.tool) {
             case "Match":
                 return (
-                    <ListItem key={tool.id}>
-                        <IconButton className={classes.deleteIcon} size="small" onClick={() => props.removeTool(tool)}>
-                            <Delete />
-                        </IconButton>
+                    <React.Fragment>
                             <span className={classes.toolName}>{tool.tool}</span> 
                             {tool.pattern}
-                    </ListItem>
+                    </React.Fragment>
                 );
             case "Replace":
                 return (
-                    <ListItem key={tool.id}>
-                        <IconButton className={classes.deleteIcon} size="small" onClick={() => props.removeTool(tool)}>
-                            <Delete />
-                        </IconButton>
+                    <React.Fragment>
                             <span className={classes.toolName}>{tool.tool}</span> 
                             {tool.find}
                             <span className={classes.conword}>with</span> 
                             {tool.replace}
-                    </ListItem>
+                    </React.Fragment>
                 );
             default:
                 return;
         }
     }
+
+    const DragHandle = SortableHandle(({tool}) => (
+        <div className={classes.toolText}>
+          {mapTool(tool)}
+        </div>
+      ));
+
+    const SortableItem = SortableElement(({ tool }) => (
+        <ListItem key={tool.id} ContainerComponent="li" divider={true} className={classes.listItem}>
+            <IconButton className={classes.listIcon} size="small" onClick={() => props.removeTool(tool)}>
+                <Delete />
+            </IconButton>
+            <IconButton className={classes.listIcon} size="small" onClick={() => props.reactiveTool(tool)}>
+                {tool.active ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+              <DragHandle tool={tool}/>
+        </ListItem>
+    ));
+
+    const SortableListContainer = SortableContainer(({ tools }) => (
+        <List component="ul" className={classes.list}>
+                {tools.map((tool, index) => (
+                    <SortableItem key={tool.id} index={index} tool={tool} />
+                ))}
+        </List>
+    ));
 
     return (
         <div className={classes.root}>
@@ -92,11 +122,13 @@ function ToolList(props) {
                 <div className={classes.titleLabel}>Pipeline</div>
             </div>
             <div className={classes.content}>
-            <List component="ul" className={classes.list}>
-                {props.tools.map((tool) =>
-                    mapTool(tool)
-                )}
-            </List>
+            <SortableListContainer
+                tools={props.tools}
+                lockAxis='y'
+                useDragHandle={true}
+                updateBeforeSortStart={props.beforeSort}
+                onSortEnd={props.sort}
+            />
             </div>
         </div>
     );

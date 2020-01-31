@@ -9,6 +9,7 @@ import { grey, green, amber, blue } from '@material-ui/core/colors';
 import { CheckCircle, Close, Warning, Error, Info } from '@material-ui/icons';
 import clsx from 'clsx';
 import ToolList from './components/ToolList';
+import arrayMove from 'array-move';
 
 /*const pipeline = [];
 
@@ -121,9 +122,11 @@ function App() {
   const [editorResult, setEditorResult] = useState("");
 
   const modify = useRef(false);
+  const sortable = useRef(true);  // TODO: dodelat
 
   const addTool = (tool) => {
     tool.id = pipeline.length + 1;
+    tool.active = true;
     setPipeline([...pipeline, tool]);
     modify.current = true;
     //pipeline.push(tool);
@@ -135,6 +138,34 @@ function App() {
     //pipeline.splice(pipeline.indexOf(tool), 1);
   };
 
+  const reactiveTool = (tool) => {
+    const tmp = [...pipeline];
+    for (var i in tmp) {
+      if (tmp[i].id === tool.id) {
+        tmp[i].active = !(tmp[i].active);
+        break;
+      }
+    }
+    setPipeline(tmp);
+    modify.current = true;
+  };
+
+  const beforeSortPipeline = () => {
+    return new Promise((resolve, reject) => {
+      setShowSnackbar(false);
+      snackbarQueue.current = [];
+      if (showSnackbar === false)
+        resolve();
+    });
+  };
+
+  const onSortPipeline = ({ oldIndex, newIndex }) => {
+    console.log(pipeline);
+    setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
+    if (oldIndex !== newIndex)
+      modify.current = true;
+  };
+
   const editText = (newValue) => {
     setEditorContent(newValue);
     modify.current = true;
@@ -144,6 +175,9 @@ function App() {
     var tempResult = editorContent;
 
     for (var i = 0; i < pipeline.length; i++) {
+      if (pipeline[i].active === false)
+        continue;
+
       switch (pipeline[i].tool) {
         case "Replace":
           tempResult = tempResult.replace(new RegExp(regexEscape(pipeline[i].find), 'g'), pipeline[i].replace);
@@ -170,6 +204,11 @@ function App() {
       runPipeline();
       modify.current = false;
     }
+
+    if (snackbarQueue.current.length === 0 && showSnackbar === false){  // TODO: dodelat
+      sortable.current = true;
+    }
+    
     console.log(pipeline);
   });
 
@@ -182,6 +221,7 @@ function App() {
 
   const openSnackbar = (variant, message) => {
     snackbarQueue.current.push({ variant, message, key: new Date().getTime() });
+    sortable.current = false; // TODO: dodelat
 
     if (showSnackbar) {
       setShowSnackbar(false);
@@ -207,7 +247,7 @@ function App() {
     <div className="App">
       <TopPanel />
       <SplitEditor editorContent={editorContent} editText={editText} editorResult={editorResult} />
-      <ToolList tools={pipeline} removeTool={removeTool}/>
+      <ToolList tools={pipeline} removeTool={removeTool} reactiveTool={reactiveTool} sort={onSortPipeline} sortable={sortable} beforeSort={beforeSortPipeline}/>
       <ToolTabs displaySnackbar={openSnackbar} addTool={addTool}/>
       <Snackbar
         key={snackbarInfo ? snackbarInfo.key : undefined}
