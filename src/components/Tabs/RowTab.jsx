@@ -4,20 +4,20 @@ import { green, lightBlue } from '@material-ui/core/colors';
 import { Add } from '@material-ui/icons';
 
 const theme = createMuiTheme({
-    palette: {
-        primary: {
-            main: lightBlue[800],
-            light: lightBlue[600],
-            dark: lightBlue[900],
-          },
-        secondary: {
-            main: green[800],
-            light: green[200],
-            dark: green[900],
+  palette: {
+      primary: {
+          main: lightBlue[800],
+          light: lightBlue[600],
+          dark: lightBlue[900],
         },
-        type: 'dark',
-    },
-  });
+      secondary: {
+          main: green[800],
+          light: green[200],
+          dark: green[900],
+      },
+      type: 'dark',
+  },
+});
 
 const styles = theme => ({
     button: {

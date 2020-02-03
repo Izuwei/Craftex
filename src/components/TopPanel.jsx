@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Description, GitHub, Videocam, CardMembership } from '@material-ui/icons';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme, Tooltip } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
 const StyledMenu = withStyles({
@@ -90,9 +90,11 @@ export default function DenseAppBar() {
               <Typography className={classes.appName} variant="h6" color="inherit">
                 React App
               </Typography>
-              <IconButton edge='start' color="inherit" aria-label="menu" onClick={handleOpen}>
-                <MenuIcon />
-              </IconButton>
+              <Tooltip title="Menu">
+                <IconButton edge='start' color="inherit" aria-label="menu" onClick={handleOpen}>
+                  <MenuIcon />
+                </IconButton>
+              </Tooltip>
                 <StyledMenu
                     id="customized-menu"
                     anchorEl={anchorEl}

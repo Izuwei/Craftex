@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { List, ListItem, makeStyles, IconButton } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { Build, Delete, Visibility, VisibilityOff } from "@material-ui/icons";
+import { Build, Delete, Visibility, VisibilityOff, Edit } from "@material-ui/icons";
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import EditDialog from "./EditDialog";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,6 +66,18 @@ const useStyles = makeStyles(theme => ({
 
 function ToolList(props) {
     const classes = useStyles();
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+
+    const toolToEdit = useRef({});
+
+    const openEdit = (tool) => {
+        toolToEdit.current = tool;
+        setOpenEditDialog(true);
+    }
+
+    const closeEdit = () => {
+        setOpenEditDialog(false);
+    }
 
     const mapTool = (tool) => {
         switch (tool.tool) {
@@ -93,7 +106,7 @@ function ToolList(props) {
         <div className={classes.toolText}>
           {mapTool(tool)}
         </div>
-      ));
+    ));
 
     const SortableItem = SortableElement(({ tool }) => (
         <ListItem key={tool.id} ContainerComponent="li" divider={true} className={classes.listItem}>
@@ -102,6 +115,9 @@ function ToolList(props) {
             </IconButton>
             <IconButton className={classes.listIcon} size="small" onClick={() => props.reactiveTool(tool)}>
                 {tool.active ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+            <IconButton className={classes.listIcon} size="small" onClick={() => openEdit(tool)}>
+                <Edit />
             </IconButton>
               <DragHandle tool={tool}/>
         </ListItem>
@@ -130,6 +146,14 @@ function ToolList(props) {
                 onSortEnd={props.sort}
             />
             </div>
+            {openEditDialog && 
+                <EditDialog 
+                    open={openEditDialog}
+                    close={closeEdit}
+                    tool={toolToEdit.current}
+                    updateTool={props.updateTool}
+            />}
+            
         </div>
     );
 }

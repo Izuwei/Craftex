@@ -12,3 +12,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* Edit dialog title */
+#responsive-dialog-title > * {
+  font-size: 26px;
+  font-weight: bolder;
+  display: flex;
+  align-items: center;
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SplitPane from 'react-split-pane';
-import EditorIn from './EditorIn'
-import EditorOut from './EditorOut'
+import EditorIn from './EditorIn';
+import EditorOut from './EditorOut';
 import './SplitEditor.css';
 
 class SplitEditor extends Component {

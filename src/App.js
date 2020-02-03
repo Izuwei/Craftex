@@ -138,8 +138,22 @@ function App() {
     //pipeline.splice(pipeline.indexOf(tool), 1);
   };
 
+  const updateTool = (tool) => {
+    const tmp = [...pipeline];
+
+    for (var i in tmp) {
+      if (tmp[i].id === tool.id) {
+        tmp[i] = tool;
+        break;
+      }
+    }
+    setPipeline(tmp);
+    modify.current = true;
+  }
+
   const reactiveTool = (tool) => {
     const tmp = [...pipeline];
+
     for (var i in tmp) {
       if (tmp[i].id === tool.id) {
         tmp[i].active = !(tmp[i].active);
@@ -247,7 +261,15 @@ function App() {
     <div className="App">
       <TopPanel />
       <SplitEditor editorContent={editorContent} editText={editText} editorResult={editorResult} />
-      <ToolList tools={pipeline} removeTool={removeTool} reactiveTool={reactiveTool} sort={onSortPipeline} sortable={sortable} beforeSort={beforeSortPipeline}/>
+      <ToolList 
+        tools={pipeline}
+        removeTool={removeTool}
+        reactiveTool={reactiveTool}
+        updateTool={updateTool}
+        sort={onSortPipeline}
+        sortable={sortable}
+        beforeSort={beforeSortPipeline}
+      />
       <ToolTabs displaySnackbar={openSnackbar} addTool={addTool}/>
       <Snackbar
         key={snackbarInfo ? snackbarInfo.key : undefined}
