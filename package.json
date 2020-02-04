@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.5.1",
     "array-move": "^2.2.1",
     "gh-pages": "^2.1.1",
+    "material-ui-popup-state": "^1.5.1",
     "react": "^16.11.0",
     "react-ace": "^8.0.0",
     "react-dom": "^16.11.0",

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from '@material-ui/core';
 import { lightBlue } from '@material-ui/core/colors';
 import { Reorder, ViewColumn, FindReplace, YoutubeSearchedFor, Transform } from '@material-ui/icons';
 import RowTab from './Tabs/RowTab';
@@ -55,8 +55,11 @@ const useStyles = makeStyles(theme => ({
     width: '95%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: 'rgb(50,50,50)',
     color: 'white',
+  },
+  fullWidth: {
+    width: "100% !important",
   },
   /*toolTitle: {
     marginLeft: '10px',
@@ -75,13 +78,15 @@ export default function ToolTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
+  const fullWidth = useMediaQuery(theme.breakpoints.down('sm'));
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
     <MuiThemeProvider theme={theme}>
-      <div className={classes.root}>
+      <div className={`${classes.root} ${fullWidth && classes.fullWidth}`}>
         <AppBar position="static" color="default">
           <Tabs
             value={value}
@@ -90,6 +95,7 @@ export default function ToolTabs(props) {
             textColor="primary"
             variant="fullWidth"
             aria-label="tabs"
+            scrollButtons="auto"
             centered
           >
             <Tab icon={<YoutubeSearchedFor />} label="Reverse" {...a11yProps(0)} />

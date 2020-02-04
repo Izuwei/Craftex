@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
-import { List, ListItem, makeStyles, IconButton } from "@material-ui/core";
+import { List, ListItem, makeStyles, IconButton, Menu, MenuItem, Tooltip, useTheme, useMediaQuery } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { Build, Delete, Visibility, VisibilityOff, Edit } from "@material-ui/icons";
+import { Build, Delete, Visibility, VisibilityOff, Edit, MoreVert } from "@material-ui/icons";
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import EditDialog from "./EditDialog";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -12,22 +13,29 @@ const useStyles = makeStyles(theme => ({
         marginTop: "20px",
         marginLeft: 'auto',
         marginRight: 'auto',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'rgb(50,50,50)',
         color: "white",
     },
+    fullWidth: {
+        width: "100% !important",
+    },
     title: {
-        height: "48px",
+        height: "22px",
         textTransform: "uppercase",
         fontSize: "14px",
         backgroundColor: grey[900],
         textAlign: "center",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
         padding: "10px",
         color: "rgba(255, 255, 255, 0.7)",
         letterSpacing: "0.02857em",
         boxShadow: "0px 4px 4px -1px rgba(0,0,0,0.2)",
     },
     titleLabel: {
-        marginTop: "5px",
+        fontSize: "15px",
     },
     list: {
         marginLeft: "10px",
@@ -36,6 +44,9 @@ const useStyles = makeStyles(theme => ({
     listItem: {
         paddingTop: "0px",
         paddingBottom: "0px",
+    },
+    itemDeactivated: {
+        color: "grey !important",
     },
     content: {
         height: "182px",
@@ -51,6 +62,7 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: "13px",
         height: "100%",
         width: "100%",
+        cursor: "grab",
     },
     conword: {
         color: "#b500d1",
@@ -68,6 +80,9 @@ function ToolList(props) {
     const classes = useStyles();
     const [openEditDialog, setOpenEditDialog] = useState(false);
 
+    const theme = useTheme();   // useMediaQuery
+    const fullWidth = useMediaQuery(theme.breakpoints.down('sm'));
+
     const toolToEdit = useRef({});
 
     const openEdit = (tool) => {
@@ -84,16 +99,16 @@ function ToolList(props) {
             case "Match":
                 return (
                     <React.Fragment>
-                            <span className={classes.toolName}>{tool.tool}</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.tool}</span> 
                             {tool.pattern}
                     </React.Fragment>
                 );
             case "Replace":
                 return (
                     <React.Fragment>
-                            <span className={classes.toolName}>{tool.tool}</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.tool}</span> 
                             {tool.find}
-                            <span className={classes.conword}>with</span> 
+                            <span className={`${classes.conword} ${!(tool.active) && classes.itemDeactivated}`}>with</span> 
                             {tool.replace}
                     </React.Fragment>
                 );
@@ -109,17 +124,37 @@ function ToolList(props) {
     ));
 
     const SortableItem = SortableElement(({ tool }) => (
-        <ListItem key={tool.id} ContainerComponent="li" divider={true} className={classes.listItem}>
-            <IconButton className={classes.listIcon} size="small" onClick={() => props.removeTool(tool)}>
-                <Delete />
-            </IconButton>
-            <IconButton className={classes.listIcon} size="small" onClick={() => props.reactiveTool(tool)}>
-                {tool.active ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-            <IconButton className={classes.listIcon} size="small" onClick={() => openEdit(tool)}>
-                <Edit />
-            </IconButton>
-              <DragHandle tool={tool}/>
+        <ListItem key={tool.id} ContainerComponent="li" divider={true} className={`${classes.listItem} ${!(tool.active) && classes.itemDeactivated}`}>
+            <PopupState variant="popover" popupId="demo-popup-menu">
+                {properties => (
+                    <React.Fragment>
+                        <Tooltip title="Properties">
+                            <IconButton 
+                                className={classes.listIcon} 
+                                variant="contained" 
+                                size="small" 
+                                {...bindTrigger(properties)}
+                            >
+                                <MoreVert />
+                            </IconButton>
+                        </Tooltip>
+                        <Menu {...bindMenu(properties)}>
+                            <MenuItem onClick={() => openEdit(tool)}>
+                                <Edit className={classes.listIcon} /> Edit
+                            </MenuItem>
+                            <MenuItem onClick={() => props.reactiveTool(tool)}>
+                                {tool.active ? 
+                                    (<React.Fragment> <VisibilityOff className={classes.listIcon} /> Deactivate </React.Fragment>) : 
+                                    (<React.Fragment> <Visibility className={classes.listIcon} /> Activate </React.Fragment>)}
+                            </MenuItem>
+                            <MenuItem onClick={() => props.removeTool(tool)}>
+                                <Delete className={classes.listIcon} /> Delete
+                            </MenuItem>
+                        </Menu>
+                    </React.Fragment>
+                )}
+            </PopupState>
+            <DragHandle tool={tool}/>
         </ListItem>
     ));
 
@@ -132,19 +167,21 @@ function ToolList(props) {
     ));
 
     return (
-        <div className={classes.root}>
+        <div className={`${classes.root} ${fullWidth && classes.fullWidth}`}>
             <div className={classes.title}>
-                <Build />
+                <Build style={{fontSize: "22px", paddingLeft: "5px"}}/>
                 <div className={classes.titleLabel}>Pipeline</div>
+                <div />
             </div>
             <div className={classes.content}>
-            <SortableListContainer
-                tools={props.tools}
-                lockAxis='y'
-                useDragHandle={true}
-                updateBeforeSortStart={props.beforeSort}
-                onSortEnd={props.sort}
-            />
+                <SortableListContainer
+                    tools={props.tools}
+                    lockAxis='y'
+                    useDragHandle={true}
+                    updateBeforeSortStart={props.beforeSort}
+                    onSortEnd={props.sort}
+                    helperClass={'SortableHelper'}
+                />
             </div>
             {openEditDialog && 
                 <EditDialog 
