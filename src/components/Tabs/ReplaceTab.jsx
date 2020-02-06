@@ -70,12 +70,12 @@ export default function ReplaceTab(props){
             setReplaceFindError(false);
             setReplaceReplaceError(false);
             props.addTool({tool: "Replace", find: replaceFind, replace: replaceReplace});
-            props.displaySnackbar("success", "Success: Replace added into the pipeline.");
+            props.showAlert("success", "Success: Replace added into the pipeline.");
             setReplaceFind("");
             setReplaceReplace("");
         }
         else {
-            props.displaySnackbar("error", "Error: Fields cannot be empty!");
+            props.showAlert("error", "Error: Fields cannot be empty!");
         }
     }
 

@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function DenseAppBar() {
+const DenseAppBar = React.memo(() => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -140,4 +140,6 @@ export default function DenseAppBar() {
         </div>
     </MuiThemeProvider>
   );
-}
+});
+
+export default DenseAppBar;

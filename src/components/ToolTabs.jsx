@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function ToolTabs(props) {
+const ToolTabs = React.memo(({ showAlert, addTool }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -109,10 +109,10 @@ export default function ToolTabs(props) {
           TBD
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <ReplaceTab displaySnackbar={props.displaySnackbar} addTool={props.addTool}/>
+          <ReplaceTab showAlert={showAlert} addTool={addTool}/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <RowTab displaySnackbar={props.displaySnackbar} addTool={props.addTool}/>
+          <RowTab showAlert={showAlert} addTool={addTool}/>
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD
@@ -123,4 +123,6 @@ export default function ToolTabs(props) {
       </div>
     </MuiThemeProvider>
   );
-}
+});
+
+export default ToolTabs;

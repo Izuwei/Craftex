@@ -1,33 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './App.css';
 import TopPanel from './components/TopPanel';
 import SplitEditor from './components/SplitEditor';
 import ToolTabs from './components/ToolTabs';
-import { MuiThemeProvider, createMuiTheme, makeStyles, Snackbar, SnackbarContent, IconButton } from '@material-ui/core';
-import { grey, green, amber, blue } from '@material-ui/core/colors';
-import { CheckCircle, Close, Warning, Error, Info } from '@material-ui/icons';
-import clsx from 'clsx';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import ToolList from './components/ToolList';
+import Alerts from './components/Alerts';
 import arrayMove from 'array-move';
-
-/*const pipeline = [];
-
-function addTool(tool) {
-  tool.id = pipeline.length + 1;
-  pipeline.push(tool);
-};
-
-function removeTool(tool){
-  pipeline.splice(pipeline.indexOf(tool), 1);
-  console.log(pipeline);
-}
-
-/*addTool.propTypes = {
-  tool: PropTypes.shape({
-    tool: PropTypes.string.isRequired,
-  })
-}*/
+import newID from './scripts/newID.js';
 
 const theme = createMuiTheme({
   palette: {
@@ -38,107 +19,35 @@ const theme = createMuiTheme({
   }
 });
 
-const variantIcon = {
-  success: CheckCircle,
-  warning: Warning,
-  error: Error,
-  info: Info,
-};
-
-const useStyles = makeStyles(theme => ({
-  success: {
-    backgroundColor: green[600],
-  },
-  error: {
-    backgroundColor: theme.palette.error.dark,
-  },
-  info: {
-    backgroundColor: blue[500],
-  },
-  warning: {
-    backgroundColor: amber[700],
-  },
-  icon: {
-    fontSize: 25,
-  },
-  iconVariant: {
-    opacity: 0.9,
-    marginRight: theme.spacing(1),
-  },
-  message: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
-
-function CustomSnackbarContent(props) {
-  const classes = useStyles();
-  const { className, message, onClose, variant, ...other } = props;
-  const Icon = variantIcon[variant];
-
-  return (
-    <SnackbarContent
-      className={clsx(classes[variant], className)}
-      message={
-        <span id="message-id" className={classes.message}>
-          <Icon className={clsx(classes.icon, classes.iconVariant)} />
-          {message}
-        </span>}
-      action={[
-        <IconButton
-          key="close"
-          aria-label="close"
-          color="inherit"
-   
-          onClick={onClose}
-        >
-          <Close />
-        </IconButton>,
-      ]}
-      {...other}
-    />
-  );
-}
-
-CustomSnackbarContent.propTypes = {
-  className: PropTypes.string,
-  message: PropTypes.string,
-  onClose: PropTypes.func,
-  variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']),
-};
-
 // https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
 function regexEscape(regex) {
   return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
 
 function App() {
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarInfo, setSnackbarInfo] = useState(undefined);
-  const snackbarQueue = useRef([]);
+  const alertRef = useRef();
   const [pipeline, setPipeline] = useState([]);
 
   const [editorContent, setEditorContent] = useState("");
   const [editorResult, setEditorResult] = useState("");
 
   const modify = useRef(false);
-  const sortable = useRef(true);  // TODO: dodelat
 
-  const addTool = (tool) => {
-    tool.id = pipeline.length + 1;
+  const addTool = useCallback((tool) => {
+    tool.id = newID();
     tool.active = true;
-    setPipeline([...pipeline, tool]);
+    setPipeline(c => [...c, tool]);
     modify.current = true;
     //pipeline.push(tool);
-  };
+  }, [setPipeline]);
 
-  const removeTool = (tool) => {
-    setPipeline(pipeline.filter(each => each.id !== tool.id));
+  const removeTool = useCallback((tool) => {
+    setPipeline(c => c.filter(each => each.id !== tool.id));
     modify.current = true;
     //pipeline.splice(pipeline.indexOf(tool), 1);
-  };
+  }, [setPipeline]);
 
-  const updateTool = (tool) => {
+  const updateTool = useCallback((tool) => {
     const tmp = [...pipeline];
 
     for (var i in tmp) {
@@ -149,9 +58,9 @@ function App() {
     }
     setPipeline(tmp);
     modify.current = true;
-  }
+  }, [pipeline, setPipeline]);
 
-  const reactiveTool = (tool) => {
+  const reactiveTool = useCallback((tool) => {
     const tmp = [...pipeline];
 
     for (var i in tmp) {
@@ -162,28 +71,19 @@ function App() {
     }
     setPipeline(tmp);
     modify.current = true;
-  };
+  }, [pipeline, setPipeline]);
 
-  const beforeSortPipeline = () => {
-    return new Promise((resolve, reject) => {
-      setShowSnackbar(false);
-      snackbarQueue.current = [];
-      if (showSnackbar === false)
-        resolve();
-    });
-  };
-
-  const onSortPipeline = ({ oldIndex, newIndex }) => {
+  const onSortPipeline = useCallback(({ oldIndex, newIndex }) => {
     console.log(pipeline);
     setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
     if (oldIndex !== newIndex)
       modify.current = true;
-  };
+  }, [pipeline, setPipeline]);
 
-  const editText = (newValue) => {
+  const editText = useCallback((newValue) => {
     setEditorContent(newValue);
     modify.current = true;
-  };
+  }, [setEditorContent]);
 
   const runPipeline = () => {
     var tempResult = editorContent;
@@ -209,84 +109,38 @@ function App() {
 
   // Do dokumentace napsat proc neni async/await ale useEffect
   useEffect(() => {
-    for (var i = 0; i < pipeline.length; i++){
+    /*for (var i = 0; i < pipeline.length; i++){  // Nejspis nebude potreba
       if (pipeline[i].id !== (i + 1))
         pipeline[i].id = (i + 1);
-    }
+    }*/
 
     if (modify.current === true) {
       runPipeline();
       modify.current = false;
     }
-
-    if (snackbarQueue.current.length === 0 && showSnackbar === false){  // TODO: dodelat
-      sortable.current = true;
-    }
     
     console.log(pipeline);
   });
 
-  const processSnackbarQueue = () => {
-    if (snackbarQueue.current.length > 0) {
-      setSnackbarInfo(snackbarQueue.current.shift());
-      setShowSnackbar(true);
-    }
-  };
-
-  const openSnackbar = (variant, message) => {
-    snackbarQueue.current.push({ variant, message, key: new Date().getTime() });
-    sortable.current = false; // TODO: dodelat
-
-    if (showSnackbar) {
-      setShowSnackbar(false);
-    }
-    else {
-      processSnackbarQueue();
-    }
-  };
-
-  const closeSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setShowSnackbar(false);
-  };
-
-  const handleExited = () => {
-    processSnackbarQueue();
-  };
+  const showAlert = useCallback((variant, message) => {
+    alertRef.current.openSnackbar(variant, message);
+  }, []);
 
   return (
     <MuiThemeProvider theme={theme}>
-    <div className="App">
-      <TopPanel />
-      <SplitEditor editorContent={editorContent} editText={editText} editorResult={editorResult} />
-      <ToolList 
-        tools={pipeline}
-        removeTool={removeTool}
-        reactiveTool={reactiveTool}
-        updateTool={updateTool}
-        sort={onSortPipeline}
-        sortable={sortable}
-        beforeSort={beforeSortPipeline}
-      />
-      <ToolTabs displaySnackbar={openSnackbar} addTool={addTool}/>
-      <Snackbar
-        key={snackbarInfo ? snackbarInfo.key : undefined}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        open={showSnackbar}
-        autoHideDuration={2000}
-        onClose={closeSnackbar}
-        onExited={handleExited}
-        ContentProps={{ 'aria-describedby': 'message-id' }} 
-      >
-        <CustomSnackbarContent
-          message={snackbarInfo ? snackbarInfo.message : undefined}
-          variant={snackbarInfo ? snackbarInfo.variant : undefined}
-          onClose={closeSnackbar}
+      <div className="App">
+        <TopPanel />
+        <SplitEditor editorContent={editorContent} editText={editText} editorResult={editorResult} />
+        <ToolList 
+          tools={pipeline}
+          removeTool={removeTool}
+          reactiveTool={reactiveTool}
+          updateTool={updateTool}
+          sort={onSortPipeline}
         />
-      </Snackbar>
-    </div>
+        <ToolTabs showAlert={showAlert} addTool={addTool}/>
+        <Alerts ref={alertRef} />
+      </div>
     </MuiThemeProvider>
   );
 }

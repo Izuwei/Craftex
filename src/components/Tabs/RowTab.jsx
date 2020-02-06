@@ -50,12 +50,12 @@ class RowTab extends Component {
   handleMatch(){
     if (this.state.matchPattern === ""){
       this.setState({ matchError: true});
-      this.props.displaySnackbar("error", "Error: Match pattern is empty!");
+      this.props.showAlert("error", "Error: Match pattern is empty!");
     }
     else {
       this.setState({ matchError: false});
       this.props.addTool({tool: "Match", pattern: this.state.matchPattern});
-      this.props.displaySnackbar("success", "Success: Match added into the pipeline.");
+      this.props.showAlert("success", "Success: Match added into the pipeline.");
       this.setState({matchPattern: ""});
     }
   }

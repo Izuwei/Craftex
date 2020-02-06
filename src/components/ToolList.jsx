@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
         color: "grey !important",
     },
     content: {
-        height: "182px",
+        height: "208px",
         overflow: "auto",
     },
     toolName: {
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function ToolList(props) {
+const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sort }) => {
     const classes = useStyles();
     const [openEditDialog, setOpenEditDialog] = useState(false);
 
@@ -142,12 +142,12 @@ function ToolList(props) {
                             <MenuItem onClick={() => openEdit(tool)}>
                                 <Edit className={classes.listIcon} /> Edit
                             </MenuItem>
-                            <MenuItem onClick={() => props.reactiveTool(tool)}>
+                            <MenuItem onClick={() => reactiveTool(tool)}>
                                 {tool.active ? 
                                     (<React.Fragment> <VisibilityOff className={classes.listIcon} /> Deactivate </React.Fragment>) : 
                                     (<React.Fragment> <Visibility className={classes.listIcon} /> Activate </React.Fragment>)}
                             </MenuItem>
-                            <MenuItem onClick={() => props.removeTool(tool)}>
+                            <MenuItem onClick={() => removeTool(tool)}>
                                 <Delete className={classes.listIcon} /> Delete
                             </MenuItem>
                         </Menu>
@@ -175,11 +175,10 @@ function ToolList(props) {
             </div>
             <div className={classes.content}>
                 <SortableListContainer
-                    tools={props.tools}
+                    tools={tools}
                     lockAxis='y'
                     useDragHandle={true}
-                    updateBeforeSortStart={props.beforeSort}
-                    onSortEnd={props.sort}
+                    onSortEnd={sort}
                     helperClass={'SortableHelper'}
                 />
             </div>
@@ -188,11 +187,11 @@ function ToolList(props) {
                     open={openEditDialog}
                     close={closeEdit}
                     tool={toolToEdit.current}
-                    updateTool={props.updateTool}
+                    updateTool={updateTool}
             />}
             
         </div>
     );
-}
+});
 
 export default ToolList;

@@ -4,7 +4,7 @@ import EditorIn from './EditorIn';
 import EditorOut from './EditorOut';
 import './SplitEditor.css';
 
-function SplitEditor(props) {
+const SplitEditor = React.memo(({ editorContent, editText, editorResult }) => {
     const aceIn = useRef();
     const aceOut = useRef();
 
@@ -14,11 +14,18 @@ function SplitEditor(props) {
     }
 
     return ( 
-        <SplitPane className="SplitEditor" split="vertical" style={{height: "700px", position: "static"}} minSize={200} maxSize={-200} defaultSize={"50%"} onChange={ () => handleResize() }>
-            <EditorIn ref={ aceIn } content={props.editorContent} edit={props.editText}/>
-            <EditorOut ref={ aceOut } content={props.editorResult}/>
+        <SplitPane 
+            className="SplitEditor" 
+            split="vertical" 
+            style={{height: "700px", position: "static"}} 
+            minSize={200} maxSize={-200} 
+            defaultSize={"50%"} 
+            onChange={ () => handleResize() }
+        >
+            <EditorIn ref={ aceIn } content={editorContent} edit={editText}/>
+            <EditorOut ref={ aceOut } content={editorResult}/>
         </SplitPane>
      );  
-};
+});
  
 export default SplitEditor;
