@@ -49,7 +49,6 @@
   border-color: transparent;
 }
 .SplitEditor {
-    margin-top: 20px;
+    margin-top: 0px;
     border-bottom: 1px solid black;
-    border-top: 1px solid black;
 }

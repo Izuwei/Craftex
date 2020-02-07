@@ -130,7 +130,12 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <div className="App">
         <TopPanel />
-        <SplitEditor editorContent={editorContent} editText={editText} editorResult={editorResult} />
+        <SplitEditor 
+          editorContent={editorContent} 
+          editText={editText} 
+          editorResult={editorResult}
+          showAlert={showAlert} 
+        />
         <ToolList 
           tools={pipeline}
           removeTool={removeTool}

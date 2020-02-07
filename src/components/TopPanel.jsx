@@ -49,7 +49,7 @@ const StyledMenuItem = withStyles(theme => ({
 const theme = createMuiTheme({
     palette: {
       primary: {
-        main: grey[900],
+        main: "rgb(30, 30, 30)",
         light: grey[200],
         dark: grey[900],
       },

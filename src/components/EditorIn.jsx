@@ -67,6 +67,18 @@ class EditorIn extends Component {
     console.log(content);
   }
 
+  undo() {
+    this.refs.aceIn.editor.undo();
+  }
+
+  redo() {
+    this.refs.aceIn.editor.redo();
+  }
+
+  clearAllBreakpoints() {
+    this.refs.aceIn.editor.session.clearBreakpoints();
+  }
+
 //<button onClick={()=> {this.refs.aceIn.editor.undo()}}>Undo</button>
   render() { 
     return ( 
@@ -84,6 +96,7 @@ class EditorIn extends Component {
         placeholder="Insert your input here"
         showPrintMargin={false}
         hScrollBarAlwaysVisible={true}
+        debounceChangePeriod={1500}
         editorProps={{ $blockScrolling: true }}
       />);
   }
