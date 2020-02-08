@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         height: "22px",
+        fontWeight: "500",
         textTransform: "uppercase",
         fontSize: "14px",
         backgroundColor: grey[900],

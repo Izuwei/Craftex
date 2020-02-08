@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
-import { Toolbar, Button, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener } from "@material-ui/core";
-import { Description, Publish, GetApp, Undo, Redo, BugReport, Clear } from "@material-ui/icons";
+import { Toolbar, Button, IconButton, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener, InputBase, Tooltip } from "@material-ui/core";
+import { Description, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive } from "@material-ui/icons";
+import { fade } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,42 +24,136 @@ const useStyles = makeStyles(theme => ({
     input: {
         display: "none",
     },
+
+    activeButton: {
+        backgroundColor: "#039be5 !important",
+    },
+    searchBox: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        justifyContent: "flex-start",
+        alignItems: "stretch",
+    },
+    searchBtns: {
+        paddingLeft: "5px",
+        paddingRight: "5px",
+        borderRadius: "4px",
+    },
+    searchBtnIcons: {
+        height: "10px",
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+          backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+          marginLeft: theme.spacing(1),
+          marginRight: theme.spacing(1),
+          width: 'auto',
+        },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+    },
+    searchIcon: {
+        paddingLeft: "5px",
+        paddingRight: "5px",
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    inputRoot: {
+        color: 'inherit',
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 5),
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: 120,
+            '&:focus': {
+                width: 200,
+            },
+        },
+    },
 }));
 
-const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert }) => {
+const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll }) => {
     const classes = useStyles();
 
     const [openFile, setOpenFile] = useState(false);
+    const [openEditor, setOpenEditor] = useState(false);
     const [openInspect, setOpenInspect] = useState(false);
+    const [openSearch, setOpenSearch] = useState(false);
+
+    const [searchExpression, setSearchExpression] = useState("");   // TODO: Predelat jednotlivy casti na mensi komponenty (asi)
+    const [searchRegExp, setSearchRegExp] = useState(false);
+    const [searchCaseSensitive, setSearchCaseSensitive] = useState(false);
 
     const fileRef = React.createRef();
-
+    
     const fileButtonRef = useRef(null);
+    const editorButtonRef = useRef(null);
     const inspectButtonRef = useRef(null);
+    const searchButtonRef = useRef(null);
 
     const expandFile = () => {
+        setOpenEditor(false);
+        setOpenInspect(false);
         setOpenFile(prev => !prev);
+        setOpenSearch(false);
+    };
+
+    const expandEditor = () => {
+        setOpenFile(false);
+        setOpenInspect(false);
+        setOpenEditor(prev => !prev);
+        setOpenSearch(false);
     };
 
     const expandInspect = () => {
+        setOpenFile(false);
+        setOpenEditor(false);
         setOpenInspect(prev => !prev);
+        setOpenSearch(false);
+    };
+
+    const expandSearch = () => {
+        setOpenEditor(false);
+        setOpenInspect(false);
+        setOpenFile(false);
+        setOpenSearch(prev => !prev);
     };
 
     const handleClose = event => {
         // Otevreni dalsiho selectu
         if ((fileButtonRef.current && fileButtonRef.current.contains(event.target)) || 
-            (inspectButtonRef.current && inspectButtonRef.current.contains(event.target))) {
+            (editorButtonRef.current && editorButtonRef.current.contains(event.target)) ||
+            (inspectButtonRef.current && inspectButtonRef.current.contains(event.target)) ||
+            (searchButtonRef.current && searchButtonRef.current.contains(event.target))) {
             return;
         }
         
         setOpenFile(false);
+        setOpenEditor(false);
         setOpenInspect(false);
+        setOpenSearch(false);
     };
 
     const handleListKeyDown = (event) => {
         if (event.key === 'Tab') {
           event.preventDefault();
           setOpenFile(false);
+          setOpenEditor(false);
           setOpenInspect(false);
         }
     }
@@ -128,20 +223,43 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 </Grow>
             )}
             </Popper>
+
             <Button 
                 className={classes.btn}
-                onClick={undo}
+                ref={editorButtonRef}
+                onClick={expandEditor}
             >
-                <Undo fontSize="small" className={classes.toolbarIcon} />
-                Undo
+                <ListAlt fontSize="small" className={classes.toolbarIcon} />
+                Editor
             </Button>
-            <Button 
-                className={classes.btn}
-                onClick={redo}
-            >
-                <Redo fontSize="small" className={classes.toolbarIcon} />
-                Redo
-            </Button>
+            <Popper className={classes.popmenu} open={openEditor} anchorEl={editorButtonRef.current} role={undefined} transition disablePortal>
+            {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList autoFocusItem={openEditor} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                        <MenuItem onClick={e => `${undo(e)} ${handleClose(e)}`}>
+                            <Undo fontSize="small" className={classes.toolbarIcon} />
+                            Undo
+                        </MenuItem>
+                        <MenuItem onClick={e => `${redo(e)} ${handleClose(e)}`}>
+                            <Redo fontSize="small" className={classes.toolbarIcon} />
+                            Redo
+                        </MenuItem>
+                        <MenuItem onClick={e => `${toggleWrap(e)} ${handleClose(e)}`}>
+                            <WrapText fontSize="small" className={classes.toolbarIcon} />
+                            { wrap ? "Disable wrap" : "Enable wrap" }
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+            )}
+            </Popper>
+
             <Button 
                 className={classes.btn}
                 ref={inspectButtonRef}
@@ -166,6 +284,87 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>
+                </Grow>
+            )}
+            </Popper>
+
+            <Button 
+                className={classes.btn}
+                ref={searchButtonRef}
+                onClick={expandSearch}
+            >
+                <Search fontSize="small" className={classes.toolbarIcon} />
+                Search
+            </Button>
+            <Popper className={classes.popmenu} open={openSearch} anchorEl={searchButtonRef.current} role={undefined} transition disablePortal>
+                {({ TransitionProps, placement }) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                    >
+                    <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                            <div className={classes.searchBox}>
+                                <Tooltip title="RegExp">
+                                <IconButton size="small" className={`${classes.searchBtns} ${searchRegExp && classes.activeButton }`}
+                                    onClick={() => setSearchRegExp(prev => !prev)}
+                                >
+                                    <Translate />
+                                </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Case sensitive">
+                                <IconButton size="small" className={`${classes.searchBtns} ${searchCaseSensitive && classes.activeButton }`}
+                                    onClick={() => setSearchCaseSensitive(prev => !prev)}
+                                >
+                                    <TextFields />
+                                </IconButton>
+                                </Tooltip>
+                                <div className={classes.search}>
+                                    <div className={classes.searchIcon}>
+                                        <Search />
+                                    </div>
+                                    <InputBase
+                                        placeholder="Search…"
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                        inputProps={{ 'aria-label': 'search' }}
+                                        onChange={event => setSearchExpression(event.target.value)}
+                                        value={searchExpression}
+                                    />
+                                    <Tooltip title="Remove">
+                                    <IconButton size="small" style={{marginRight: "5px"}} 
+                                        onClick={() => setSearchExpression("")}
+                                    >
+                                        <Clear />
+                                    </IconButton>
+                                    </Tooltip>
+                                </div>
+                                <Tooltip title="Previous">
+                                <IconButton size="small" className={classes.searchBtns} 
+                                    onClick={() => find(searchExpression, { backwards: true, wrap: true, caseSensitive: searchCaseSensitive, wholeWord: false, regExp: searchRegExp })}
+                                >
+                                    <SkipPrevious />
+                                </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Next">
+                                <IconButton size="small" className={classes.searchBtns}
+                                     onClick={() => find(searchExpression, { backwards: false, wrap: true, caseSensitive: searchCaseSensitive, wholeWord: false, regExp: searchRegExp })}
+                                >
+                                    <SkipNext />
+                                </IconButton>
+                                </Tooltip>
+                                <Tooltip title="All">
+                                <IconButton size="small" className={classes.searchBtns} 
+                                     onClick={() => findAll(searchExpression, { backwards: false, wrap: true, caseSensitive: searchCaseSensitive, wholeWord: false, regExp: searchRegExp })}
+                                >
+                                    <AllInclusive />
+                                </IconButton>
+                                </Tooltip>
+                            </div>
+                        </ClickAwayListener>
+                    </Paper>
                 </Grow>
             )}
             </Popper>

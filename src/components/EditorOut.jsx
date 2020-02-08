@@ -14,6 +14,14 @@ class EditorOut extends Component {
     this.resize = this.resize.bind(this);
   }
 
+  find(expression, properties) {
+    this.refs.aceOut.editor.find(expression, properties);
+  }
+
+  findAll(expression, properties) {
+    this.refs.aceOut.editor.findAll(expression, properties);
+  }
+
   resize() {
     this.refs.aceOut.editor.resize();
   }
@@ -33,6 +41,7 @@ class EditorOut extends Component {
         placeholder="Your output will be here"
         showPrintMargin={false}
         hScrollBarAlwaysVisible={true}
+        wrapEnabled={this.props.wrap}
         editorProps={{ $blockScrolling: true }}
       />);
   }

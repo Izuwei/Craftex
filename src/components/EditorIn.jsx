@@ -53,6 +53,14 @@ class EditorIn extends Component {
     });
   }
 
+  find(expression, properties) {
+    this.refs.aceIn.editor.find(expression, properties);
+  }
+
+  findAll(expression, properties) {
+    this.refs.aceIn.editor.findAll(expression, properties);
+  }
+
   resize() {
     this.refs.aceIn.editor.resize();
   }
@@ -97,6 +105,7 @@ class EditorIn extends Component {
         showPrintMargin={false}
         hScrollBarAlwaysVisible={true}
         debounceChangePeriod={1500}
+        wrapEnabled={this.props.wrap}
         editorProps={{ $blockScrolling: true }}
       />);
   }
