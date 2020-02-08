@@ -1,8 +1,10 @@
 import React, { useRef, useState, useCallback } from "react";
 import EditorToolbar from "./EditorToolbar";
 import SplitPane from "react-split-pane";
+import { Resizable } from "re-resizable";
 import EditorIn from "./EditorIn";
 import EditorOut from "./EditorOut";
+import EditorBottomPanel from "./EditorBottomPanel";
 import "./SplitEditor.css";
 
 const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert }) => {
@@ -56,19 +58,29 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                 find={find}
                 findAll={findAll}
             />
-            <SplitPane 
-                className="SplitEditor" 
-                split="vertical" 
-                style={{height: "700px", position: "static"}} 
-                minSize={200} maxSize={-200} 
-                defaultSize={"50%"} 
-                onChange={ () => handleResize() }
+            <Resizable
+                defaultSize={{ width: "100%", height: "700px" }}
+                minHeight={100}
+                enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
+                onResize={() => handleResize()}
+                style={{display: "flex", flexDirection: "column", flexWrap: "nowrap", justifyContent: "flex-start",
+                    alignItems: "stretch", borderBottom: "1px solid rgb(30, 30, 30)"}}
             >
-                <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} />
-                <EditorOut ref={ aceOut } content={editorResult} wrap={wrap} />
-            </SplitPane>
+                <SplitPane 
+                    className="SplitEditor" 
+                    split="vertical" 
+                    style={{height: "100%", position: "static"}} 
+                    minSize={200} maxSize={-200} 
+                    defaultSize={"50%"} 
+                    onChange={() => handleResize()}
+                >
+                    <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} />
+                    <EditorOut ref={ aceOut } content={editorResult} wrap={wrap} />
+                </SplitPane>
+                    <EditorBottomPanel wrap={wrap}/>
+            </Resizable>
         </React.Fragment>
-     );  
+    );  
 });
  
 export default SplitEditor;
