@@ -8,7 +8,9 @@ import { grey } from '@material-ui/core/colors';
 import ToolList from './components/ToolList';
 import Alerts from './components/Alerts';
 import arrayMove from 'array-move';
-import newID from './scripts/newID.js';
+import newID from './scripts/generatorID';
+import worker from './scripts/pipeWorker';
+import WebWorker from './scripts/WebWorker';
 
 const theme = createMuiTheme({
   palette: {
@@ -19,11 +21,6 @@ const theme = createMuiTheme({
   }
 });
 
-// https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
-function regexEscape(regex) {
-  return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
-
 function App() {
   const alertRef = useRef();
   const [pipeline, setPipeline] = useState([]);
@@ -31,20 +28,14 @@ function App() {
   const [editorContent, setEditorContent] = useState("");
   const [editorResult, setEditorResult] = useState("");
 
-  const modify = useRef(false);
-
   const addTool = useCallback((tool) => {
     tool.id = newID();
     tool.active = true;
     setPipeline(c => [...c, tool]);
-    modify.current = true;
-    //pipeline.push(tool);
   }, [setPipeline]);
 
   const removeTool = useCallback((tool) => {
     setPipeline(c => c.filter(each => each.id !== tool.id));
-    modify.current = true;
-    //pipeline.splice(pipeline.indexOf(tool), 1);
   }, [setPipeline]);
 
   const updateTool = useCallback((tool) => {
@@ -57,7 +48,6 @@ function App() {
       }
     }
     setPipeline(tmp);
-    modify.current = true;
   }, [pipeline, setPipeline]);
 
   const reactiveTool = useCallback((tool) => {
@@ -70,57 +60,34 @@ function App() {
       }
     }
     setPipeline(tmp);
-    modify.current = true;
   }, [pipeline, setPipeline]);
 
   const onSortPipeline = useCallback(({ oldIndex, newIndex }) => {
+    if (oldIndex !== newIndex) {
+      setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
+    }
     console.log(pipeline);
-    setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
-    if (oldIndex !== newIndex)
-      modify.current = true;
   }, [pipeline, setPipeline]);
 
   const editText = useCallback((newValue) => {
     setEditorContent(newValue);
-    modify.current = true;
   }, [setEditorContent]);
 
-  const runPipeline = () => {
-    var tempResult = editorContent;
-
-    for (var i = 0; i < pipeline.length; i++) {
-      if (pipeline[i].active === false)
-        continue;
-
-      switch (pipeline[i].tool) {
-        case "Replace":
-          tempResult = tempResult.replace(new RegExp(regexEscape(pipeline[i].find), 'g'), pipeline[i].replace);
-          break;
-        case "Match":
-          tempResult = tempResult.match(new RegExp(".*" + regexEscape(pipeline[i].pattern) + ".*", 'g'));
-          tempResult === null ? tempResult = "" : tempResult = tempResult.join('\n');
-          break;
-        default:
-          break;
-      }
-    }
-    setEditorResult(tempResult);
-  };
-
   // Do dokumentace napsat proc neni async/await ale useEffect
+  // Popsat WebWorkers
   useEffect(() => {
-    /*for (var i = 0; i < pipeline.length; i++){  // Nejspis nebude potreba
-      if (pipeline[i].id !== (i + 1))
-        pipeline[i].id = (i + 1);
-    }*/
+    const pipeWorker = new WebWorker(worker);
 
-    if (modify.current === true) {
-      runPipeline();
-      modify.current = false;
+    pipeWorker.postMessage({text: editorContent, pipeline: pipeline});
+
+    pipeWorker.onmessage = (event) => {
+      setEditorResult(event.data);
     }
-    
-    console.log(pipeline);
-  });
+
+    return () => {  // Cleanup
+      pipeWorker.terminate();
+    }
+  }, [editorContent, pipeline, setEditorResult]);
 
   const showAlert = useCallback((variant, message) => {
     alertRef.current.openSnackbar(variant, message);
