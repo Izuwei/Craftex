@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Toolbar, Button, IconButton, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener, InputBase, Tooltip } from "@material-ui/core";
-import { Description, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive } from "@material-ui/icons";
+import { Description, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
 import { fade } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll }) => {
+const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll, inspectMode, toggleInspectMode }) => {
     const classes = useStyles();
 
     const [openFile, setOpenFile] = useState(false);
@@ -266,7 +266,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 onClick={expandInspect}
             >
                 <BugReport fontSize="small" className={classes.toolbarIcon} />
-                Inspect
+                Inspector
             </Button>
             <Popper className={classes.popmenu} open={openInspect} anchorEl={inspectButtonRef.current} role={undefined} transition disablePortal>
             {({ TransitionProps, placement }) => (
@@ -277,6 +277,10 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
                       <MenuList autoFocusItem={openInspect} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                        <MenuItem onClick={e => `${toggleInspectMode(e)} ${handleClose(e)}`}>
+                            <ViewDay fontSize="small" className={classes.toolbarIcon} />
+                            { inspectMode ? "Disable inspector" : "Enable inspector" }
+                        </MenuItem>
                         <MenuItem onClick={e => `${clearAllBreakpoints(e)} ${handleClose(e)}`}>
                             <Clear fontSize="small" className={classes.toolbarIcon} />
                             Clear all breakpoints

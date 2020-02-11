@@ -7,7 +7,7 @@ import EditorOut from "./EditorOut";
 import EditorBottomPanel from "./EditorBottomPanel";
 import "./SplitEditor.css";
 
-const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert }) => {
+const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert, toggleBreakpoint, inspectMode, toggleInspectMode }) => {
     const aceIn = useRef();
     const aceOut = useRef();
 
@@ -42,7 +42,8 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
 
     const clearAllBreakpoints = useCallback(() => {
         aceIn.current.clearAllBreakpoints();
-    }, []);
+        toggleBreakpoint([]);
+    }, [toggleBreakpoint]);
 
     return ( 
         <React.Fragment>
@@ -57,6 +58,8 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                 toggleWrap={toggleWrap}
                 find={find}
                 findAll={findAll}
+                inspectMode={inspectMode}
+                toggleInspectMode={toggleInspectMode}
             />
             <Resizable
                 defaultSize={{ width: "100%", height: "700px" }}
@@ -74,10 +77,10 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                     defaultSize={"50%"} 
                     onChange={() => handleResize()}
                 >
-                    <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} />
+                    <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} toggleBreakpoint={toggleBreakpoint} />
                     <EditorOut ref={ aceOut } content={editorResult} wrap={wrap} />
                 </SplitPane>
-                    <EditorBottomPanel wrap={wrap}/>
+                    <EditorBottomPanel wrap={wrap} inspectMode={inspectMode} />
             </Resizable>
         </React.Fragment>
     );  

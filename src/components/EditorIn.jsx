@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { forwardRef, useImperativeHandle, useEffect, useRef } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/webpack-resolver";
@@ -6,97 +6,90 @@ import "ace-builds/src-noconflict/ext-searchbox";
 import "ace-builds/src-noconflict/theme-idle_fingers";
 
 
-class EditorIn extends Component {
-  state = {  }
+const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint }, ref) => {
+  const aceIn = useRef(null);
 
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-    this.resize = this.resize.bind(this);
-    this.onSelectionChange = this.onSelectionChange.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
-  }
+  useImperativeHandle(ref, () => ({
+    find(expression, properties){
+      aceIn.current.editor.find(expression, properties);
+    },
+    
+    findAll(expression, properties) {
+      aceIn.current.editor.findAll(expression, properties);
+    },
+
+    resize() {
+      aceIn.current.editor.resize();
+    },
+
+    undo()  {
+      aceIn.current.editor.undo();
+    },
+  
+    redo  ()  {
+      aceIn.current.editor.redo();
+    },
+  
+    clearAllBreakpoints  ()  {
+      aceIn.current.editor.session.clearBreakpoints();
+    },
+
+
+}));
 
   /**
    * https://ourcodeworld.com/articles/read/1052/how-to-add-toggle-breakpoints-on-the-ace-editor-gutter
   */
-  componentDidMount(){
-    this.refs.aceIn.editor.on("guttermousedown", function(e) {
-      var target = e.domEvent.target;
+useEffect(() => {
+  aceIn.current.editor.on("guttermousedown", function(e) {
+    var target = e.domEvent.target;
 
-      if (target.className.indexOf("ace_gutter-cell") === -1) {
-          return;
-      }
+    if (target.className.indexOf("ace_gutter-cell") === -1) {
+        return;
+    }
 
-      /*// Pokud neni editor focusnut ignorovat nastaveni breakpointu (mozna se bude hodit).
-      if (!(e.editor.isFocused())){
-          return; 
-      }*/
+    /*// Pokud neni editor focusnut ignorovat nastaveni breakpointu (mozna se bude hodit).
+    if (!(e.editor.isFocused())){
+        return; 
+    }*/
 
-      // Misto za cislici ignorujeme pro nastaveni breakpointu
-      if (e.clientX > 25 + target.getBoundingClientRect().left) {
-          return;
-      }
+    // Misto za cislici ignorujeme pro nastaveni breakpointu
+    if (e.clientX > 25 + target.getBoundingClientRect().left) {
+        return;
+    }
 
-      var row = e.getDocumentPosition().row;
-      var breakpoints = e.editor.session.getBreakpoints(row, 0);
+    var row = e.getDocumentPosition().row;
+    var breakpoints = e.editor.session.getBreakpoints(row, 0);
 
-      if (typeof breakpoints[row] === typeof undefined) {
-        e.editor.session.setBreakpoint(row);
-      }
-      else {
-          e.editor.session.clearBreakpoint(row);
-      }
+    if (typeof breakpoints[row] === typeof undefined) {
+      e.editor.session.setBreakpoint(row);
+    }
+    else {
+        e.editor.session.clearBreakpoint(row);
+    }
 
-      e.stop();
-      console.log(breakpoints);
+    e.stop();
+    
+    toggleBreakpoint(breakpoints);
     });
-  }
+  }, [toggleBreakpoint]);
 
-  find(expression, properties) {
-    this.refs.aceIn.editor.find(expression, properties);
-  }
 
-  findAll(expression, properties) {
-    this.refs.aceIn.editor.findAll(expression, properties);
-  }
-
-  resize() {
-    this.refs.aceIn.editor.resize();
-  }
-
-  onChange(newValue) {
-    this.props.edit(newValue);
-    console.log(this.refs.aceIn.editor.session.getBreakpoints());
-  }
-  
-  onSelectionChange(newValue, event) {
-    const content = this.refs.aceIn.editor.getSelectedText();
-    console.log(content);
-  }
-
-  undo() {
-    this.refs.aceIn.editor.undo();
-  }
-
-  redo() {
-    this.refs.aceIn.editor.redo();
-  }
-
-  clearAllBreakpoints() {
-    this.refs.aceIn.editor.session.clearBreakpoints();
+  const onChange = (newValue) => {
+    edit(newValue);
+    console.log(aceIn.current.editor.session.getBreakpoints());
   }
 
 //<button onClick={()=> {this.refs.aceIn.editor.undo()}}>Undo</button>
-  render() { 
+  
     return ( 
       <AceEditor
         theme="idle_fingers"
         fontSize="20px"
-        onChange={this.onChange}
+        onChange={onChange}
         //onSelectionChange={this.onSelectionChange}
-        ref="aceIn"
-        value={this.props.content}
+        ref={aceIn}
+        value={content}
         mode="plain_text"
         name="EditorIn"
         height="100%"
@@ -105,10 +98,10 @@ class EditorIn extends Component {
         showPrintMargin={false}
         hScrollBarAlwaysVisible={true}
         debounceChangePeriod={1500}
-        wrapEnabled={this.props.wrap}
+        wrapEnabled={wrap}
         editorProps={{ $blockScrolling: true }}
       />);
-  }
-}
+  
+}));
  
 export default EditorIn;

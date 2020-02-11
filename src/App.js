@@ -9,8 +9,8 @@ import ToolList from './components/ToolList';
 import Alerts from './components/Alerts';
 import arrayMove from 'array-move';
 import newID from './scripts/generatorID';
-import worker from './scripts/pipeWorker';
 import WebWorker from './scripts/WebWorker';
+import pipeWorker from './scripts/pipeWorker';
 
 const theme = createMuiTheme({
   palette: {
@@ -21,12 +21,27 @@ const theme = createMuiTheme({
   }
 });
 
+/**
+ * Funkce zkontroluje pole, zda nejsou nastavene breakpointy.
+ * Kdyby byla velmi pomala, vytvorit workera.
+ */
+function emptyBreakpoints(breakpoints) {
+  for (var i in breakpoints) {
+      if (typeof breakpoints[i] !== typeof undefined) {
+          return false;
+      }
+  }
+  return true;
+};
+
 function App() {
   const alertRef = useRef();
   const [pipeline, setPipeline] = useState([]);
 
   const [editorContent, setEditorContent] = useState("");
   const [editorResult, setEditorResult] = useState("");
+  const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});
+  //const [inspectMode, setInspectMode] = useState(false);
 
   const addTool = useCallback((tool) => {
     tool.id = newID();
@@ -73,22 +88,35 @@ function App() {
     setEditorContent(newValue);
   }, [setEditorContent]);
 
+  const toggleInspectMode = useCallback(() => {
+    setInspectMode(state => ({ ...state, enabled: !state.enabled}));
+  }, [setInspectMode]);
+
+  const toggleBreakpoint = useCallback((breakpoints) => {
+    setInspectMode(state => ({ ...state, enabled: !emptyBreakpoints(breakpoints), breakpoints: breakpoints}));
+  }, [setInspectMode]);
+
   // Do dokumentace napsat proc neni async/await ale useEffect
   // Popsat WebWorkers
   useEffect(() => {
-    const pipeWorker = new WebWorker(worker);
+    const worker = new WebWorker(pipeWorker);
 
-    pipeWorker.postMessage({text: editorContent, pipeline: pipeline});
+    worker.postMessage({
+      text: editorContent, 
+      pipeline: pipeline, 
+      breakpoints: inspectMode.breakpoints, 
+      inspectMode: inspectMode.enabled
+    });
 
-    pipeWorker.onmessage = (event) => {
+    worker.onmessage = (event) => {
       setEditorResult(event.data);
     }
 
     return () => {  // Cleanup
-      pipeWorker.terminate();
+      worker.terminate();
     }
-  }, [editorContent, pipeline, setEditorResult]);
-
+  }, [editorContent, pipeline, inspectMode, setEditorResult]);
+  
   const showAlert = useCallback((variant, message) => {
     alertRef.current.openSnackbar(variant, message);
   }, []);
@@ -102,6 +130,9 @@ function App() {
           editText={editText} 
           editorResult={editorResult}
           showAlert={showAlert} 
+          toggleBreakpoint={toggleBreakpoint}
+          inspectMode={inspectMode.enabled}
+          toggleInspectMode={toggleInspectMode}
         />
         <ToolList 
           tools={pipeline}

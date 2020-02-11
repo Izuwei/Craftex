@@ -14,20 +14,27 @@ const useStyles = makeStyles(theme => ({
         fontSize: "13px",
         borderRadius: "0px",
     },
+    item: {
+        marginLeft: "15px",
+    },
     enabled: {
         color: "green",
     },
     disabled: {
         color: "#bf001d",
     },
+    violet: {
+        color: "#e35d14",
+    },
 }));
 
-const EditorBottomPanel = React.memo(({wrap}) => {
+const EditorBottomPanel = React.memo(({wrap, inspectMode}) => {
     const classes = useStyles();
 
     return (
         <Paper elevation={7} className={classes.root}>
-            <span>Wrap: {wrap ? <span className={classes.enabled}>Enabled</span> : <span className={classes.disabled}>Disabled</span>}</span>
+            <span className={classes.item}>Wrap: {wrap ? <span className={classes.enabled}>Enabled</span> : <span className={classes.disabled}>Disabled</span>}</span>
+            <span className={classes.item}>Mode: <span className={classes.violet}>{ inspectMode ? "Inspect" : "Auto" }</span></span>
         </Paper>
     );
 });

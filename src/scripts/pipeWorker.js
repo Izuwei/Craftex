@@ -5,7 +5,7 @@ export default () => {
         return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     };
 
-    function run(text, pipeline) {
+    function processPipeline(text, pipeline) {
         var tempResult = text;
     
         for (var i = 0; i < pipeline.length; i++) {
@@ -29,7 +29,20 @@ export default () => {
     };
 
     self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
+        var processData = [];
+        
+        if (event.data.inspectMode) {
+            var splitedText = event.data.text.split('\n');
 
-        postMessage(run(event.data.text, event.data.pipeline));
+            for (var i in event.data.breakpoints) {
+                processData.push(splitedText[i]);
+            }
+            processData = processData.join('\n');
+        }
+        else {
+            processData = event.data.text;
+        }
+
+        postMessage(processPipeline(processData, event.data.pipeline));
     });
 }
