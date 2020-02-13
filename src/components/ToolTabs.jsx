@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from '@material-ui/core';
 import { lightBlue } from '@material-ui/core/colors';
-import { Reorder, ViewColumn, FindReplace, YoutubeSearchedFor, Transform } from '@material-ui/icons';
+import { Edit, FindReplace, AddCircleOutline, RemoveCircleOutline, Transform } from '@material-ui/icons';
 import RowTab from './Tabs/RowTab';
 import ReplaceTab from './Tabs/ReplaceTab';
 
@@ -98,10 +98,10 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
             scrollButtons="auto"
             centered
           >
-            <Tab icon={<YoutubeSearchedFor />} label="Reverse" {...a11yProps(0)} />
-            <Tab icon={<FindReplace />} label="Replace" {...a11yProps(1)} />
-            <Tab icon={<Reorder />} label="Rows" {...a11yProps(2)} />
-            <Tab icon={<ViewColumn />} label="Columns" {...a11yProps(3)} />
+            <Tab icon={<FindReplace />} label="Find & replace" {...a11yProps(0)} />
+            <Tab icon={<AddCircleOutline />} label="Addition" {...a11yProps(1)} />
+            <Tab icon={<RemoveCircleOutline />} label="Removal" {...a11yProps(2)} />
+            <Tab icon={<Edit />} label="Modify" {...a11yProps(3)} />
             <Tab icon={<Transform />} label="Convert" {...a11yProps(4)} />
           </Tabs>
         </AppBar>

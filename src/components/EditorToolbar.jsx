@@ -283,7 +283,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                         </MenuItem>
                         <MenuItem onClick={e => `${clearAllBreakpoints(e)} ${handleClose(e)}`}>
                             <Clear fontSize="small" className={classes.toolbarIcon} />
-                            Clear all breakpoints
+                            Remove all breakpoints
                         </MenuItem>
                       </MenuList>
                     </ClickAwayListener>

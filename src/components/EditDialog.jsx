@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, TextField, DialogTitle, DialogContent, DialogActions, IconButton, useMediaQuery, Tooltip, makeStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-import { Done, Close, Edit } from '@material-ui/icons';
+import { Done, Close, Settings } from '@material-ui/icons';
 import { green, lightBlue } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
@@ -174,7 +174,7 @@ function EditDialog(props) {
             aria-labelledby="responsive-dialog-title"
         >
             <DialogTitle className={classes.title} id="responsive-dialog-title">
-                <Edit className={classes.titleIcon} fontSize="large" />
+                <Settings className={classes.titleIcon} fontSize="large" />
                 {props.tool.tool}
             </DialogTitle>
             <DialogContent>
