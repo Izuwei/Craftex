@@ -41,6 +41,7 @@ function App() {
   const [editorContent, setEditorContent] = useState("");
   const [editorResult, setEditorResult] = useState("");
   const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});
+  const [pipeProgress, setPipeProgress] = useState(100);
   //const [inspectMode, setInspectMode] = useState(false);
 
   const addTool = useCallback((tool) => {
@@ -109,12 +110,15 @@ function App() {
     });
 
     worker.onmessage = (event) => {
-      setEditorResult(event.data);
-    }
+      if (event.data.type === "progress")
+        setPipeProgress(event.data.data);
+      else
+        setEditorResult(event.data.data);
+    };
 
     return () => {  // Cleanup
       worker.terminate();
-    }
+    };
   }, [editorContent, pipeline, inspectMode, setEditorResult]);
   
   const showAlert = useCallback((variant, message) => {
@@ -133,6 +137,7 @@ function App() {
           toggleBreakpoint={toggleBreakpoint}
           inspectMode={inspectMode.enabled}
           toggleInspectMode={toggleInspectMode}
+          pipeProgress={pipeProgress}
         />
         <ToolList 
           tools={pipeline}

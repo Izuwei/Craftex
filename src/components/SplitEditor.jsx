@@ -4,10 +4,18 @@ import SplitPane from "react-split-pane";
 import { Resizable } from "re-resizable";
 import EditorIn from "./EditorIn";
 import EditorOut from "./EditorOut";
+import { LinearProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import EditorBottomPanel from "./EditorBottomPanel";
 import "./SplitEditor.css";
 
-const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert, toggleBreakpoint, inspectMode, toggleInspectMode }) => {
+const ColorLinearProgress = withStyles({
+    barColorPrimary: {
+      backgroundColor: '#028fd4',
+    },
+})(LinearProgress);
+
+const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert, toggleBreakpoint, inspectMode, toggleInspectMode, pipeProgress }) => {
     const aceIn = useRef();
     const aceOut = useRef();
 
@@ -80,6 +88,7 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                     <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} toggleBreakpoint={toggleBreakpoint} />
                     <EditorOut ref={ aceOut } content={editorResult} wrap={wrap} />
                 </SplitPane>
+                    <ColorLinearProgress variant="determinate" value={pipeProgress} />
                     <EditorBottomPanel wrap={wrap} inspectMode={inspectMode} />
             </Resizable>
         </React.Fragment>
