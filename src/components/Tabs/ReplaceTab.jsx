@@ -69,7 +69,7 @@ export default function ReplaceTab(props){
         if (replaceFind !== "" && replaceReplace !== "") {
             setReplaceFindError(false);
             setReplaceReplaceError(false);
-            props.addTool({tool: "Replace", find: replaceFind, replace: replaceReplace});
+            props.addTool({toolname: "Replace", find: replaceFind, replace: replaceReplace});
             props.showAlert("success", "Success: Replace added into the pipeline.");
             setReplaceFind("");
             setReplaceReplace("");

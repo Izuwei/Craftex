@@ -101,7 +101,7 @@ function EditDialog(props) {
      * Vypis html kontextu podle zvoleneho nastroje
     */
     const mapToolContent = (tool) => {
-        switch (tool.tool) {
+        switch (tool.toolname) {
             case "Match":
                 return (
                     <React.Fragment>
@@ -145,7 +145,7 @@ function EditDialog(props) {
     }
 
     const confirm = (tool) => {
-        switch (tool.tool) {
+        switch (tool.toolname) {
             case "Match":
                 if (validateMatch(editedTool)) {
                     props.updateTool(editedTool);
@@ -175,7 +175,7 @@ function EditDialog(props) {
         >
             <DialogTitle className={classes.title} id="responsive-dialog-title">
                 <Settings className={classes.titleIcon} fontSize="large" />
-                {props.tool.tool}
+                {props.tool.toolname}
             </DialogTitle>
             <DialogContent>
                 {mapToolContent(props.tool)}

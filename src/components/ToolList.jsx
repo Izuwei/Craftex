@@ -2,19 +2,21 @@ import React, { useState, useRef } from "react";
 import { List, ListItem, makeStyles, IconButton, Menu, MenuItem, Tooltip, useTheme, useMediaQuery } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import { Build, Delete, Visibility, VisibilityOff, Edit, MoreVert } from "@material-ui/icons";
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortableHandle } from "react-sortable-hoc";
 import EditDialog from "./EditDialog";
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { Resizable } from "re-resizable";
 
 const useStyles = makeStyles(theme => ({
     root: {
         height: "250px",
-        width: "95%",
+        //width: "95%",
         marginTop: "20px",
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        backgroundColor: 'rgb(50,50,50)',
+        marginLeft: "auto",
+        marginRight: "auto",
+        backgroundColor: "rgb(50,50,50)",
         color: "white",
+        borderBottom: "1px solid rgb(30, 30, 30)",
     },
     fullWidth: {
         width: "100% !important",
@@ -80,9 +82,11 @@ const useStyles = makeStyles(theme => ({
 const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sort }) => {
     const classes = useStyles();
     const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [listHeight, setListHeight] = useState(208);
+    const [onSort, setOnSort] = useState(false);
 
     const theme = useTheme();   // useMediaQuery
-    const fullWidth = useMediaQuery(theme.breakpoints.down('sm'));
+    const fullWidth = useMediaQuery(theme.breakpoints.down("sm"));
 
     const toolToEdit = useRef({});
 
@@ -95,19 +99,24 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
         setOpenEditDialog(false);
     }
 
+    const handleResize = (d) => {
+        setListHeight(state => state + d.height);
+        setOnSort(false);
+    }
+
     const mapTool = (tool) => {
-        switch (tool.tool) {
+        switch (tool.toolname) {
             case "Match":
                 return (
                     <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.tool}</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname}</span> 
                             {tool.pattern}
                     </React.Fragment>
                 );
             case "Replace":
                 return (
                     <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.tool}</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname}</span> 
                             {tool.find}
                             <span className={`${classes.conword} ${!(tool.active) && classes.itemDeactivated}`}>with</span> 
                             {tool.replace}
@@ -168,19 +177,29 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
     ));
 
     return (
-        <div className={`${classes.root} ${fullWidth && classes.fullWidth}`}>
+        <Resizable 
+            className={`${classes.root} ${fullWidth && classes.fullWidth}`}
+            defaultSize={{ width: "95%", height: "208px" }}
+            minHeight={100}
+            enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
+            onResizeStart={() => setOnSort(true)}
+            onResizeStop={(e, direction, ref, d) => handleResize(d)}
+        >
             <div className={classes.title}>
                 <Build style={{fontSize: "22px", paddingLeft: "5px"}}/>
                 <div className={classes.titleLabel}>Pipeline</div>
                 <div />
             </div>
-            <div className={classes.content}>
+            <div 
+                className={classes.content} 
+                style={{height: listHeight - 44 + "px", visibility: onSort ? "hidden" : "visible"}}  // 44 == vyska nadpisu 
+            >
                 <SortableListContainer
                     tools={tools}
                     lockAxis='y'
                     useDragHandle={true}
                     onSortEnd={sort}
-                    helperClass={'SortableHelper'}
+                    helperClass={"SortableHelper"}
                 />
             </div>
             {openEditDialog && 
@@ -190,8 +209,7 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
                     tool={toolToEdit.current}
                     updateTool={updateTool}
             />}
-            
-        </div>
+        </Resizable>
     );
 });
 

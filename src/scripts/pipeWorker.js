@@ -12,7 +12,7 @@ export default () => {
         	if (pipeline[i].active === false)
         		continue;
 
-        	switch (pipeline[i].tool) {
+        	switch (pipeline[i].toolname) {
         		case "Replace":
         			tempResult = tempResult.replace(new RegExp(regexEscape(pipeline[i].find), 'g'), pipeline[i].replace);
         			break;
