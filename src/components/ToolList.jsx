@@ -11,6 +11,9 @@ const useStyles = makeStyles(theme => ({
     root: {
         height: "250px",
         //width: "95%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
         marginTop: "20px",
         marginLeft: "auto",
         marginRight: "auto",
@@ -52,8 +55,9 @@ const useStyles = makeStyles(theme => ({
         color: "grey !important",
     },
     content: {
-        height: "208px",
+        //height: "208px",
         overflow: "auto",
+        flexGrow: "1",
     },
     toolName: {
         color: "#ff6a1a",
@@ -82,8 +86,6 @@ const useStyles = makeStyles(theme => ({
 const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sort }) => {
     const classes = useStyles();
     const [openEditDialog, setOpenEditDialog] = useState(false);
-    const [listHeight, setListHeight] = useState(208);
-    const [onSort, setOnSort] = useState(false);
 
     const theme = useTheme();   // useMediaQuery
     const fullWidth = useMediaQuery(theme.breakpoints.down("sm"));
@@ -97,11 +99,6 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
 
     const closeEdit = () => {
         setOpenEditDialog(false);
-    }
-
-    const handleResize = (d) => {
-        setListHeight(state => state + d.height);
-        setOnSort(false);
     }
 
     const mapTool = (tool) => {
@@ -179,21 +176,16 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
     return (
         <Resizable 
             className={`${classes.root} ${fullWidth && classes.fullWidth}`}
-            defaultSize={{ width: "95%", height: "208px" }}
+            defaultSize={{ width: "95%", height: "250px" }}
             minHeight={100}
             enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
-            onResizeStart={() => setOnSort(true)}
-            onResizeStop={(e, direction, ref, d) => handleResize(d)}
         >
             <div className={classes.title}>
                 <Build style={{fontSize: "22px", paddingLeft: "5px"}}/>
                 <div className={classes.titleLabel}>Pipeline</div>
                 <div />
             </div>
-            <div 
-                className={classes.content} 
-                style={{height: listHeight - 44 + "px", visibility: onSort ? "hidden" : "visible"}}  // 44 == vyska nadpisu 
-            >
+            <div className={classes.content}>
                 <SortableListContainer
                     tools={tools}
                     lockAxis='y'
