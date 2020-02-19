@@ -4,7 +4,7 @@ import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, creat
 import { lightBlue } from '@material-ui/core/colors';
 import { Edit, FindReplace, AddCircleOutline, RemoveCircleOutline, Transform } from '@material-ui/icons';
 import RowTab from './Tabs/RowTab';
-import ReplaceTab from './Tabs/ReplaceTab';
+import FindAndReplaceTab from './Tabs/FindAndReplaceTab';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -106,10 +106,10 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
           </Tabs>
         </AppBar>
         <TabPanel theme={theme} value={value} index={0}>
-          TBD
+          <FindAndReplaceTab showAlert={showAlert} addTool={addTool}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <ReplaceTab showAlert={showAlert} addTool={addTool}/>
+          TBD
         </TabPanel>
         <TabPanel value={value} index={2}>
           <RowTab showAlert={showAlert} addTool={addTool}/>

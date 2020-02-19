@@ -9,7 +9,7 @@ export default () => {
         var result;
 
         switch (tool.toolname) {
-        	case "Replace":
+        	case "replace":
         		result = text.replace(new RegExp(regexEscape(tool.find), 'g'), tool.replace);
         		break;
         	case "Match":

@@ -116,7 +116,7 @@ function EditDialog(props) {
                         />
                     </React.Fragment>
                 );
-            case "Replace":
+            case "replace":
                 return (
                     <React.Fragment>
                             <TextField
@@ -152,7 +152,7 @@ function EditDialog(props) {
                     props.close();
                 }
                 break;
-            case "Replace":
+            case "replace":
                 if (validateReplace(editedTool)) {
                     props.updateTool(editedTool);
                     props.close();

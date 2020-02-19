@@ -72,6 +72,8 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
             <Resizable
                 defaultSize={{ width: "100%", height: "700px" }}
                 minHeight={100}
+                minWidth="100%"
+                maxWidth="100%"
                 enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
                 onResize={() => handleResize()}
                 style={{display: "flex", flexDirection: "column", flexWrap: "nowrap", justifyContent: "flex-start",

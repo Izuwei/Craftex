@@ -11,6 +11,8 @@ const useStyles = makeStyles(theme => ({
     root: {
         height: "250px",
         //width: "95%",
+        minWidth: "95%",
+        maxWidth: "95%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
@@ -23,6 +25,8 @@ const useStyles = makeStyles(theme => ({
     },
     fullWidth: {
         width: "100% !important",
+        minWidth: "100% !important",
+        maxWidth: "100% !important",
     },
     title: {
         height: "22px",
@@ -106,14 +110,14 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
             case "Match":
                 return (
                     <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname}</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Match</span> 
                             {tool.pattern}
                     </React.Fragment>
                 );
-            case "Replace":
+            case "replace":
                 return (
                     <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname}</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Replace</span> 
                             {tool.find}
                             <span className={`${classes.conword} ${!(tool.active) && classes.itemDeactivated}`}>with</span> 
                             {tool.replace}
