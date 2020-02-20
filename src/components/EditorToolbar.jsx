@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Toolbar, Button, IconButton, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener, InputBase, Tooltip } from "@material-ui/core";
-import { Description, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
-import { fade } from '@material-ui/core/styles';
+import { Description, FiberNew, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
+import { fade } from "@material-ui/core/styles";
+import ShellDialog from "./ShellDialog";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -94,6 +95,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
     const [openEditor, setOpenEditor] = useState(false);
     const [openInspect, setOpenInspect] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
+    const [openShellDialog, setOpenShellDialog] = useState(false);
 
     const [searchExpression, setSearchExpression] = useState("");   // TODO: Predelat jednotlivy casti na mensi komponenty (asi)
     const [searchRegExp, setSearchRegExp] = useState(false);
@@ -103,7 +105,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
     
     const fileButtonRef = useRef(null);
     const editorButtonRef = useRef(null);
-    const inspectButtonRef = useRef(null);
+    const pipelineButtonRef = useRef(null);
     const searchButtonRef = useRef(null);
 
     const expandFile = () => {
@@ -138,7 +140,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
         // Otevreni dalsiho selectu
         if ((fileButtonRef.current && fileButtonRef.current.contains(event.target)) || 
             (editorButtonRef.current && editorButtonRef.current.contains(event.target)) ||
-            (inspectButtonRef.current && inspectButtonRef.current.contains(event.target)) ||
+            (pipelineButtonRef.current && pipelineButtonRef.current.contains(event.target)) ||
             (searchButtonRef.current && searchButtonRef.current.contains(event.target))) {
             return;
         }
@@ -253,6 +255,14 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                             <WrapText fontSize="small" className={classes.toolbarIcon} />
                             { wrap ? "Disable wrap" : "Enable wrap" }
                         </MenuItem>
+                        <MenuItem onClick={e => `${toggleInspectMode(e)} ${handleClose(e)}`}>
+                            <ViewDay fontSize="small" className={classes.toolbarIcon} />
+                            { inspectMode ? "Disable inspector" : "Enable inspector" }
+                        </MenuItem>
+                        <MenuItem onClick={e => `${clearAllBreakpoints(e)} ${handleClose(e)}`}>
+                            <Clear fontSize="small" className={classes.toolbarIcon} />
+                            Remove all breakpoints
+                        </MenuItem>
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>
@@ -262,13 +272,13 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
 
             <Button 
                 className={classes.btn}
-                ref={inspectButtonRef}
+                ref={pipelineButtonRef}
                 onClick={expandInspect}
             >
                 <BugReport fontSize="small" className={classes.toolbarIcon} />
-                Inspector
+                Pipeline
             </Button>
-            <Popper className={classes.popmenu} open={openInspect} anchorEl={inspectButtonRef.current} role={undefined} transition disablePortal>
+            <Popper className={classes.popmenu} open={openInspect} anchorEl={pipelineButtonRef.current} role={undefined} transition disablePortal>
             {({ TransitionProps, placement }) => (
                 <Grow
                   {...TransitionProps}
@@ -276,14 +286,10 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 >
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
-                      <MenuList autoFocusItem={openInspect} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                        <MenuItem onClick={e => `${toggleInspectMode(e)} ${handleClose(e)}`}>
-                            <ViewDay fontSize="small" className={classes.toolbarIcon} />
-                            { inspectMode ? "Disable inspector" : "Enable inspector" }
-                        </MenuItem>
-                        <MenuItem onClick={e => `${clearAllBreakpoints(e)} ${handleClose(e)}`}>
-                            <Clear fontSize="small" className={classes.toolbarIcon} />
-                            Remove all breakpoints
+                    <MenuList autoFocusItem={openInspect} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                        <MenuItem onClick={e => `${setOpenShellDialog(true)} ${handleClose(e)}`}>
+                            <FiberNew fontSize="small" className={classes.toolbarIcon} />
+                            Create shell script
                         </MenuItem>
                       </MenuList>
                     </ClickAwayListener>
@@ -372,6 +378,12 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 </Grow>
             )}
             </Popper>
+            {openShellDialog &&
+                <ShellDialog 
+                    open={openShellDialog}
+                    close={() => setOpenShellDialog(false)}
+                />
+            }
         </ Toolbar>
     );
 });

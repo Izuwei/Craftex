@@ -5,12 +5,56 @@ export default () => {
         return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     };
 
+    function replaceTool(text, tool) {
+        if (tool.inColumn === "") {     // Bez sloupcu -> globalne
+            if (tool.occurrence === "all") {    // All
+                if (tool.casesensitive === true) {
+                    return text.replace(new RegExp(regexEscape(tool.find), 'g'), tool.replace);
+                }
+                else {
+                    return text.replace(new RegExp(regexEscape(tool.find), 'gi'), tool.replace);
+                }
+            }
+            else {                              // First
+                if (tool.casesensitive === true) {
+                    return text.replace(new RegExp(regexEscape(tool.find), ''), tool.replace);
+                }
+                else {
+                    return text.replace(new RegExp(regexEscape(tool.find), 'i'), tool.replace);
+                }
+            }
+        }
+        else {      // Ve sloupci
+            var lines = text.split('\n');
+            var result = "";
+            var columns = "";
+            var option = "";
+            
+            if (tool.occurrence === "all") {
+                tool.casesensitive === true ? option = "g" : option = "gi";
+            }
+            else {
+                tool.casesensitive === true ? option = "" : option = "i";
+            }
+      
+            for (var i = 0; i < lines.length; i++) {
+                columns = lines[i].split(tool.delimiter);
+
+                if (tool.inColumn <= columns.length) {
+                    columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                }
+                result += columns.join(tool.delimiter) + '\n';
+            }
+            return result.slice(0, -1);
+        }
+    };
+
     function processTool(text, tool) {
         var result;
 
         switch (tool.toolname) {
         	case "replace":
-        		result = text.replace(new RegExp(regexEscape(tool.find), 'g'), tool.replace);
+        		result = replaceTool(text, tool);
         		break;
         	case "Match":
         		result = text.match(new RegExp(".*" + regexEscape(tool.pattern) + ".*", 'g'));

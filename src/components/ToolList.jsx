@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
     toolName: {
         color: "#ff6a1a",
         fontWeight: "bold",
-        marginRight: "10px",
+        marginRight: "8px",
     },
     toolText: {
         paddingTop: "13px",
@@ -75,11 +75,23 @@ const useStyles = makeStyles(theme => ({
         width: "100%",
         cursor: "grab",
     },
-    conword: {
+    violetWord: {
         color: "#b500d1",
         fontWeight: "bold",
         marginRight: "10px",
         marginLeft: "10px",
+    },
+    greenWord: {
+        color: "#22ba09",
+        fontWeight: "bold",
+    },
+    blueWord: {
+        color: "#089dcf",
+        fontWeight: "bold",
+    },
+    yellowWord: {
+        color: "#ffea00",
+        fontWeight: "bold",
     },
     listIcon: {
         marginRight: "15px",
@@ -101,10 +113,6 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
         setOpenEditDialog(true);
     }
 
-    const closeEdit = () => {
-        setOpenEditDialog(false);
-    }
-
     const mapTool = (tool) => {
         switch (tool.toolname) {
             case "Match":
@@ -117,10 +125,19 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
             case "replace":
                 return (
                     <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Replace</span> 
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Replace</span>
+                            <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
                             {tool.find}
-                            <span className={`${classes.conword} ${!(tool.active) && classes.itemDeactivated}`}>with</span> 
+                            <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px", marginLeft: "8px"}}>with</span> 
                             {tool.replace}
+                            {tool.inColumn === "" ? "" : 
+                                <React.Fragment>
+                                    <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px", marginLeft: "8px"}}>in</span>
+                                    {tool.inColumn + "."}
+                                    <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px", marginLeft: "8px"}}>column delimited by</span>
+                                    {tool.delimiter}
+                                </React.Fragment>
+                            }
                     </React.Fragment>
                 );
             default:
@@ -201,7 +218,7 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
             {openEditDialog && 
                 <EditDialog 
                     open={openEditDialog}
-                    close={closeEdit}
+                    close={() => setOpenEditDialog(false)}
                     tool={toolToEdit.current}
                     updateTool={updateTool}
             />}
