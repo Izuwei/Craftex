@@ -49,7 +49,7 @@ function ReplaceTool(props) {
             setReplaceFindError(true);
         }
 
-        if (replaceFind === replaceReplace) {
+        if (replaceFind === replaceReplace && replaceFind !== "") {
             setReplaceReplaceError(true);
         }
 
@@ -61,7 +61,7 @@ function ReplaceTool(props) {
             setReplaceColumnError(true);
         }
 
-        if (replaceFind !== "" && replaceFind !== replaceReplace && (replaceInColumn === "" || (replaceInColumn > 0 && replaceColumnDelimiter !== ""))) {
+        if (replaceFind !== "" && replaceFind !== replaceReplace && (replaceInColumn === "" || (replaceInColumn > 0 && replaceColumnDelimiter !== "" && replaceColumnDelimiter !== replaceFind))) {
             setReplaceFindError(false);
             props.addTool({toolname: "replace", find: replaceFind, replace: replaceReplace, occurrence: occurrence, casesensitive: replaceCaseSensitive, inColumn: replaceInColumn, delimiter: replaceColumnDelimiter});
             props.showAlert("success", "Success: Replace added into the pipeline.");
@@ -116,7 +116,7 @@ function ReplaceTool(props) {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    error={replaceColumnError === true ? true : false}
+                    error={replaceColumnError === true}
                     helperText={replaceColumnError === true ? "Number must be greater than zero." : ""}
                 />
                 <TextField
@@ -126,7 +126,7 @@ function ReplaceTool(props) {
                     onChange={event => `${setReplaceColumnDelimiter(event.target.value)} ${setReplaceDelimiterError(false)}`}
                     className={classes.opts}
                     required={replaceInColumn === "" ? false : true}
-                    error={replaceDelimiterError === true ? true : false}
+                    error={replaceDelimiterError === true}
                     helperText={replaceDelimiterError === true ? "Required and must be different than find expression." : ""}
                 />
             </div>

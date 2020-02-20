@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Dialog, useTheme, DialogTitle, DialogContent, useMediaQuery, makeStyles, MuiThemeProvider, DialogContentText } from '@material-ui/core';
-import { Close, Settings } from '@material-ui/icons';
+import React from 'react';
+import { Dialog, useTheme, DialogTitle, DialogContent, useMediaQuery, MuiThemeProvider, DialogContentText } from '@material-ui/core';
+import { Settings } from '@material-ui/icons';
 
-function EditDialog(props) {
+function EditDialog(props) {    // TODO: dodelat tohle a predelat nazvy v toolbaru z inspect na pipeline
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
     
@@ -26,51 +26,7 @@ function EditDialog(props) {
                     id="scroll-dialog-description"
                     tabIndex={-1}
                 >
-                    asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
-            asdasdasdsdaasdasdasdsdaasdasdasdsdaasdasdasdsda
+                    TBD
                 </DialogContentText>
             </DialogContent>
         </Dialog>
