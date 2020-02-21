@@ -36,45 +36,6 @@ else {
 }
 }
 
-function replaceFirstInColumn(text, tool, option) {
-var lines = text.split('\n');
-var columns = "";
-var result = "";
-
-for (var z = 0; z < lines.length; z++) {
-  columns = lines[z].split(tool.delimiter);
-
-  if (tool.inColumn <= columns.length) {
-      if (columns[tool.inColumn - 1].match(new RegExp(tool.find), 'g') !== null) {
-          columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-          result += columns.join(tool.delimiter) + '\n';
-          lines = lines.slice(z + 1);
-          lines = lines.join('\n');
-          result += lines;
-          return result;
-      }
-  }
-  result += columns.join(tool.delimiter) + '\n';
-}
-return text;
-}
-
-function replaceAllInColumn(text, tool, option) {
-  var lines = text.split('\n');
-  var result = "";
-  var columns = "";
-
-  for (var i = 0; i < lines.length; i++) {
-  columns = lines[i].split(tool.delimiter);
-
-  if (tool.inColumn <= columns.length) {
-      columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-  }
-  result += columns.join(tool.delimiter) + '\n';
-  }
-  return result.slice(0, -1);
-}
-
 function replaceTool(text, tool) {
 const option = replaceGetOpts(tool);
 
@@ -82,33 +43,52 @@ if (tool.inColumn === "") {     // Bez sloupcu -> globalne
     return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
 }
 else {      // Ve sloupci
+  var splitedText = text.split('\n');
+  var columns = "";
+
     if (tool.occurrence === "all") {
-        return replaceAllInColumn(text, tool, option);
+      for (var i = 0; i < splitedText.length; i++) {
+      columns = splitedText[i].split(tool.delimiter);
+    
+      if (tool.inColumn <= columns.length) {
+          columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+          splitedText[i] = columns.join(tool.delimiter);
+      }
+      }
+      return splitedText.join('\n');
     }
-    else {
-        return replaceFirstInColumn(text, tool, option);
+    else { 
+      for (var z = 0; z < splitedText.length; z++) {
+        columns = splitedText[z].split(tool.delimiter);
+      
+        if (tool.inColumn <= columns.length) {
+            if (columns[tool.inColumn - 1].match(new RegExp(tool.find, option)) !== null) {
+                columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                splitedText[z] = columns.join(tool.delimiter);
+                return splitedText.join('\n');
+            }
+        }
+      }
+      return text;
     }
 }
 };
 
-function replaceInspectTool(text, originalText, tool, breakpoints) {
+function replaceInspectTool(text, tool) {
   const option = replaceGetOpts(tool);
-  var lines = "";
 
   if (tool.inColumn === "") {     // Bez sloupcu -> globalne
-      if (tool.occurrence === "all") {
-          return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+      if (tool.occurrence === "all") {    // Vsechno
+          for (var i = 0; i < text.length; i++) {
+              text[i] = text[i].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+          }
+          return text;
       }
-      else {
-          lines = originalText.split('\n');
-          for (var x = 0; x < originalText.length; x++) {
-              if (lines[x].match(new RegExp(tool.find), 'g') !== null) {
-                  if (typeof breakpoints[x] === typeof undefined) {
-                      break;
-                  }
-                  else {
-                      return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                  }
+      else {          // Prvni vyskyt
+          for (var x = 0; x < text.length; x++) {
+              if (text[x].match(new RegExp(tool.find, option)) !== null) {
+                  text[x] = text[x].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                  break;
               }
           }
           return text;
@@ -117,23 +97,26 @@ function replaceInspectTool(text, originalText, tool, breakpoints) {
   else {      // Ve sloupci
       var columns = "";
 
-      if (tool.occurrence === "all") {
-          return replaceAllInColumn(text, tool, option);
+      if (tool.occurrence === "all") {    // Vsechno
+          for (var j = 0; j < text.length; j++) {
+              columns = text[j].split(tool.delimiter);
+      
+              if (tool.inColumn <= columns.length) {
+                  columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                  text[j] = columns.join(tool.delimiter);
+              }
+          }
+          return text;
       }
-      else {
-          lines = originalText.split('\n');
-
-          for (var z = 0; z < lines.length; z++) {
-              columns = lines[z].split(tool.delimiter);
+      else {      // Prvni vyskyt
+          for (var z = 0; z < text.length; z++) {
+              columns = text[z].split(tool.delimiter);
           
               if (tool.inColumn <= columns.length) {
-                  if (columns[tool.inColumn - 1].match(new RegExp(tool.find), 'g') !== null) {
-                      if (typeof breakpoints[z] === typeof undefined) {
-                          return text;
-                      }
-                      else {
-                          return replaceFirstInColumn(text, tool, option);
-                      }
+                  if (columns[tool.inColumn - 1].match(new RegExp(regexEscape(tool.find), option)) !== null) {
+                      columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                      text[z] = columns.join(tool.delimiter);
+                      return text;
                   }
               }
           }
@@ -160,12 +143,12 @@ function processTool(text, tool) {
   return result;
 };
 
-function processInspectTool(text, originalText, tool, breakpoints) {
+function processInspectTool(text, tool) {
   var result;
 
   switch (tool.toolname) {
     case "replace":
-      result = replaceInspectTool(text, originalText, tool, breakpoints);
+      result = replaceInspectTool(text, tool);
       break;
     case "Match":
       result = text.match(new RegExp(".*" + regexEscape(tool.pattern) + ".*", 'g'));
@@ -179,38 +162,34 @@ function processInspectTool(text, originalText, tool, breakpoints) {
 };
 
 function proc(data) { // eslint-disable-line no-restricted-globals
-  var processData = [];
-  
-  if (data.inspectMode) {
-      var splitedText = data.text.split('\n');
-
-      for (var each in data.breakpoints) {
-          processData.push(splitedText[each]);
-      }
-      processData = processData.join('\n');
-  }
-  else {
-      processData = data.text;
-  }
-  
   const pipeline = data.pipeline;
-  var tempResult = processData;
+
+  var processData = data.inspectMode === true ? data.text.split('\n') : data.text;
   
   for (var i = 0; i < pipeline.length; i++) {
     if (pipeline[i].active === false)
       continue;
 
       if (data.inspectMode === false) {
-          tempResult = processTool(tempResult, pipeline[i]);
+        processData = processTool(processData, pipeline[i]);
       }
       else {
-          tempResult = processInspectTool(tempResult, data.text, pipeline[i], data.breakpoints);
+        processData = processInspectTool(processData, pipeline[i]);
       }
   }
 
-  return tempResult;
-};
-*/
+  if (data.inspectMode === true) {
+    var temp = [];
+
+    for (var breakpoint in data.breakpoints) {
+        temp.push(processData[breakpoint]);
+    }
+    processData = temp.join('\n');
+}
+
+  return processData;
+};*/
+
 //------------------------------------------------------------------------
 
 /**
@@ -246,7 +225,7 @@ function App() {
     setPipeline(c => c.filter(each => each.id !== tool.id));
   }, [setPipeline]);
 
-  const updateTool = useCallback((tool) => {
+  const updateTool = useCallback((tool) => {  // TODO: opravit jen na set
     const tmp = [...pipeline];
 
     for (var i in tmp) {
@@ -259,16 +238,12 @@ function App() {
   }, [pipeline, setPipeline]);
 
   const reactiveTool = useCallback((tool) => {
-    const tmp = [...pipeline];
-
-    for (var i in tmp) {
-      if (tmp[i].id === tool.id) {
-        tmp[i].active = !(tmp[i].active);
-        break;
+    setPipeline(state => state.map(each => {
+      if (each.id === tool.id) {
+        return {...each, active: !each.active}
       }
-    }
-    setPipeline(tmp);
-  }, [pipeline, setPipeline]);
+      else return each}));
+  }, [setPipeline]);
 
   const onSortPipeline = useCallback(({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
@@ -288,6 +263,10 @@ function App() {
   const toggleBreakpoint = useCallback((breakpoints) => {
     setInspectMode(state => ({ ...state, enabled: !emptyBreakpoints(breakpoints), breakpoints: breakpoints}));
   }, [setInspectMode]);
+
+  const setPipelineActivity = useCallback((value) => {
+    setPipeline(state => state.map(tool => {return {...tool, active: value}}));
+  }, [setPipeline]);
 
   // Do dokumentace napsat proc neni async/await ale useEffect
   // Popsat WebWorkers
@@ -336,6 +315,8 @@ function App() {
           inspectMode={inspectMode.enabled}
           toggleInspectMode={toggleInspectMode}
           pipeProgress={pipeProgress}
+          pipeline={pipeline}
+          setPipelineActivity={setPipelineActivity}
         />
         <ToolList 
           tools={pipeline}

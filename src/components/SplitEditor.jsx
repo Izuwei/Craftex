@@ -15,7 +15,7 @@ const ColorLinearProgress = withStyles({
     },
 })(LinearProgress);
 
-const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert, toggleBreakpoint, inspectMode, toggleInspectMode, pipeProgress }) => {
+const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert, toggleBreakpoint, inspectMode, toggleInspectMode, pipeProgress, pipeline, setPipelineActivity }) => {
     const aceIn = useRef();
     const aceOut = useRef();
 
@@ -68,6 +68,8 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                 findAll={findAll}
                 inspectMode={inspectMode}
                 toggleInspectMode={toggleInspectMode}
+                pipeline={pipeline}
+                setPipelineActivity={setPipelineActivity}
             />
             <Resizable
                 defaultSize={{ width: "100%", height: "700px" }}

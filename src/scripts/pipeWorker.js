@@ -7,6 +7,7 @@ export default () => {
       
     /**
      * Replace nastroj
+     * TODO: dodelat osetreni na undefined
      */
     function replaceGetOpts(tool) {
       if (tool.occurrence === "all") {
@@ -17,79 +18,59 @@ export default () => {
       }
     }
     
-    function replaceFirstInColumn(text, tool, option) {
-      var lines = text.split('\n');
-      var columns = "";
-      var result = "";
-    
-      for (var z = 0; z < lines.length; z++) {
-        columns = lines[z].split(tool.delimiter);
-    
-        if (tool.inColumn <= columns.length) {
-            if (columns[tool.inColumn - 1].match(new RegExp(tool.find), 'g') !== null) {
-                columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                result += columns.join(tool.delimiter) + '\n';
-                lines = lines.slice(z + 1);
-                lines = lines.join('\n');
-                result += lines;
-                return result;
+    function replaceTool(text, tool) {
+        const option = replaceGetOpts(tool);
+        
+        if (tool.inColumn === "") {     // Bez sloupcu -> globalne
+            return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+        }
+        else {      // Ve sloupci
+            var splitedText = text.split('\n');
+            var columns = "";
+        
+            if (tool.occurrence === "all") {
+                for (var i = 0; i < splitedText.length; i++) {
+                    columns = splitedText[i].split(tool.delimiter);
+                
+                    if (tool.inColumn <= columns.length) {
+                        columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                        splitedText[i] = columns.join(tool.delimiter);
+                    }
+                }
+                return splitedText.join('\n');
+            }
+            else { 
+                for (var z = 0; z < splitedText.length; z++) {
+                    columns = splitedText[z].split(tool.delimiter);
+              
+                    if (tool.inColumn <= columns.length) {
+                        if (columns[tool.inColumn - 1].match(new RegExp(tool.find, option)) !== null) {
+                            columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                            splitedText[z] = columns.join(tool.delimiter);
+                            return splitedText.join('\n');
+                        }
+                    }
+                }
+                return text;
             }
         }
-        result += columns.join(tool.delimiter) + '\n';
-      }
-      return text;
-    }
-    
-    function replaceAllInColumn(text, tool, option) {
-        var lines = text.split('\n');
-        var result = "";
-        var columns = "";
-    
-        for (var i = 0; i < lines.length; i++) {
-        columns = lines[i].split(tool.delimiter);
-    
-        if (tool.inColumn <= columns.length) {
-            columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-        }
-        result += columns.join(tool.delimiter) + '\n';
-        }
-        return result.slice(0, -1);
-    }
-    
-    function replaceTool(text, tool) {
-      const option = replaceGetOpts(tool);
-      
-      if (tool.inColumn === "") {     // Bez sloupcu -> globalne
-          return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-      }
-      else {      // Ve sloupci
-          if (tool.occurrence === "all") {
-              return replaceAllInColumn(text, tool, option);
-          }
-          else {
-              return replaceFirstInColumn(text, tool, option);
-          }
-      }
     };
     
-    function replaceInspectTool(text, originalText, tool, breakpoints) {
+    function replaceInspectTool(text, tool) {
         const option = replaceGetOpts(tool);
-        var lines = "";
-    
+      
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
-            if (tool.occurrence === "all") {
-                return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+            if (tool.occurrence === "all") {    // Vsechno
+                for (var i = 0; i < text.length; i++) {
+                    text[i] = text[i].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                }
+                return text;
             }
-            else {
-                lines = originalText.split('\n');
-                for (var x = 0; x < originalText.length; x++) {
-                    if (lines[x].match(new RegExp(tool.find), 'g') !== null) {
-                        if (typeof breakpoints[x] === typeof undefined) {
-                            break;
-                        }
-                        else {
-                            return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                        }
+            else {          // Prvni vyskyt
+                for (var x = 0; x < text.length; x++) {
+                    if (text[x].match(new RegExp(tool.find, option)) !== null) {
+                        text[x] = text[x].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                        break;
                     }
                 }
                 return text;
@@ -97,24 +78,27 @@ export default () => {
         }
         else {      // Ve sloupci
             var columns = "";
-
-            if (tool.occurrence === "all") {
-                return replaceAllInColumn(text, tool, option);
+      
+            if (tool.occurrence === "all") {    // Vsechno
+                for (var j = 0; j < text.length; j++) {
+                    columns = text[j].split(tool.delimiter);
+            
+                    if (tool.inColumn <= columns.length) {
+                        columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                        text[j] = columns.join(tool.delimiter);
+                    }
+                }
+                return text;
             }
-            else {
-                lines = originalText.split('\n');
-
-                for (var z = 0; z < lines.length; z++) {
-                    columns = lines[z].split(tool.delimiter);
+            else {      // Prvni vyskyt
+                for (var z = 0; z < text.length; z++) {
+                    columns = text[z].split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
-                        if (columns[tool.inColumn - 1].match(new RegExp(tool.find), 'g') !== null) {
-                            if (typeof breakpoints[z] === typeof undefined) {
-                                return text;
-                            }
-                            else {
-                                return replaceFirstInColumn(text, tool, option);
-                            }
+                        if (columns[tool.inColumn - 1].match(new RegExp(regexEscape(tool.find), option)) !== null) {
+                            columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                            text[z] = columns.join(tool.delimiter);
+                            return text;
                         }
                     }
                 }
@@ -144,57 +128,56 @@ export default () => {
         return result;
     };
 
-    function processInspectTool(text, originalText, tool, breakpoints) {
-        var result;
-
+    function processInspectTool(text, tool) {
+        var result = "";
+      
         switch (tool.toolname) {
-        	case "replace":
-        		result = replaceInspectTool(text, originalText, tool, breakpoints);
-        		break;
-        	case "Match":
-        		result = text.match(new RegExp(".*" + regexEscape(tool.pattern) + ".*", 'g'));
-        		result === null ? result = "" : result = result.join('\n');
-        		break;
-        	default:
-        		break;
+            case "replace":
+                result = replaceInspectTool(text, tool);
+                break;
+            case "Match":
+                result = text.match(new RegExp(".*" + regexEscape(tool.pattern) + ".*", 'g'));
+                result === null ? result = "" : result = result.join('\n');
+                break;
+            default:
+                break;
         }
         
         return result;
     };
 
     self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
-        var processData = [];
-        
-        if (event.data.inspectMode) {
-            var splitedText = event.data.text.split('\n');
+        var processData = event.data.inspectMode === true ? event.data.text.split('\n') : event.data.text;
 
-            for (var each in event.data.breakpoints) {
-                processData.push(splitedText[each]);
-            }
-            processData = processData.join('\n');
-        }
-        else {
-            processData = event.data.text;
-        }
-        
         const pipeline = event.data.pipeline;
         const unit = Math.ceil(100 / pipeline.length);
-        var tempResult = processData;
+
+        if (pipeline.length > 0) {
+            postMessage({type: "progress", data: 0});
+        }
         
         for (var i = 0; i < pipeline.length; i++) {
-        	if (pipeline[i].active === false)
-        		continue;
+        	if (pipeline[i].active === true) {
+                if (event.data.inspectMode === false) {
+                    processData = processTool(processData, pipeline[i]);
+                }
+                else {
+                    processData = processInspectTool(processData, pipeline[i]);
+                }
+            }
 
-            if (event.data.inspectMode === false) {
-                tempResult = processTool(tempResult, pipeline[i]);
-            }
-            else {
-                tempResult = processInspectTool(tempResult, event.data.text, pipeline[i], event.data.breakpoints);
-            }
-            
             postMessage({type: "progress", data: (i + 1) === pipeline.length ? 100 : (i + 1) * unit});
         }
 
-        postMessage({type: "result", data: tempResult});
+        if (event.data.inspectMode === true) {
+            var temp = [];
+
+            for (var breakpoint in event.data.breakpoints) {
+                temp.push(processData[breakpoint]);
+            }
+            processData = temp.join('\n');
+        }
+
+        postMessage({type: "result", data: processData});
     });
 }

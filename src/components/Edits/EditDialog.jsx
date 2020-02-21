@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Dialog, TextField, DialogTitle, DialogContent, DialogActions, IconButton, useMediaQuery, Tooltip, makeStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-import { Done, Close, Settings } from '@material-ui/icons';
-import { green, lightBlue } from '@material-ui/core/colors';
+import React, { useRef } from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton, useMediaQuery, Tooltip, makeStyles, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { Done, Close, Settings } from "@material-ui/icons";
+import { green, lightBlue } from "@material-ui/core/colors";
+import EditReplace from "./Tools/EditReplace";
 
 const theme = createMuiTheme({
     palette: {
@@ -15,7 +16,7 @@ const theme = createMuiTheme({
             light: green[200],
             dark: green[900],
         },
-        type: 'dark',
+        type: "dark",
     },
 });
 
@@ -23,7 +24,6 @@ const useStyles = makeStyles(theme => ({
     title: {
         borderBottom: "solid 1px grey",
         marginBottom: "15px",
-        fontSize: "500px",
         paddingBottom: "8px",
         color: "#039be5",
     },
@@ -44,59 +44,10 @@ const useStyles = makeStyles(theme => ({
 
 function EditDialog(props) {
     const classes = useStyles();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+    const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
-    const [editedTool, setEditedTool] = useState(props.tool);
-    const [errors, setErrors] = useState([]);
+    const toolRef = useRef();
 
-    /**
-     * Match
-    */
-    const matchOnChange = (value) => {
-        setEditedTool({...editedTool, pattern: value});
-        setErrors([]);
-    }
-
-    const validateMatch = () => {
-        if (editedTool.pattern === "") {
-            setErrors({...errors, matchExpression: true});
-            return false;
-        }
-        else
-            return true;
-    }
-
-    /**
-     * Replace
-    */
-    const replaceFindOnChange = (value) => {
-        setEditedTool({...editedTool, find: value});
-        setErrors({...errors, replaceFind: false});
-    }
-
-    const replaceReplaceOnChange = (value) => {
-        setEditedTool({...editedTool, replace: value});
-        setErrors({...errors, replaceReplace: false});
-    }
-
-    const validateReplace = () => {
-        if (editedTool.find === "" && editedTool.replace === ""){
-            setErrors({...errors, replaceFind: true, replaceReplace: true});
-        }
-        else if (editedTool.find === ""){
-            setErrors({...errors, replaceFind: true, replaceReplace: false});
-        }
-        else if (editedTool.replace === ""){
-            setErrors({...errors, replaceFind: false, replaceReplace: true});
-        }
-
-        if (editedTool.find !== "" && editedTool.replace !== "") {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
     /**
      * Vypis html kontextu podle zvoleneho nastroje
     */
@@ -105,20 +56,13 @@ function EditDialog(props) {
             case "Match":
                 return (
                     <React.Fragment>
-                         <TextField
-                            id="edit-match-expression"
-                            label="Expression"
-                            value={editedTool.pattern}
-                            onChange={event => matchOnChange(event.target.value)}
-                            error={errors.matchExpression === true}
-                            helperText={errors.matchExpression === true ? 'Expression cannot be empty!' : ' '}
-                            fullWidth
-                        />
+                         TBD
                     </React.Fragment>
                 );
             case "replace":
                 return (
-                    <React.Fragment>
+                    <EditReplace ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                    /*<React.Fragment>
                             <TextField
                             id="edit-replace-find"
                             label="Find"
@@ -137,13 +81,13 @@ function EditDialog(props) {
                             helperText={errors.replaceReplace === true ? 'Field cannot be empty!' : ' '}
                             fullWidth
                         />
-                    </React.Fragment>
+                    </React.Fragment>*/
                 );
             default:
                 return;
         }
     }
-
+/*
     const confirm = (tool) => {
         switch (tool.toolname) {
             case "Match":
@@ -161,7 +105,7 @@ function EditDialog(props) {
             default:
                 return;
         }
-    }
+    }*/
     
     return (
         <MuiThemeProvider theme={theme}>
@@ -187,7 +131,7 @@ function EditDialog(props) {
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Confirm">
-                    <IconButton className={classes.confirmIcon} onClick={() => confirm(props.tool)}>
+                    <IconButton className={classes.confirmIcon} onClick={() => toolRef.current.handleUpdate()}>
                         <Done fontSize="large"/>
                     </IconButton>
                 </Tooltip>

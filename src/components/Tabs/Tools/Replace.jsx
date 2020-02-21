@@ -72,7 +72,7 @@ function ReplaceTool(props) {
             setReplaceDelimiterError(false);
         }
         else {
-            props.showAlert("error", "Error: Errors occurred while adding replace into the pipeline!");
+            props.showAlert("error", "Error: Error occurred while adding replace into the pipeline!");
         }
     }
 

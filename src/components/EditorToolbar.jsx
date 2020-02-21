@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { Toolbar, Button, IconButton, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener, InputBase, Tooltip } from "@material-ui/core";
-import { Description, FiberNew, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
+import { Description, FiberNew, Done, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
 import { fade } from "@material-ui/core/styles";
 import ShellDialog from "./ShellDialog";
 
@@ -88,12 +88,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll, inspectMode, toggleInspectMode }) => {
+const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll, inspectMode, toggleInspectMode, pipeline, setPipelineActivity }) => {
     const classes = useStyles();
 
     const [openFile, setOpenFile] = useState(false);
     const [openEditor, setOpenEditor] = useState(false);
-    const [openInspect, setOpenInspect] = useState(false);
+    const [openPipeline, setOpenPipeline] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
     const [openShellDialog, setOpenShellDialog] = useState(false);
 
@@ -108,35 +108,35 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
     const pipelineButtonRef = useRef(null);
     const searchButtonRef = useRef(null);
 
-    const expandFile = () => {
-        setOpenEditor(false);
-        setOpenInspect(false);
+    const expandFile = useCallback(() => {
         setOpenFile(prev => !prev);
+        setOpenEditor(false);
+        setOpenPipeline(false);
         setOpenSearch(false);
-    };
+    }, [setOpenFile, setOpenEditor, setOpenPipeline, setOpenSearch]);
 
-    const expandEditor = () => {
+    const expandEditor = useCallback(() => {
         setOpenFile(false);
-        setOpenInspect(false);
         setOpenEditor(prev => !prev);
+        setOpenPipeline(false);
         setOpenSearch(false);
-    };
+    }, [setOpenFile, setOpenEditor, setOpenPipeline, setOpenSearch]);
 
-    const expandInspect = () => {
+    const expandInspect = useCallback(() => {
         setOpenFile(false);
         setOpenEditor(false);
-        setOpenInspect(prev => !prev);
+        setOpenPipeline(prev => !prev);
         setOpenSearch(false);
-    };
+    }, [setOpenFile, setOpenEditor, setOpenPipeline, setOpenSearch]);
 
-    const expandSearch = () => {
-        setOpenEditor(false);
-        setOpenInspect(false);
+    const expandSearch = useCallback(() => {
         setOpenFile(false);
+        setOpenEditor(false);
+        setOpenPipeline(false);
         setOpenSearch(prev => !prev);
-    };
+    }, [setOpenFile, setOpenEditor, setOpenPipeline, setOpenSearch]);
 
-    const handleClose = event => {
+    const handleClose = useCallback((event) => {
         // Otevreni dalsiho selectu
         if ((fileButtonRef.current && fileButtonRef.current.contains(event.target)) || 
             (editorButtonRef.current && editorButtonRef.current.contains(event.target)) ||
@@ -147,20 +147,20 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
         
         setOpenFile(false);
         setOpenEditor(false);
-        setOpenInspect(false);
+        setOpenPipeline(false);
         setOpenSearch(false);
-    };
+    }, [setOpenFile, setOpenEditor, setOpenPipeline, setOpenSearch]);
 
-    const handleListKeyDown = (event) => {
+    const handleListKeyDown = useCallback((event) => {
         if (event.key === 'Tab') {
           event.preventDefault();
           setOpenFile(false);
           setOpenEditor(false);
-          setOpenInspect(false);
+          setOpenPipeline(false);
         }
-    }
+    }, [setOpenFile, setOpenEditor, setOpenPipeline]);
 
-    const loadFile = async(e) => {
+    const loadFile = useCallback(async(e) => {
         e.preventDefault();
 
         const reader = new FileReader();
@@ -169,17 +169,18 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
           setInput(e.target.result);
         };
         reader.readAsText(e.target.files[0]);
-        showAlert("success", "Success: File imported.");
-    }
+        showAlert("info", "Info: File imported.");
+    }, [setInput, showAlert]);
 
-    const downloadResult = async() => {
+    const downloadResult = useCallback(async() => {
         const element = document.createElement("a");
         const file = new Blob([result], {type: 'text/plain'});
+
         element.href = URL.createObjectURL(file);
         element.download = "result.txt";
         document.body.appendChild(element);
         element.click();
-    }
+    }, [result]);
 
     return (
         <Toolbar className={classes.root}>
@@ -278,7 +279,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 <BugReport fontSize="small" className={classes.toolbarIcon} />
                 Pipeline
             </Button>
-            <Popper className={classes.popmenu} open={openInspect} anchorEl={pipelineButtonRef.current} role={undefined} transition disablePortal>
+            <Popper className={classes.popmenu} open={openPipeline} anchorEl={pipelineButtonRef.current} role={undefined} transition disablePortal>
             {({ TransitionProps, placement }) => (
                 <Grow
                   {...TransitionProps}
@@ -286,7 +287,15 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 >
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList autoFocusItem={openInspect} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                    <MenuList autoFocusItem={openPipeline} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                        <MenuItem onClick={e => `${setPipelineActivity(true)} ${handleClose(e)}`}>
+                            <Done fontSize="small" className={classes.toolbarIcon} />
+                            Enable all tools
+                        </MenuItem>
+                        <MenuItem onClick={e => `${setPipelineActivity(false)} ${handleClose(e)}`}>
+                            <Clear fontSize="small" className={classes.toolbarIcon} />
+                            Disable all tools
+                        </MenuItem>
                         <MenuItem onClick={e => `${setOpenShellDialog(true)} ${handleClose(e)}`}>
                             <FiberNew fontSize="small" className={classes.toolbarIcon} />
                             Create shell script
@@ -382,6 +391,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                 <ShellDialog 
                     open={openShellDialog}
                     close={() => setOpenShellDialog(false)}
+                    pipeline={pipeline}
                 />
             }
         </ Toolbar>

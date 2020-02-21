@@ -3,7 +3,7 @@ import { List, ListItem, makeStyles, IconButton, Menu, MenuItem, Tooltip, useThe
 import { grey } from "@material-ui/core/colors";
 import { Build, Delete, Visibility, VisibilityOff, Edit, MoreVert } from "@material-ui/icons";
 import { SortableContainer, SortableElement, SortableHandle } from "react-sortable-hoc";
-import EditDialog from "./EditDialog";
+import EditDialog from "./Edits/EditDialog";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { Resizable } from "re-resizable";
 
