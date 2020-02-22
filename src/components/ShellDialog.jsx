@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function ShellDialog(props) {    // TODO: dodelat tohle a predelat nazvy v toolbaru z inspect na pipeline
+function ShellDialog(props) {    // TODO: dodelat (ikonky, stylyzace)
     const classes = useStyles();
 
     const theme = useTheme();

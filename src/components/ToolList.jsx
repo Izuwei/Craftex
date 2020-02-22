@@ -97,6 +97,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: "15px",
         color: "#e0e0e0",
     },
+    marginLR: {
+        marginLeft: "8px",
+        marginRight: "8px",
+    },
 }));
 
 const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sort }) => {
@@ -115,26 +119,36 @@ const ToolList = React.memo(( { tools, removeTool, reactiveTool, updateTool, sor
 
     const mapTool = (tool) => {
         switch (tool.toolname) {
-            case "Match":
+            case "match":
                 return (
                     <React.Fragment>
                             <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Match</span> 
-                            {tool.pattern}
+                            <span className={`${classes.blueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
+                            {tool.expression}
+                            {tool.inColumn === "" ? "" : 
+                                <React.Fragment>
+                                    <span className={`${classes.blueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
+                                    {tool.inColumn + "."}
+                                    <span className={`${classes.blueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
+                                    {tool.delimiter}
+                                </React.Fragment>
+                            }
                     </React.Fragment>
                 );
+            case "regexReplace":
             case "replace":
                 return (
                     <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Replace</span>
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "replace" ?  <React.Fragment>Replace</React.Fragment> : <React.Fragment>Regex replace</React.Fragment>}</span>
                             <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
                             {tool.find}
-                            <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px", marginLeft: "8px"}}>with</span> 
+                            <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>with</span> 
                             {tool.replace}
                             {tool.inColumn === "" ? "" : 
                                 <React.Fragment>
-                                    <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px", marginLeft: "8px"}}>in</span>
+                                    <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
                                     {tool.inColumn + "."}
-                                    <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px", marginLeft: "8px"}}>column delimited by</span>
+                                    <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
                                     {tool.delimiter}
                                 </React.Fragment>
                             }

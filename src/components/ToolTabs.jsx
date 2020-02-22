@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from '@material-ui/core';
 import { lightBlue } from '@material-ui/core/colors';
 import { Edit, FindReplace, AddCircleOutline, RemoveCircleOutline, Transform } from '@material-ui/icons';
-import RowTab from './Tabs/RowTab';
 import FindAndReplaceTab from './Tabs/FindAndReplaceTab';
 
 function TabPanel(props) {
@@ -112,7 +111,7 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
           TBD
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <RowTab showAlert={showAlert} addTool={addTool}/>
+          TBD
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD

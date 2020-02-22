@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
         marginRight: "5px",
     },
     flexCenter: {
+        marginTop: "8px",
         display: "flex",
         alignItems: "center",
     },
@@ -62,7 +63,6 @@ function ReplaceTool(props) {
         }
 
         if (replaceFind !== "" && replaceFind !== replaceReplace && (replaceInColumn === "" || (replaceInColumn > 0 && replaceColumnDelimiter !== "" && replaceColumnDelimiter !== replaceFind))) {
-            setReplaceFindError(false);
             props.addTool({toolname: "replace", find: replaceFind, replace: replaceReplace, occurrence: occurrence, casesensitive: replaceCaseSensitive, inColumn: replaceInColumn, delimiter: replaceColumnDelimiter});
             props.showAlert("success", "Success: Replace added into the pipeline.");
             setReplaceFind("");
@@ -72,7 +72,7 @@ function ReplaceTool(props) {
             setReplaceDelimiterError(false);
         }
         else {
-            props.showAlert("error", "Error: Error occurred while adding replace into the pipeline!");
+            props.showAlert("error", "Error: An error occurred while adding replace into the pipeline!");
         }
     }
 
