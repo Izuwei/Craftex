@@ -89,10 +89,52 @@ function regexReplaceCommand(tool) {
     }
 }
 
+function matchCommand(tool) {
+    if (tool.inColumn === "") {     // globalne
+        if (tool.casesensitive === true) {  // case-sensitive
+            if (tool.occurrence === "all") {    //
+                return "grep -E '" + regexEscape(tool.expression) + "'";
+            }
+            else {
+                return "grep -E -m 1 '" + regexEscape(tool.expression) + "'";
+            }
+        }
+        else {
+            if (tool.occurrence === "all") {
+                return "grep -E -i '" + regexEscape(tool.expression) + "'";
+            }
+            else {
+                return "grep -E -i -m 1 '" + regexEscape(tool.expression) + "'";
+            }
+        }
+    }
+    else {      // ve sloupci
+        if (tool.occurrence === "all") {    // vsechny vyskyty
+            if (tool.casesensitive === true) {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/'";
+            }
+            else {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/'";
+            }
+        }
+        else {  // pouze prvni vyskyt
+            if (tool.casesensitive === true) {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/ {print; exit}'";
+            }
+            else {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/ {print; exit}'";
+            }
+        }
+    }
+}
+
 function getToolCommand(tool) {
     var command = "";
 
     switch (tool.toolname) {
+        case "match":
+            command = matchCommand(tool);
+            break;
         case "replace":
             command = replaceCommand(tool);
             break;

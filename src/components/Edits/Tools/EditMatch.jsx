@@ -37,13 +37,14 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
             }
     
             if ((matchInColumn !== "" && matchColumnDelimiter === "") || (matchColumnDelimiter === matchFind && matchFind !== "")) {
+                console.log('IM IN');
                 setMatchDelimiterError(true);
             }
     
             if (matchInColumn !== "" && matchInColumn <= 0) {
                 setMatchColumnError(true);
             }
-    
+            
             if (matchFind !== "" && (matchInColumn === "" || (matchInColumn > 0 && matchColumnDelimiter !== "" && matchColumnDelimiter !== matchFind))) {
                 props.updateTool({...props.tool, expression: matchFind, occurrence: occurrence, casesensitive: matchCaseSensitive, inColumn: matchInColumn, delimiter: matchColumnDelimiter});
                 props.close();

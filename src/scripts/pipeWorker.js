@@ -9,7 +9,7 @@ export default () => {
      * Replace nastroj
      * TODO: dodelat osetreni na undefined
      */
-    function replaceGetOpts(tool) {
+    function getMatchOptions(tool) {
       if (tool.occurrence === "all") {
           return tool.casesensitive === true ? "g" : "gi";
       }
@@ -19,7 +19,7 @@ export default () => {
     }
     
     function replaceTool(text, tool) {
-        const option = replaceGetOpts(tool);
+        const option = getMatchOptions(tool);
         
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
@@ -57,17 +57,25 @@ export default () => {
     };
     
     function replaceInspectTool(text, tool) {
-        const option = replaceGetOpts(tool);
+        const option = getMatchOptions(tool);
       
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechno
                 for (var i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+
                     text[i] = text[i].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
                 }
                 return text;
             }
             else {          // Prvni vyskyt
                 for (var x = 0; x < text.length; x++) {
+                    if (text[x] === null) {
+                        continue;
+                    }
+
                     if (text[x].match(new RegExp(tool.find, option)) !== null) {
                         text[x] = text[x].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
                         break;
@@ -81,6 +89,9 @@ export default () => {
       
             if (tool.occurrence === "all") {    // Vsechno
                 for (var j = 0; j < text.length; j++) {
+                    if (text[j] === null) {
+                        continue;
+                    }
                     columns = text[j].split(tool.delimiter);
             
                     if (tool.inColumn <= columns.length) {
@@ -92,6 +103,9 @@ export default () => {
             }
             else {      // Prvni vyskyt
                 for (var z = 0; z < text.length; z++) {
+                    if (text[z] === null) {
+                        continue;
+                    }
                     columns = text[z].split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
@@ -107,19 +121,58 @@ export default () => {
         }
     }
 
+    function regexReplaceAll(lines, tool) {
+        var option = tool.casesensitive ? "g" : "gi";
+        var tmp = "";
+
+        for (let i = 0; i < lines.length; i++) {
+            tmp = lines[i].match(new RegExp(tool.find, option));
+
+            if (tmp === null) {
+                continue;
+            }
+
+            var specificMatch = true;
+            for (let j = 0; j < tmp.length; j++) {
+              if (tmp[j] === "") {
+                specificMatch = false;
+                break;
+              }
+            }
+
+            if (specificMatch === true) {
+                lines[i] = lines[i].replace(new RegExp(tool.find, option), tool.replace);
+                continue;
+            }
+            
+            var fullMatch = tmp[0].length === lines[i].length ? true : false;
+            if (fullMatch === true) {
+              lines[i] = tool.replace;
+            }
+            else {
+                lines[i] = lines[i].split(new RegExp(tool.find, option));
+                var firstChar = lines[i][0] === "" ? "" : tool.replace;
+                var lastChar = lines[i][lines[i].length - 1] === "" ? "" : tool.replace;
+                lines[i] = firstChar + lines[i].join(tool.replace) + lastChar;
+            }
+        }
+        return lines;
+    }
+
     /**
      * Regex replace nastroj
      */
     function regexReplaceTool(text, tool) {
-        const option = replaceGetOpts(tool);
+        const option = getMatchOptions(tool);
         var splitedText = text.split('\n');
         
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechno
-                for (var y = 0; y < splitedText.length; y++) {
+                /*for (var y = 0; y < splitedText.length; y++) {  // TODO: otestovat na fullmatch
                     splitedText[y] = splitedText[y].replace(new RegExp(tool.find, option), tool.replace);
                 }
-                return splitedText.join('\n');
+                return splitedText.join('\n');*/
+                return regexReplaceAll(splitedText, tool).join('\n');
             }
             else {                              // Pouze prvni vyskyt
                 for (let i = 0; i < splitedText.length; i++) {
@@ -139,7 +192,7 @@ export default () => {
                     columns = splitedText[i].split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
-                        columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(tool.find, option), tool.replace);
+                        columns[tool.inColumn - 1] = regexReplaceAll([columns[tool.inColumn - 1]], tool);
                         splitedText[i] = columns.join(tool.delimiter);
                     }
                 }
@@ -163,19 +216,27 @@ export default () => {
     };
     
     function regexReplaceInspectTool(text, tool) {
-        const option = replaceGetOpts(tool);
+        const option = getMatchOptions(tool);
       
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechno
-                for (var i = 0; i < text.length; i++) {
-                    text[i] = text[i].replace(new RegExp(tool.find, option), tool.replace);
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    text[i] = regexReplaceAll([text[i]], tool)[0];
+                    //text[i] = text[i].replace(new RegExp(tool.find, option), tool.replace);
                 }
                 return text;
             }
             else {          // Prvni vyskyt
-                for (var x = 0; x < text.length; x++) {
-                    if (text[x].match(new RegExp(tool.find, option)) !== null) {
-                        text[x] = text[x].replace(new RegExp(tool.find, option), tool.replace);
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+
+                    if (text[i].match(new RegExp(tool.find, option)) !== null) {
+                        text[i] = text[i].replace(new RegExp(tool.find, option), tool.replace);
                         break;
                     }
                 }
@@ -186,7 +247,11 @@ export default () => {
             var columns = "";
       
             if (tool.occurrence === "all") {    // Vsechno
-                for (var j = 0; j < text.length; j++) {
+                for (let j = 0; j < text.length; j++) {
+                    if (text[j] === null) {
+                        continue;
+                    }
+
                     columns = text[j].split(tool.delimiter);
             
                     if (tool.inColumn <= columns.length) {
@@ -197,7 +262,11 @@ export default () => {
                 return text;
             }
             else {      // Prvni vyskyt
-                for (var z = 0; z < text.length; z++) {
+                for (let z = 0; z < text.length; z++) {
+                    if (text[z] === null) {
+                        continue;
+                    }
+
                     columns = text[z].split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
@@ -217,7 +286,7 @@ export default () => {
      * Match nastroj
      */
     function matchTool(text, tool) {    // TODO: tady pokracovat
-        const option = replaceGetOpts(tool);
+        const option = getMatchOptions(tool);
         
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             text = text.match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option));
@@ -256,8 +325,78 @@ export default () => {
     };
 
     function matchInspectTool(text, tool) {
-        console.log('Dodelat');
-        return "";
+        const option = getMatchOptions(tool);
+        
+        if (tool.inColumn === "") {     // Bez sloupcu -> globalne
+            if (tool.occurrence === "all") {        // Vsechny radky
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    if (text[i].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option)) === null) {
+                        text[i] = null;
+                    }
+                }
+                return text;
+            }
+            else {  // Prvni vyskyt
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    if (text[i].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option)) === null) {
+                        text[i] = null;
+                    }
+                    else {
+                        for (let j = i + 1; j < text.length; j++) {
+                            text[j] = null;
+                        }
+                        return text;
+                    }
+                }
+                return text;
+            }
+        }
+        else {      // Ve sloupci
+            var columns = "";
+        
+            if (tool.occurrence === "all") {    // Vsechno
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    columns = text[i].split(tool.delimiter);
+                
+                    if (tool.inColumn <= columns.length) {
+                        if (null === columns[tool.inColumn - 1].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option))) {
+                            text[i] = null;
+                        }
+                    }
+                }
+                return text;
+            }
+            else {          // Prvni vyskyt
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    columns = text[i].split(tool.delimiter);
+              
+                    if (tool.inColumn <= columns.length) {
+                        if (null === columns[tool.inColumn - 1].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option))) {
+                            text[i] = null;
+                        }
+                        else {
+                            for (let j = i + 1; j < text.length; j++) {
+                                text[j] = null;
+                            }
+                            return text;
+                        }
+                    }
+                }
+                return text;
+            }
+        }
     }
 
     /**
@@ -330,9 +469,11 @@ export default () => {
 
         if (event.data.inspectMode === true) {
             var temp = [];
-
+            console.log(processData);
             for (var breakpoint in event.data.breakpoints) {
-                temp.push(processData[breakpoint]);
+                if (processData[breakpoint] !== null) {
+                    temp.push(processData[breakpoint]);
+                }
             }
             processData = temp.join('\n');
         }
