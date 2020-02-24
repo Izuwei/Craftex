@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({    // TODO: Nejspis predelat na sdileny
     },
 }));
 
-function ReplaceTool(props) {
+function MatchTool(props) {
     const classes = useStyles();
 
     const [matchFind, setMatchFind] = useState("");
@@ -43,7 +43,7 @@ function ReplaceTool(props) {
     const [matchColumnError, setMatchColumnError] = useState(false);
     const [matchDelimiterError, setMatchDelimiterError] = useState(false);
 
-    const handleReplace = () => {
+    const handleMatch = () => {
         if (matchFind === ""){
             setMatchFindError(true);
         }
@@ -139,7 +139,7 @@ function ReplaceTool(props) {
                     variant="contained"
                     id="add-match"
                     className={classes.button}
-                    onClick={() => handleReplace()}
+                    onClick={() => handleMatch()}
                     startIcon={<Add />}
                 >Add</Button>
             </div>
@@ -147,4 +147,4 @@ function ReplaceTool(props) {
     );
 };
 
-export default ReplaceTool;
+export default MatchTool;

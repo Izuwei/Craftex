@@ -372,6 +372,9 @@ export default () => {
                             text[i] = null;
                         }
                     }
+                    else {
+                        text[i] = null;
+                    }
                 }
                 return text;
             }
@@ -393,11 +396,181 @@ export default () => {
                             return text;
                         }
                     }
+                    else {
+                        text[i] = null;
+                    }
                 }
                 return text;
             }
         }
     }
+
+    /**
+     * Regex match nastroj
+     */
+    function regexMatchTool(text, tool) {    // TODO: tady pokracovat
+        const option = getMatchOptions(tool);
+        var lines = text.split('\n');
+        var result = "";
+        
+        if (tool.inColumn === "") {     // Bez sloupcu -> globalne
+            if (tool.occurrence === "all") {    // Vsechny vyskyty
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].match(new RegExp(tool.expression, option)) !== null) {
+                        result += lines[i] + '\n';
+                    }
+                }
+                return result.slice(0, -1);
+            }
+            else {
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].match(new RegExp(tool.expression, option)) !== null) {
+                        return lines[i];
+                    }
+                }
+                return "";
+            }
+        }
+        else {      // Ve sloupci
+            var columns = "";
+        
+            if (tool.occurrence === "all") {    // Vsechno
+                for (let i = 0; i < lines.length; i++) {
+                    columns = lines[i].split(tool.delimiter);
+                
+                    if (tool.inColumn <= columns.length) {
+                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
+                            result += lines[i] + '\n';
+                        }
+                    }
+                }
+                return result.slice(0, -1);
+            }
+            else { 
+                for (let i = 0; i < lines.length; i++) {
+                    columns = lines[i].split(tool.delimiter);
+              
+                    if (tool.inColumn <= columns.length) {
+                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
+                            return lines[i];
+                        }
+                    }
+                }
+                return "";
+            }
+        }
+    };
+
+    function regexMatchInspectTool(text, tool) {    // TODO: osetreni na null
+        const option = getMatchOptions(tool);
+        
+        if (tool.inColumn === "") {     // Bez sloupcu -> globalne
+            if (tool.occurrence === "all") {    // Vsechny vyskyty
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+
+                    if (text[i].match(new RegExp(tool.expression, option)) === null) {
+                        text[i] = null;
+                    }
+                }
+                return text;
+            }
+            else {
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+
+                    if (text[i].match(new RegExp(tool.expression, option)) !== null) {
+                        for (let j = i + 1; j < text.length; j++) {
+                            text[j] = null;
+                        }
+                        return text;
+                    }
+                }
+                return text;
+            }
+        }
+        else {      // Ve sloupci
+            var columns = "";
+        
+            if (tool.occurrence === "all") {    // Vsechno
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    columns = text[i].split(tool.delimiter);
+                
+                    if (tool.inColumn <= columns.length) {
+                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) === null) {
+                            text[i] = null;
+                        }
+                    }
+                    else {
+                        text[i] = null;
+                    }
+                }
+                return text;
+            }
+            else { 
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    columns = text[i].split(tool.delimiter);
+              
+                    if (tool.inColumn <= columns.length) {
+                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
+                            for (let j = i + 1; j < text.length; j++) {
+                                text[j] = null;
+                            }
+                        }
+                        else {
+                            text[i] = null;
+                        }
+                    }
+                    else {
+                        text[i] = null;
+                    }
+                }
+                return text;
+            }
+        }
+    };
+
+    function removeColumnTool(text, tool) {
+        text = text.split('\n');
+        var columns = "";
+
+        for (let i = 0; i < text.length; i++) {
+            columns = text[i].split(tool.delimiter);
+
+            if (tool.position <= columns.length) {
+                columns.splice(tool.position - 1, 1);
+                text[i] = columns.join(tool.delimiter);
+            }
+        }
+        return text.join('\n');
+    };
+
+    function removeColumnInspectTool(text, tool) {
+        var columns = "";
+
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === null) {
+                continue;
+            }
+            columns = text[i].split(tool.delimiter);
+
+            if (tool.position <= columns.length) {
+                columns.splice(tool.position - 1, 1);
+                text[i] = columns.join(tool.delimiter);
+            }
+        }
+        return text;
+    };
 
     /**
      * Ridici funkce
@@ -408,14 +581,18 @@ export default () => {
         switch (tool.toolname) {
             case "match":
                 result = matchTool(text, tool);
-        		/*result = text.match(new RegExp(".*" + regexEscape(tool.expression) + ".*", 'g'));
-        		result === null ? result = "" : result = result.join('\n');*/
-        		break;
+                break;
+            case "regexMatch":
+                result = regexMatchTool(text, tool);
+                break;
         	case "replace":
         		result = replaceTool(text, tool);
                 break;
             case "regexReplace":
                 result = regexReplaceTool(text, tool);
+                break;
+            case "removeColumn":
+                result = removeColumnTool(text, tool);
                 break;
         	default:
         		break;
@@ -431,11 +608,17 @@ export default () => {
             case "match":
                 result = matchInspectTool(text, tool);
                 break;
+            case "regexMatch":
+                result = regexMatchInspectTool(text, tool);
+                break;
             case "replace":
                 result = replaceInspectTool(text, tool);
                 break;
             case "regexReplace":
                 result = regexReplaceInspectTool(text, tool);
+                break;
+            case "removeColumn":
+                result = removeColumnInspectTool(text, tool);
                 break;
             default:
                 break;

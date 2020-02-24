@@ -268,6 +268,10 @@ function App() {
     setPipeline(state => state.map(tool => {return {...tool, active: value}}));
   }, [setPipeline]);
 
+  const clearPipeline = useCallback(() => {
+    setPipeline([]);
+  }, [setPipeline]);
+
   // Do dokumentace napsat proc neni async/await ale useEffect
   // Popsat WebWorkers
   useEffect(() => {
@@ -317,6 +321,7 @@ function App() {
           pipeProgress={pipeProgress}
           pipeline={pipeline}
           setPipelineActivity={setPipelineActivity}
+          clearPipeline={clearPipeline}
         />
         <ToolList 
           tools={pipeline}

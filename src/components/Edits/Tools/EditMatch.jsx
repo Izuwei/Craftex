@@ -37,7 +37,6 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
             }
     
             if ((matchInColumn !== "" && matchColumnDelimiter === "") || (matchColumnDelimiter === matchFind && matchFind !== "")) {
-                console.log('IM IN');
                 setMatchDelimiterError(true);
             }
     
@@ -93,7 +92,7 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
                         shrink: true,
                     }}
                     error={matchColumnError === true}
-                    helperText={matchColumnError === true ? "Number must be greater than zero." : ""}
+                    helperText={matchColumnError === true ? "Number must be greater than zero!" : ""}
                 />
                 <TextField
                     id="edit-match-column-delimiter"
@@ -103,7 +102,7 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
                     className={classes.opts}
                     required={matchInColumn === "" ? false : true}
                     error={matchDelimiterError === true}
-                    helperText={matchDelimiterError === true ? "Required and must be different than find expression." : ""}
+                    helperText={matchDelimiterError === true ? "This field is required!" : ""}
                 />
             </div>
             <TextField

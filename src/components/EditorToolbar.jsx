@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback } from "react";
 import { Toolbar, Button, IconButton, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener, InputBase, Tooltip } from "@material-ui/core";
-import { Description, FiberNew, Done, Publish, GetApp, Undo, Redo, BugReport, Clear, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
+import { Description, FiberNew, Done, Publish, GetApp, Undo, Redo, BugReport, Clear, ClearAll, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";
 import { fade } from "@material-ui/core/styles";
 import ShellDialog from "./ShellDialog";
 
@@ -88,7 +88,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll, inspectMode, toggleInspectMode, pipeline, setPipelineActivity }) => {
+const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakpoints, showAlert, wrap, toggleWrap, find, findAll, inspectMode, toggleInspectMode, pipeline, setPipelineActivity, clearPipeline }) => {
     const classes = useStyles();
 
     const [openFile, setOpenFile] = useState(false);
@@ -295,6 +295,10 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                         <MenuItem onClick={e => `${setPipelineActivity(false)} ${handleClose(e)}`}>
                             <Clear fontSize="small" className={classes.toolbarIcon} />
                             Disable all tools
+                        </MenuItem>
+                        <MenuItem onClick={e => `${clearPipeline()} ${handleClose(e)}`}>
+                            <ClearAll fontSize="small" className={classes.toolbarIcon} />
+                            Clear pipeline
                         </MenuItem>
                         <MenuItem onClick={e => `${setOpenShellDialog(true)} ${handleClose(e)}`}>
                             <FiberNew fontSize="small" className={classes.toolbarIcon} />

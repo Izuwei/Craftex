@@ -1,9 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from '@material-ui/core';
-import { lightBlue } from '@material-ui/core/colors';
-import { Edit, FindReplace, AddCircleOutline, RemoveCircleOutline, Transform } from '@material-ui/icons';
-import FindAndReplaceTab from './Tabs/FindAndReplaceTab';
+import React from "react";
+import PropTypes from "prop-types";
+import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from "@material-ui/core";
+import { lightBlue } from "@material-ui/core/colors";
+import { Search, Edit, FindReplace, RemoveCircleOutline, Transform } from "@material-ui/icons";
+import FindTab from "./Tabs/FindTab";
+import ReplaceTab from "./Tabs/ReplaceTab";
+import ReduceTab from "./Tabs/ReduceTab";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -97,21 +99,21 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
             scrollButtons="auto"
             centered
           >
-            <Tab icon={<FindReplace />} label="Find & replace" {...a11yProps(0)} />
-            <Tab icon={<AddCircleOutline />} label="Addition" {...a11yProps(1)} />
-            <Tab icon={<RemoveCircleOutline />} label="Removal" {...a11yProps(2)} />
+            <Tab icon={<Search />} label="Find" {...a11yProps(0)} />
+            <Tab icon={<FindReplace />} label="Replace" {...a11yProps(1)} />
+            <Tab icon={<RemoveCircleOutline />} label="Reduce" {...a11yProps(2)} />
             <Tab icon={<Edit />} label="Modify" {...a11yProps(3)} />
             <Tab icon={<Transform />} label="Convert" {...a11yProps(4)} />
           </Tabs>
         </AppBar>
         <TabPanel theme={theme} value={value} index={0}>
-          <FindAndReplaceTab showAlert={showAlert} addTool={addTool}/>
+          <FindTab showAlert={showAlert} addTool={addTool} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          TBD
+          <ReplaceTab showAlert={showAlert} addTool={addTool} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          TBD
+          <ReduceTab showAlert={showAlert} addTool={addTool} />
         </TabPanel>
         <TabPanel value={value} index={3}>
           TBD

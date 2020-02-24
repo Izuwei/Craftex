@@ -128,6 +128,55 @@ function matchCommand(tool) {
     }
 }
 
+function regexMatchCommand(tool) {
+    if (tool.inColumn === "") {     // globalne
+        if (tool.casesensitive === true) {  // case-sensitive
+            if (tool.occurrence === "all") {    //
+                return "grep -E '" + tool.expression + "'";
+            }
+            else {
+                return "grep -E -m 1 '" + tool.expression + "'";
+            }
+        }
+        else {
+            if (tool.occurrence === "all") {
+                return "grep -E -i '" + tool.expression + "'";
+            }
+            else {
+                return "grep -E -i -m 1 '" + tool.expression + "'";
+            }
+        }
+    }
+    else {      // ve sloupci
+        if (tool.occurrence === "all") {    // vsechny vyskyty
+            if (tool.casesensitive === true) {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + tool.expression + "/'";
+            }
+            else {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + tool.expression + "/'";
+            }
+        }
+        else {  // pouze prvni vyskyt
+            if (tool.casesensitive === true) {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + tool.expression + "/ {print; exit}'";
+            }
+            else {
+                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + tool.expression + "/ {print; exit}'";
+            }
+        }
+    }
+}
+
+function getRemoveColumnCommand(tool) {
+    var start = "";
+
+    if (parseInt(tool.position) !== 1) {
+        start = "-" + parseInt(tool.position - 1) + ",";
+    }
+
+    return "cut -d '" + tool.delimiter + "' -f " + start + (parseInt(tool.position) + 1) + "-";
+}
+
 function getToolCommand(tool) {
     var command = "";
 
@@ -135,20 +184,25 @@ function getToolCommand(tool) {
         case "match":
             command = matchCommand(tool);
             break;
+        case "regexMatch":
+            command = regexMatchCommand(tool);
+            break;
         case "replace":
             command = replaceCommand(tool);
             break;
         case "regexReplace":
             command = regexReplaceCommand(tool);
             break;
+        case "removeColumn":
+            command = getRemoveColumnCommand(tool);
+            break;
         default:
             return;
     }
-
     return " | " + command;
 }
 
-export default function(pipeline) {
+export default function (pipeline) {
     var result = "cat FILENAME";
 
     for (var i = 0; i < pipeline.length; i++) {

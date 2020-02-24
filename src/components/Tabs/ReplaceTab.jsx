@@ -1,7 +1,8 @@
 import React from "react";
-import { Grid, makeStyles, Typography, MuiThemeProvider, createMuiTheme, Divider } from "@material-ui/core";
+import { Grid, Typography, MuiThemeProvider, createMuiTheme, Divider } from "@material-ui/core";
 import { green, lightBlue } from "@material-ui/core/colors";
-import Match from "./Tools/Match";
+import { withStyles } from "@material-ui/styles";
+import styles from "./TabStyles";
 import Replace from "./Tools/Replace";
 import RegexReplace from "./Tools/RegexReplace";
 
@@ -21,40 +22,23 @@ const theme = createMuiTheme({
     },
 });
 
-const useStyles = makeStyles(theme => ({
-    toolName: {
-        color: "#d9d9d9",
-        fontWeight: "bold",
-        marginBottom: "5px",
-    },
-    divider: {
-	    marginTop: "20px",
-	},
-}));
-
-function FindAndReplaceTab(props){
-    const classes = useStyles();
+const FindAndReplaceTab = React.memo(({ classes, addTool, showAlert }) => {
 
     return (
         <MuiThemeProvider theme={theme}>
             <Grid container alignItems="center" spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant="h5" className={classes.toolName}>Match</Typography>
-                    <Match addTool={props.addTool} showAlert={props.showAlert} />
-                    <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
-                </Grid>
-                <Grid item xs={12}>
                     <Typography variant="h5" className={classes.toolName}>Replace</Typography>
-                    <Replace addTool={props.addTool} showAlert={props.showAlert} />
+                    <Replace addTool={addTool} showAlert={showAlert} />
                     <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.toolName}>Regex replace</Typography>
-                    <RegexReplace addTool={props.addTool} showAlert={props.showAlert} />
+                    <RegexReplace addTool={addTool} showAlert={showAlert} />
                 </Grid>
             </Grid>
         </MuiThemeProvider>
     );
-}
+});
 
-export default FindAndReplaceTab;
+export default withStyles(styles)(FindAndReplaceTab);
