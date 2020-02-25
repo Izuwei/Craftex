@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/styles";
 import styles from "./TabStyles";
 import Match from "./Tools/Match";
 import RegexMatch from "./Tools/RegexMatch";
+import Compare from "./Tools/Compare";
 
 const theme = createMuiTheme({
     palette: {
@@ -35,6 +36,11 @@ const FindTab = React.memo(({ classes, addTool, showAlert }) => {
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.toolName}>Regex match</Typography>
                     <RegexMatch addTool={addTool} showAlert={showAlert} />
+                    <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h5" className={classes.toolName}>Compare</Typography>
+                    <Compare addTool={addTool} showAlert={showAlert} />
                 </Grid>
             </Grid>
         </MuiThemeProvider>

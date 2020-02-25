@@ -167,7 +167,34 @@ function regexMatchCommand(tool) {
     }
 }
 
-function getRemoveColumnCommand(tool) {
+function compareCommand(tool) {
+    var separator = tool.inColumn === "" ? "\\n" : tool.delimiter;
+    var column = tool.inColumn === "" ? "1" : tool.inColumn;
+    var comparator = "";
+
+    switch (tool.comparator) {
+        case "gt":
+            comparator = ">";
+            break;
+        case "ge":
+            comparator = ">=";
+            break;
+        case "lt":
+            comparator = "<";
+            break;
+        case "le":
+            comparator = "<=";
+            break;
+        case "eq":
+            comparator = "==";
+            break;
+        default:
+            comparator = "";
+    }
+    return "awk -F '" + separator + "' '$" + column + " " + comparator + " \"" + awkSlashEscape(tool.value) + "\"'";
+}
+
+function removeColumnCommand(tool) {
     var start = "";
 
     if (parseInt(tool.position) !== 1) {
@@ -175,6 +202,17 @@ function getRemoveColumnCommand(tool) {
     }
 
     return "cut -d '" + tool.delimiter + "' -f " + start + (parseInt(tool.position) + 1) + "-";
+}
+
+function removeLinesCommand(tool) {
+    switch (tool.content) {
+        case "empty":
+            return "sed '/^$/d'";
+        case "whiteSpaces":
+            return "awk 'NF > 0'";
+        default:
+            return "";
+    }
 }
 
 function getToolCommand(tool) {
@@ -193,8 +231,14 @@ function getToolCommand(tool) {
         case "regexReplace":
             command = regexReplaceCommand(tool);
             break;
+        case "compare":
+            command = compareCommand(tool);
+            break;
         case "removeColumn":
-            command = getRemoveColumnCommand(tool);
+            command = removeColumnCommand(tool);
+            break;
+        case "removeLines":
+            command = removeLinesCommand(tool);
             break;
         default:
             return;

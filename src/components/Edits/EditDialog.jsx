@@ -6,7 +6,10 @@ import EditMatch from "./Tools/EditMatch";
 import EditRegexMatch from "./Tools/EditRegexMatch";
 import EditReplace from "./Tools/EditReplace";
 import EditRegexReplace from "./Tools/EditRegexReplace";
+import EditCompare from "./Tools/EditCompare";
 import EditRemoveColumn from "./Tools/EditRemoveColumn";
+import EditRemoveLines from "./Tools/EditRemoveLines";
+//import EditReverse from "./Tools/EditReverse";
 
 const theme = createMuiTheme({
     palette: {
@@ -58,7 +61,10 @@ function EditDialog(props) {
             case "regexMatch": return (<React.Fragment>Regex match</React.Fragment>);
             case "replace": return (<React.Fragment>Replace</React.Fragment>);
             case "regexReplace": return (<React.Fragment>Regex replace</React.Fragment>);
+            case "compare": return (<React.Fragment>Compare</React.Fragment>);
             case "removeColumn": return (<React.Fragment>Remove column</React.Fragment>);
+            case "removeLines": return (<React.Fragment>Remove lines</React.Fragment>);
+            //case "reverse": return (<React.Fragment>Reverse</React.Fragment>);
             default: return;
         }
     };
@@ -84,10 +90,22 @@ function EditDialog(props) {
                 return (
                     <EditRegexReplace ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
+            case "compare":
+                return (
+                    <EditCompare ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
             case "removeColumn":
                 return (
                     <EditRemoveColumn ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
+            case "removeLines":
+                return (
+                    <EditRemoveLines ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
+            /*case "reverse":
+                return (
+                    <EditReverse ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );*/
             default:
                 return;
         }

@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditRemoveColumn = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     const classes = useStyles();
 
     const [position, setPosition] = useState(props.tool.position);
@@ -64,4 +64,4 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     );
 });
 
-export default EditMatch;
+export default EditRemoveColumn;

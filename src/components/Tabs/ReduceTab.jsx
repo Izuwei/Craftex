@@ -3,7 +3,8 @@ import { Grid, Typography, MuiThemeProvider, createMuiTheme } from "@material-ui
 import { green, lightBlue } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/styles";
 import styles from "./TabStyles";
-import RemoveColumnTool from "./Tools/RemoveColumn";
+import RemoveColumn from "./Tools/RemoveColumn";
+import RemoveLines from "./Tools/RemoveLines";
 
 const theme = createMuiTheme({
     palette: {
@@ -27,8 +28,16 @@ const ReduceTab = React.memo(({ classes, addTool, showAlert }) => {
         <MuiThemeProvider theme={theme}>
             <Grid container alignItems="center" spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant="h5" className={classes.toolName}>Remove column</Typography>
-                    <RemoveColumnTool addTool={addTool} showAlert={showAlert} />
+                    <div className={classes.flexToolbox}>
+                        <div className={classes.flexTool}>
+                            <Typography variant="h5" className={classes.toolName}>Remove column</Typography>
+                            <RemoveColumn addTool={addTool} showAlert={showAlert} />
+                        </div>
+                        <div className={classes.flexTool}>
+                            <Typography variant="h5" className={classes.toolName}>Remove lines</Typography>
+                            <RemoveLines addTool={addTool} showAlert={showAlert} />
+                        </div>
+                    </div>
                 </Grid>
             </Grid>
         </MuiThemeProvider>

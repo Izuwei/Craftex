@@ -88,7 +88,15 @@ const useStyles = makeStyles(theme => ({
         fontWeight: "bold",
     },
     yellowWord: {
-        color: "#ffea00",
+        color: "#ffcc00",
+        fontWeight: "bold",
+    },
+    redWord: {
+        color: "#bd0032",
+        fontWeight: "bold",
+    },
+    greenBlueWord: {
+        color: "#00b87d",
         fontWeight: "bold",
     },
     listIcon: {
@@ -100,6 +108,34 @@ const useStyles = makeStyles(theme => ({
         marginRight: "8px",
     },
 }));
+
+function mapComparator(comparator) {
+    switch (comparator) {
+        case "gt":
+            return "greater than";
+        case "ge":
+            return "greater equal";
+        case "lt":
+            return "less than";
+        case "le":
+            return "less equal";
+        case "eq":
+            return "equal";
+        default:
+            return "";
+    }
+};
+
+function mapRemoveLinesContent(content) {
+    switch (content) {
+        case "empty":
+            return "with empty content";
+        case "whiteSpaces":
+            return "with white spaces";
+        default:
+            return "";
+    }
+}
 
 const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort }) => {
     const classes = useStyles();
@@ -153,6 +189,22 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                         }
                     </React.Fragment>
                 );
+            case "compare":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Compare</span>
+                        <span className={`${classes.yellowWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{mapComparator(tool.comparator)}</span>
+                        {tool.value}
+                        {tool.inColumn === "" ? "" : 
+                            <React.Fragment>
+                                <span className={`${classes.yellowWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
+                                {tool.inColumn + "."}
+                                <span className={`${classes.yellowWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
+                                {tool.delimiter}
+                            </React.Fragment>
+                        }
+                    </React.Fragment>
+                );
             case "removeColumn":
                 return (
                     <React.Fragment>
@@ -163,6 +215,20 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                         {tool.delimiter}
                     </React.Fragment>
                 );
+            case "removeLines":
+                    return (
+                        <React.Fragment>
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Remove lines</span>
+                            <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>{mapRemoveLinesContent(tool.content)}</span>
+                        </React.Fragment>
+                    );
+            /*case "reverse":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Reverse</span>
+                        <span className={`${classes.redWord} ${!(tool.active) && classes.itemDeactivated}`}>{tool.direction}</span>
+                    </React.Fragment>
+                );*/
             default:
                 return;
         }

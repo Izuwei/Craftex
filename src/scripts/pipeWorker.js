@@ -1,3 +1,4 @@
+
 export default () => {
 
     // https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
@@ -573,6 +574,318 @@ export default () => {
     };
 
     /**
+     * Compare nastroj
+     */
+    function compareTool(text, tool) {
+        var lines = text.split('\n');
+        var result = "";
+        var columns = "";
+
+        switch (tool.comparator) {
+            case "gt":
+                if (tool.inColumn === "") {
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i] > tool.value) {
+                            result += lines[i] + '\n';
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < lines.length; i++) {
+                        columns = lines[i].split(tool.delimiter);
+
+                        if (tool.inColumn <= columns.length) {
+                            if (columns[tool.inColumn - 1] > tool.value) {
+                                result += lines[i] + '\n';
+                            }
+                        }
+                    }
+                }
+                return result.slice(0, -1);
+            case "ge":
+                if (tool.inColumn === "") {
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i] >= tool.value) {
+                            result += lines[i] + '\n';
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < lines.length; i++) {
+                        columns = lines[i].split(tool.delimiter);
+
+                        if (tool.inColumn <= columns.length) {
+                            if (columns[tool.inColumn - 1] >= tool.value) {
+                                result += lines[i] + '\n';
+                            }
+                        }
+                    }
+                }
+                return result.slice(0, -1);
+            case "lt":
+                if (tool.inColumn === "") {
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i] < tool.value) {
+                            result += lines[i] + '\n';
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < lines.length; i++) {
+                        columns = lines[i].split(tool.delimiter);
+
+                        if (tool.inColumn <= columns.length) {
+                            if (columns[tool.inColumn - 1] < tool.value) {
+                                result += lines[i] + '\n';
+                            }
+                        }
+                    }
+                }
+                return result.slice(0, -1);
+                case "le":
+                    if (tool.inColumn === "") {
+                        for (let i = 0; i < lines.length; i++) {
+                            if (lines[i] <= tool.value) {
+                                result += lines[i] + '\n';
+                            }
+                        }
+                    }
+                    else {
+                        for (let i = 0; i < lines.length; i++) {
+                            columns = lines[i].split(tool.delimiter);
+    
+                            if (tool.inColumn <= columns.length) {
+                                if (columns[tool.inColumn - 1] <= tool.value) {
+                                    result += lines[i] + '\n';
+                                }
+                            }
+                        }
+                    }
+                    return result.slice(0, -1);
+                case "eq":
+                        if (tool.inColumn === "") {
+                            for (let i = 0; i < lines.length; i++) {
+                                if (lines[i] === tool.value) {
+                                    result += lines[i] + '\n';
+                                }
+                            }
+                        }
+                        else {
+                            for (let i = 0; i < lines.length; i++) {
+                                columns = lines[i].split(tool.delimiter);
+        
+                                if (tool.inColumn <= columns.length) {
+                                    if (columns[tool.inColumn - 1] === tool.value) {
+                                        result += lines[i] + '\n';
+                                    }
+                                }
+                            }
+                        }
+                        return result.slice(0, -1);
+            default:
+                return text;
+        }
+    }
+
+    function compareInspectTool(text, tool) {
+        var columns = "";
+
+        switch (tool.comparator) {
+            case "gt":
+                if (tool.inColumn === "") {
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i] === null) {
+                            continue;
+                        }
+                        if (!(text[i] > tool.value)) {
+                            text[i] = null;
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i] === null) {
+                            continue;
+                        }
+                        columns = text[i].split(tool.delimiter);
+
+                        if (tool.inColumn <= columns.length) {
+                            if (!(columns[tool.inColumn - 1] > tool.value)) {
+                                text[i] = null;
+                            }
+                        }
+                        else {
+                            text[i] = null;
+                        }
+                    }
+                }
+                return text;
+            case "ge":
+                if (tool.inColumn === "") {
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i] === null) {
+                            continue;
+                        }
+                        if (!(text[i] >= tool.value)) {
+                            text[i] = null;
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i] === null) {
+                            continue;
+                        }
+                        columns = text[i].split(tool.delimiter);
+
+                        if (tool.inColumn <= columns.length) {
+                            if (!(columns[tool.inColumn - 1] >= tool.value)) {
+                                text[i] = null;
+                            }
+                        }
+                        else {
+                            text[i] = null;
+                        }
+                    }
+                }
+                return text;
+            case "lt":
+                if (tool.inColumn === "") {
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i] === null) {
+                            continue;
+                        }
+                        if (!(text[i] < tool.value)) {
+                            text[i] = null;
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i] === null) {
+                            continue;
+                        }
+                        columns = text[i].split(tool.delimiter);
+
+                        if (tool.inColumn <= columns.length) {
+                            if (!(columns[tool.inColumn - 1] < tool.value)) {
+                                text[i] = null;
+                            }
+                        }
+                        else {
+                            text[i] = null;
+                        }
+                    }
+                }
+                return text;
+                case "le":
+                    if (tool.inColumn === "") {
+                        for (let i = 0; i < text.length; i++) {
+                            if (text[i] === null) {
+                                continue;
+                            }
+                            if (!(text[i] <= tool.value)) {
+                                text[i] = null;
+                            }
+                        }
+                    }
+                    else {
+                        for (let i = 0; i < text.length; i++) {
+                            if (text[i] === null) {
+                                continue;
+                            }
+                            columns = text[i].split(tool.delimiter);
+    
+                            if (tool.inColumn <= columns.length) {
+                                if (!(columns[tool.inColumn - 1] <= tool.value)) {
+                                    text[i] = null;
+                                }
+                            }
+                            else {
+                                text[i] = null;
+                            }
+                        }
+                    }
+                    return text;
+                case "eq":
+                        if (tool.inColumn === "") {
+                            for (let i = 0; i < text.length; i++) {
+                                if (text[i] === null) {
+                                    continue;
+                                }
+                                if (!(text[i] === tool.value)) {
+                                    text[i] = null;
+                                }
+                            }
+                        }
+                        else {
+                            for (let i = 0; i < text.length; i++) {
+                                if (text[i] === null) {
+                                    continue;
+                                }
+                                columns = text[i].split(tool.delimiter);
+        
+                                if (tool.inColumn <= columns.length) {
+                                    if (!(columns[tool.inColumn - 1] === tool.value)) {
+                                        text[i] = null;
+                                    }
+                                }
+                                else {
+                                    text[i] = null;
+                                }
+                            }
+                        }
+                        return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
+     * RemoveLines nastroj
+     */
+    function removeLinesTool(text, tool) {
+        switch (tool.content) {
+            case "empty":
+                text = text.replace(/\n+/g, '\n');
+                break;
+            case "whiteSpaces":
+                text = text.replace(/^\s*[\r\n]/gm, '');
+                break;
+            default:
+                return text;
+        }
+        if (text.charAt(0) === '\n') {
+            text = text.slice(1)
+        }
+        if (text.charAt(text.length - 1) === '\n') {
+            text = text.slice(0, -1);
+        }
+        return text;
+    }
+
+    function removeLinesInspectTool(text, tool) {
+        switch (tool.content) {
+            case "empty":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === "") {
+                        text[i] = null;
+                    }
+                }
+                return text;
+            case "whiteSpaces":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].trim() === "") {
+                        text[i] = null;
+                    }
+                }
+                return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
      * Ridici funkce
      */
     function processTool(text, tool) {
@@ -591,8 +904,14 @@ export default () => {
             case "regexReplace":
                 result = regexReplaceTool(text, tool);
                 break;
+            case "compare":
+                result = compareTool(text, tool);
+                break;
             case "removeColumn":
                 result = removeColumnTool(text, tool);
+                break;
+            case "removeLines":
+                result = removeLinesTool(text, tool);
                 break;
         	default:
         		break;
@@ -617,13 +936,18 @@ export default () => {
             case "regexReplace":
                 result = regexReplaceInspectTool(text, tool);
                 break;
+            case "compare":
+                result = compareInspectTool(text, tool);
+                break;
             case "removeColumn":
                 result = removeColumnInspectTool(text, tool);
+                break;
+            case "removeLines":
+                result = removeLinesInspectTool(text, tool);
                 break;
             default:
                 break;
         }
-        
         return result;
     };
 

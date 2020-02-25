@@ -2,10 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from "@material-ui/core";
 import { lightBlue } from "@material-ui/core/colors";
-import { Search, Edit, FindReplace, RemoveCircleOutline, Transform } from "@material-ui/icons";
+import { Search, Edit, FindReplace, RemoveCircleOutline } from "@material-ui/icons";
 import FindTab from "./Tabs/FindTab";
 import ReplaceTab from "./Tabs/ReplaceTab";
 import ReduceTab from "./Tabs/ReduceTab";
+import ModifyTab from "./Tabs/ModifyTab";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,17 +63,6 @@ const useStyles = makeStyles(theme => ({
   fullWidth: {
     width: "100% !important",
   },
-  /*toolTitle: {
-    marginLeft: '10px',
-    color: 'orange',
-    position: 'relative',
-    bottom: '15px',
-    paddingLeft: '5px',
-    paddingRight: '5px',
-    paddingBottom: '2px',
-    backgroundColor: theme.palette.background.paper,
-  },*/
-
 }));
 
 const ToolTabs = React.memo(({ showAlert, addTool }) => {
@@ -103,7 +93,6 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
             <Tab icon={<FindReplace />} label="Replace" {...a11yProps(1)} />
             <Tab icon={<RemoveCircleOutline />} label="Reduce" {...a11yProps(2)} />
             <Tab icon={<Edit />} label="Modify" {...a11yProps(3)} />
-            <Tab icon={<Transform />} label="Convert" {...a11yProps(4)} />
           </Tabs>
         </AppBar>
         <TabPanel theme={theme} value={value} index={0}>
@@ -116,11 +105,8 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
           <ReduceTab showAlert={showAlert} addTool={addTool} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          TBD
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          TBD
-        </TabPanel>
+          <ModifyTab showAlert={showAlert} addTool={addTool} />
+        </TabPanel> 
       </div>
     </MuiThemeProvider>
   );
