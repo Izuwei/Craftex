@@ -8,7 +8,9 @@ import EditReplace from "./Tools/EditReplace";
 import EditRegexReplace from "./Tools/EditRegexReplace";
 import EditCompare from "./Tools/EditCompare";
 import EditRemoveColumn from "./Tools/EditRemoveColumn";
-import EditRemoveLines from "./Tools/EditRemoveLines";
+import EditFilterLines from "./Tools/EditFilterLines";
+import EditCutLines from "./Tools/EditCutLines";
+import EditInsertColumn from "./Tools/EditInsertColumn";
 //import EditReverse from "./Tools/EditReverse";
 
 const theme = createMuiTheme({
@@ -57,14 +59,16 @@ function EditDialog(props) {
 
     const mapToolname = (tool) => {
         switch (tool.toolname) {
-            case "match": return (<React.Fragment>Match</React.Fragment>);
-            case "regexMatch": return (<React.Fragment>Regex match</React.Fragment>);
-            case "replace": return (<React.Fragment>Replace</React.Fragment>);
-            case "regexReplace": return (<React.Fragment>Regex replace</React.Fragment>);
-            case "compare": return (<React.Fragment>Compare</React.Fragment>);
-            case "removeColumn": return (<React.Fragment>Remove column</React.Fragment>);
-            case "removeLines": return (<React.Fragment>Remove lines</React.Fragment>);
-            //case "reverse": return (<React.Fragment>Reverse</React.Fragment>);
+            case "match": return "Match";
+            case "regexMatch": return "Regex match";
+            case "replace": return "Replace";
+            case "regexReplace": return "Regex replace";
+            case "compare": return "Compare";
+            case "removeColumn": return "Remove column";
+            case "filterLines": return "Filter lines";
+            case "cutLines": return "Cut lines";
+            case "insertColumn": return "Insert column";
+            //case "reverse": return "Reverse";
             default: return;
         }
     };
@@ -98,9 +102,17 @@ function EditDialog(props) {
                 return (
                     <EditRemoveColumn ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
-            case "removeLines":
+            case "filterLines":
                 return (
-                    <EditRemoveLines ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                    <EditFilterLines ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
+            case "cutLines":
+                return (
+                    <EditCutLines ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
+            case "insertColumn":
+                return (
+                    <EditInsertColumn ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
             /*case "reverse":
                 return (

@@ -6,9 +6,9 @@ const useStyles = makeStyles(theme => ({
     root: {
         padding: "5px",
         display: "flex",
-        justifyContent: "space-between",
+        flexDirection: "row",
         alignItems: "center",
-        width: "320px",
+        flexWrap: "wrap",
     },
     button: {
         margin: "8px 0px 8px 8px",
@@ -16,12 +16,6 @@ const useStyles = makeStyles(theme => ({
     textField: {
         width: "100px",
         marginRight: "10px",
-    },
-    flexStart: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        flexWrap: "wrap",
     },
 }));
 
@@ -56,29 +50,27 @@ function RemoveColumnTool(props) {
 
     return (
         <div className={classes.root}>
-            <div className={classes.flexStart}>
-                <TextField
-                    id="remove-column-position"
-                    label="Position"
-                    value={position}
-                    onChange={event => `${setPosition(event.target.value)} ${setPositionError(false)}`}
-                    type="number"
-                    required={true}
-                    className={classes.textField}
-                    error={positionError === true}
-                    helperText={positionError === true ? "Required and number must be greater than zero." : ""}
-                />
-                <TextField
-                    id="remove-column-delimiter"
-                    label="Delimiter"
-                    value={delimiter}
-                    onChange={event => `${setDelimiter(event.target.value)} ${setDelimiterError(false)}`}
-                    className={classes.textField}
-                    required={true}
-                    error={delimiterError === true}
-                    helperText={delimiterError === true ? "This field is required" : ""}
-                />
-            </div>
+            <TextField
+                id="remove-column-position"
+                label="Position"
+                value={position}
+                onChange={event => `${setPosition(event.target.value)} ${setPositionError(false)}`}
+                type="number"
+                required={true}
+                className={classes.textField}
+                error={positionError === true}
+                helperText={positionError === true ? "Required and number must be greater than zero." : ""}
+            />
+            <TextField
+                id="remove-column-delimiter"
+                label="Delimiter"
+                value={delimiter}
+                onChange={event => `${setDelimiter(event.target.value)} ${setDelimiterError(false)}`}
+                className={classes.textField}
+                required={true}
+                error={delimiterError === true}
+                helperText={delimiterError === true ? "This field is required" : ""}
+            />
             <Button
                 color="secondary"
                 variant="contained"

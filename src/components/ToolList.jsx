@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
         flexGrow: "1",
     },
     toolName: {
-        color: "#ff6a1a",
+        color: "#ff5d00",
         fontWeight: "bold",
         marginRight: "8px",
     },
@@ -77,6 +77,10 @@ const useStyles = makeStyles(theme => ({
     },
     violetWord: {
         color: "#b500d1",
+        fontWeight: "bold",
+    },
+    lightGreenWord: {
+        color: "#a4ad00",
         fontWeight: "bold",
     },
     greenWord: {
@@ -96,6 +100,10 @@ const useStyles = makeStyles(theme => ({
         fontWeight: "bold",
     },
     greenBlueWord: {
+        color: "#00b87d",
+        fontWeight: "bold",
+    },
+    turquoiseWord: {
         color: "#00b87d",
         fontWeight: "bold",
     },
@@ -126,12 +134,12 @@ function mapComparator(comparator) {
     }
 };
 
-function mapRemoveLinesContent(content) {
+function mapFilterLinesContent(content) {
     switch (content) {
         case "empty":
             return "with empty content";
-        case "whiteSpaces":
-            return "with white spaces";
+        case "whiteChars":
+            return "with white characters";
         default:
             return "";
     }
@@ -157,7 +165,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
             case "match":
                 return (
                     <React.Fragment>
-                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "match" ?  <React.Fragment>Match</React.Fragment> : <React.Fragment>Regex match</React.Fragment>}</span> 
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "match" ?  "Match" :"Regex match"}</span> 
                         <span className={`${classes.blueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
                         {tool.expression}
                         {tool.inColumn === "" ? "" : 
@@ -174,7 +182,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
             case "replace":
                 return (
                     <React.Fragment>
-                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "replace" ?  <React.Fragment>Replace</React.Fragment> : <React.Fragment>Regex replace</React.Fragment>}</span>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "replace" ?  "Replace" : "Regex replace"}</span>
                         <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
                         {tool.find}
                         <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>with</span> 
@@ -215,13 +223,35 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                         {tool.delimiter}
                     </React.Fragment>
                 );
-            case "removeLines":
+            case "filterLines":
                     return (
                         <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Remove lines</span>
-                            <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>{mapRemoveLinesContent(tool.content)}</span>
+                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Filter lines</span>
+                            <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>{mapFilterLinesContent(tool.content)}</span>
                         </React.Fragment>
                     );
+            case "cutLines":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Cut lines</span>
+                        {tool.count}
+                        <span className={`${classes.turquoiseWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>{
+                            tool.variant === "head" ? "from the beggining" : "from the end"
+                        }</span>
+                    </React.Fragment>
+                );
+            case "insertColumn":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Insert column</span>
+                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>starting with</span>
+                        {tool.content.split('\n')[0] + "..."}
+                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>at</span>
+                        {tool.position + "."}
+                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>position delimited by</span> 
+                        {tool.delimiter}
+                    </React.Fragment>
+                );
             /*case "reverse":
                 return (
                     <React.Fragment>

@@ -53,6 +53,12 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
         toggleBreakpoint([]);
     }, [toggleBreakpoint]);
 
+    const initialEditorHeight = useCallback(() => {
+        const height = window.innerHeight - 1047;   // 1047 celkova vyska ostatniho contentu
+
+        return height < 480 ? "480px" : height;
+    }, []);
+
     return ( 
         <React.Fragment>
             <EditorToolbar 
@@ -73,7 +79,7 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                 clearPipeline={clearPipeline}
             />
             <Resizable
-                defaultSize={{ width: "100%", height: "700px" }}
+                defaultSize={{ width: "100%", height: initialEditorHeight() }}
                 minHeight={100}
                 minWidth="100%"
                 maxWidth="100%"

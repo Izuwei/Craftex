@@ -4,7 +4,8 @@ import { green, lightBlue } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/styles";
 import styles from "./TabStyles";
 import RemoveColumn from "./Tools/RemoveColumn";
-import RemoveLines from "./Tools/RemoveLines";
+import FilterLines from "./Tools/FilterLines";
+import CutLines from "./Tools/CutLines";
 
 const theme = createMuiTheme({
     palette: {
@@ -34,8 +35,12 @@ const ReduceTab = React.memo(({ classes, addTool, showAlert }) => {
                             <RemoveColumn addTool={addTool} showAlert={showAlert} />
                         </div>
                         <div className={classes.flexTool}>
-                            <Typography variant="h5" className={classes.toolName}>Remove lines</Typography>
-                            <RemoveLines addTool={addTool} showAlert={showAlert} />
+                            <Typography variant="h5" className={classes.toolName}>Filter lines</Typography>
+                            <FilterLines addTool={addTool} showAlert={showAlert} />
+                        </div>
+                        <div className={classes.flexTool}>
+                            <Typography variant="h5" className={classes.toolName}>Cut lines</Typography>
+                            <CutLines addTool={addTool} showAlert={showAlert} />
                         </div>
                     </div>
                 </Grid>

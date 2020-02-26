@@ -844,12 +844,12 @@ export default () => {
     /**
      * RemoveLines nastroj
      */
-    function removeLinesTool(text, tool) {
+    function filterLinesTool(text, tool) {
         switch (tool.content) {
             case "empty":
                 text = text.replace(/\n+/g, '\n');
                 break;
-            case "whiteSpaces":
+            case "whiteChars":
                 text = text.replace(/^\s*[\r\n]/gm, '');
                 break;
             default:
@@ -864,7 +864,7 @@ export default () => {
         return text;
     }
 
-    function removeLinesInspectTool(text, tool) {
+    function filterLinesInspectTool(text, tool) {
         switch (tool.content) {
             case "empty":
                 for (let i = 0; i < text.length; i++) {
@@ -873,7 +873,7 @@ export default () => {
                     }
                 }
                 return text;
-            case "whiteSpaces":
+            case "whiteChars":
                 for (let i = 0; i < text.length; i++) {
                     if (text[i].trim() === "") {
                         text[i] = null;
@@ -883,6 +883,99 @@ export default () => {
             default:
                 return text;
         }
+    }
+
+    /**
+     * Cut lines nastroj
+     */
+    function cutLinesTool(text, tool) {
+        text = text.split('\n');
+
+        switch (tool.variant) {
+            case "head":
+                text = text.slice(0, tool.count);
+                return text.join('\n');
+            case "tail":
+                text = text.slice(text.length - tool.count);
+                return text.join('\n');
+            default:
+                return text.join('\n');
+        }
+    }
+
+    function cutLinesInspectTool(text, tool) {
+        switch (tool.variant) {
+            case "head":
+                for (let i = tool.count; i < text.length; i++) {
+                    text[i] = null;
+                }
+                return text;
+            case "tail":
+                for (let i = 0; i < (text.length - tool.count); i++) {
+                    text[i] = null;
+                }
+                return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
+     * InsertColumn nastroj
+     */
+    function insertColumnTool(text, tool) {
+        text = text.split('\n');
+        const givenColumn = tool.content.split('\n');
+        var lineNumber = 0;
+        var columns = "";
+
+        while (lineNumber < text.length) {
+            columns = text[lineNumber].split(tool.delimiter);
+
+            if (columns.length < tool.position) {
+                columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
+            }
+            columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
+            text[lineNumber] = columns.join(tool.delimiter);
+            lineNumber++;
+        }
+        while(lineNumber < givenColumn.length) {
+            text.push(Array(tool.position - 1).fill(""));
+            text[lineNumber].splice(tool.position - 1, 0, givenColumn[lineNumber]);
+            text[lineNumber] = text[lineNumber].join(tool.delimiter);
+            lineNumber++;
+        }
+        return text.join('\n');
+    }
+
+    function insertColumnInspectTool(text, tool) {
+        const givenColumn = tool.content.split('\n');
+        var lineNumber = 0;
+        var columns = "";
+
+        while (lineNumber < text.length) {
+            if (text[lineNumber] === null) {
+                continue;
+            }
+            columns = text[lineNumber].split(tool.delimiter);
+
+            if (columns.length < tool.position) {
+                columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
+            }
+            columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
+            text[lineNumber] = columns.join(tool.delimiter);
+            lineNumber++;
+        }
+        while(lineNumber < givenColumn.length) {
+            if (text[lineNumber] === null) {
+                continue;
+            }
+            text.push(Array(tool.position - 1).fill(""));
+            text[lineNumber].splice(tool.position - 1, 0, givenColumn[lineNumber]);
+            text[lineNumber] = text[lineNumber].join(tool.delimiter);
+            lineNumber++;
+        }
+        return text;
     }
 
     /**
@@ -910,8 +1003,14 @@ export default () => {
             case "removeColumn":
                 result = removeColumnTool(text, tool);
                 break;
-            case "removeLines":
-                result = removeLinesTool(text, tool);
+            case "filterLines":
+                result = filterLinesTool(text, tool);
+                break;
+            case "cutLines":
+                result = cutLinesTool(text, tool);
+                break;
+            case "insertColumn":
+                result = insertColumnTool(text, tool);
                 break;
         	default:
         		break;
@@ -942,8 +1041,14 @@ export default () => {
             case "removeColumn":
                 result = removeColumnInspectTool(text, tool);
                 break;
-            case "removeLines":
-                result = removeLinesInspectTool(text, tool);
+            case "filterLines":
+                result = filterLinesInspectTool(text, tool);
+                break;
+            case "cutLines":
+                result = cutLinesInspectTool(text, tool);
+                break;
+            case "insertColumn":
+                result = insertColumnInspectTool(text, tool);
                 break;
             default:
                 break;

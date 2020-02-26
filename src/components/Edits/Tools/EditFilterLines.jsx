@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditRemoveLines = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditFilterLines = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     const classes = useStyles();
 
     const [content, setContent] = useState(props.tool.content);
@@ -23,20 +23,20 @@ const EditRemoveLines = forwardRef((props, ref) => {    // TODO: dodelat callbac
     return (
         <React.Fragment>
             <FormControl>
-                <InputLabel id="edit-remove-lines-content-label">Content</InputLabel>
+                <InputLabel id="edit-filter-lines-content-label">Content</InputLabel>
                 <Select
-                  labelId="edit-remove-lines-content-label"
-                  id="edit-remove-lines-content"
+                  labelId="edit-filter-lines-content-label"
+                  id="edit-filter-lines-content"
                   className={classes.opts}
                   value={content}
                   onChange={(event) => setContent(event.target.value)}
                 >
                     <MenuItem value={"empty"}>Empty</MenuItem>
-                    <MenuItem value={"whiteSpaces"}>White spaces</MenuItem>
+                    <MenuItem value={"whiteChars"}>White characters</MenuItem>
                 </Select>
             </FormControl>
         </React.Fragment>
     );
 });
 
-export default EditRemoveLines;
+export default EditFilterLines;
