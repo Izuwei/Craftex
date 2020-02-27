@@ -6,6 +6,8 @@ import styles from "./TabStyles";
 import RemoveColumn from "./Tools/RemoveColumn";
 import FilterLines from "./Tools/FilterLines";
 import CutLines from "./Tools/CutLines";
+import Trim from "./Tools/Trim";
+import RemoveExtraSpaces from "./Tools/RemoveExtraSpaces";
 
 const theme = createMuiTheme({
     palette: {
@@ -41,6 +43,14 @@ const ReduceTab = React.memo(({ classes, addTool, showAlert }) => {
                         <div className={classes.flexTool}>
                             <Typography variant="h5" className={classes.toolName}>Cut lines</Typography>
                             <CutLines addTool={addTool} showAlert={showAlert} />
+                        </div>
+                        <div className={classes.flexTool}>
+                            <Typography variant="h5" className={classes.toolName}>Trim</Typography>
+                            <Trim addTool={addTool} showAlert={showAlert} />
+                        </div>
+                        <div className={classes.flexTool}>
+                            <Typography variant="h5" className={classes.toolName}>Remove extra spaces</Typography>
+                            <RemoveExtraSpaces addTool={addTool} showAlert={showAlert} />
                         </div>
                     </div>
                 </Grid>

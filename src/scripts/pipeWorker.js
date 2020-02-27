@@ -851,6 +851,7 @@ export default () => {
                 break;
             case "whiteChars":
                 text = text.replace(/^\s*[\r\n]/gm, '');
+                text = text.replace(/[\r\n]\s*$/g, '');
                 break;
             default:
                 return text;
@@ -904,15 +905,39 @@ export default () => {
     }
 
     function cutLinesInspectTool(text, tool) {
+        var count = 0;
+
         switch (tool.variant) {
             case "head":
-                for (let i = tool.count; i < text.length; i++) {
-                    text[i] = null;
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    else {
+                        count++;
+                    }
+                    if (count === parseInt(tool.count)) {
+                        for (i++; i < text.length; i++) {
+                            text[i] = null;
+                        }
+                        return text;
+                    }
                 }
                 return text;
             case "tail":
-                for (let i = 0; i < (text.length - tool.count); i++) {
-                    text[i] = null;
+                for (let i = text.length - 1; 0 <= i; i--) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    else {
+                        count++;
+                    }
+                    if (count === parseInt(tool.count)) {
+                        for (i--; i >= 0; i--) {
+                            text[i] = null;
+                        }
+                        return text;
+                    }
                 }
                 return text;
             default:
@@ -921,7 +946,7 @@ export default () => {
     }
 
     /**
-     * InsertColumn nastroj
+     * Insert column nastroj
      */
     function insertColumnTool(text, tool) {
         text = text.split('\n');
@@ -979,6 +1004,134 @@ export default () => {
     }
 
     /**
+     * Swap columns nastroj
+     */
+    function swapColumnsTool(text, tool) {
+        text = text.split('\n');
+        const width = tool.first > tool.second ? tool.first : tool.second;
+        var column = "";
+        var temp;
+
+        for (let i = 0; i < text.length; i++) {
+            column = text[i].split(tool.delimiter);
+
+            if (column.length < width) {
+                column = column.concat(Array(width - column.length - 1).fill(""));
+            }
+            temp = column[tool.first - 1];
+            column[tool.first - 1] = column[tool.second - 1];
+            column[tool.second - 1] = temp;
+            text[i] = column.join(tool.delimiter);
+        }
+        return text.join('\n');
+    }
+
+    function swapColumnsInspectTool(text, tool) {
+        const width = tool.first > tool.second ? tool.first : tool.second;
+        var column = "";
+        var temp;
+
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === null) {
+                continue;
+            }
+            column = text[i].split(tool.delimiter);
+
+            if (column.length < width) {
+                column = column.concat(Array(width - column.length - 1).fill(""));
+            }
+            temp = column[tool.first - 1];
+            column[tool.first - 1] = column[tool.second - 1];
+            column[tool.second - 1] = temp;
+            text[i] = column.join(tool.delimiter);
+        }
+        return text;
+    }
+
+    /**
+     * Convert case nastroj
+     */
+    function convertCaseTool(text, tool) {
+        switch (tool.textCase) {
+            case "uppercase":
+                return text.toUpperCase();
+            case "lowercase":
+                return text.toLowerCase();
+            default:
+                return text;
+        }
+    }
+
+    function convertCaseInspectTool(text, tool) {
+        switch (tool.textCase) {
+            case "uppercase":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    text[i] = text[i].toUpperCase();
+                }
+                return text;
+            case "lowercase":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === null) {
+                        continue;
+                    }
+                    text[i] = text[i].toLowerCase();
+                }
+                return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
+     * Trim nastroj
+     */
+    function trimTool(text) {
+        var lines = text.split('\n');
+
+        for (let i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].trim();
+        }
+
+        return lines.join('\n');
+    }
+
+    function trimInspectTool(text) {
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === null) {
+                continue;
+            }
+            text[i] = text[i].trim();
+        }
+        return text;
+    }
+
+    /**
+     * Remove extra spaces nastroj
+     */
+    function removeExtraSpacesTool(text) {
+        var lines = text.split('\n');
+
+        for (let i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replace(/\s+/g, ' ');
+        }
+
+        return lines.join('\n');
+    }
+
+    function removeExtraSpacesInspectTool(text) {
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === null) {
+                continue;
+            }
+            text[i] = text[i].replace(/\s+/g, ' ');
+        }
+        return text;
+    }
+
+    /**
      * Ridici funkce
      */
     function processTool(text, tool) {
@@ -1011,6 +1164,18 @@ export default () => {
                 break;
             case "insertColumn":
                 result = insertColumnTool(text, tool);
+                break;
+            case "swapColumns":
+                result = swapColumnsTool(text, tool);
+                break;
+            case "convertCase":
+                result = convertCaseTool(text, tool);
+                break;
+            case "trim":
+                result = trimTool(text);
+                break;
+            case "removeExtraSpaces":
+                result = removeExtraSpacesTool(text);
                 break;
         	default:
         		break;
@@ -1049,6 +1214,18 @@ export default () => {
                 break;
             case "insertColumn":
                 result = insertColumnInspectTool(text, tool);
+                break;
+            case "swapColumns":
+                result = swapColumnsInspectTool(text, tool);
+                break;
+            case "convertCase":
+                result = convertCaseInspectTool(text, tool);
+                break;
+            case "trim":
+                result = trimInspectTool(text);
+                break;
+            case "removeExtraSpaces":
+                result = removeExtraSpacesInspectTool(text);
                 break;
             default:
                 break;

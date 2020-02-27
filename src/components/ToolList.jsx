@@ -107,6 +107,10 @@ const useStyles = makeStyles(theme => ({
         color: "#00b87d",
         fontWeight: "bold",
     },
+    lightTurquoiseWord: {
+        color: "#14db78",
+        fontWeight: "bold",
+    },
     listIcon: {
         marginRight: "15px",
         color: "#e0e0e0",
@@ -119,20 +123,22 @@ const useStyles = makeStyles(theme => ({
 
 function mapComparator(comparator) {
     switch (comparator) {
-        case "gt":
-            return "greater than";
-        case "ge":
-            return "greater equal";
-        case "lt":
-            return "less than";
-        case "le":
-            return "less equal";
-        case "eq":
-            return "equal";
-        default:
-            return "";
+        case "gt": return "greater than";
+        case "ge": return "greater equal";
+        case "lt": return "less than";
+        case "le": return "less equal";
+        case "eq": return "equal";
+        default: return "";
     }
 };
+
+function mapCase(textCase) {
+    switch (textCase) {
+        case "uppercase": return "upper case";
+        case "lowercase": return "lower case";
+        default: return "";
+    }
+}
 
 function mapFilterLinesContent(content) {
     switch (content) {
@@ -143,6 +149,12 @@ function mapFilterLinesContent(content) {
         default:
             return "";
     }
+}
+
+function isEditable(tool) {
+    const nonEditable = ["trim", "removeExtraSpaces"];
+    
+    return nonEditable.includes(tool.toolname) ? false : true;
 }
 
 const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort }) => {
@@ -235,7 +247,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Cut lines</span>
                         {tool.count}
-                        <span className={`${classes.turquoiseWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>{
+                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>{
                             tool.variant === "head" ? "from the beggining" : "from the end"
                         }</span>
                     </React.Fragment>
@@ -244,12 +256,44 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Insert column</span>
-                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>starting with</span>
+                        <span className={`${classes.turquoiseWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>starting with</span>
                         {tool.content.split('\n')[0] + "..."}
-                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>at</span>
+                        <span className={`${classes.turquoiseWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>at</span>
                         {tool.position + "."}
-                        <span className={`${classes.lightGreenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>position delimited by</span> 
+                        <span className={`${classes.turquoiseWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>position delimited by</span> 
                         {tool.delimiter}
+                    </React.Fragment>
+                );
+            case "swapColumns":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Swap columns</span>
+                        <span className={`${classes.lightTurquoiseWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>at</span>
+                        {tool.first + "."}
+                        <span className={`${classes.lightTurquoiseWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>and</span>
+                        {tool.second + "."}
+                        <span className={`${classes.lightTurquoiseWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>position delimited by</span> 
+                        {tool.delimiter}
+                    </React.Fragment>
+                );
+            case "convertCase":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Convert case</span>
+                        <span className={`${classes.redWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>to</span>
+                        {mapCase(tool.textCase)}
+                    </React.Fragment>
+                );
+            case "trim":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Trim</span>
+                    </React.Fragment>
+                );
+            case "removeExtraSpaces":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Remove extra spaces</span>
                     </React.Fragment>
                 );
             /*case "reverse":
@@ -286,9 +330,11 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                             </IconButton>
                         </Tooltip>
                         <Menu {...bindMenu(properties)}>
-                            <MenuItem onClick={() => openEdit(tool)}>
-                                <Edit className={classes.listIcon} /> Edit
-                            </MenuItem>
+                            {isEditable(tool) &&
+                                <MenuItem onClick={() => openEdit(tool)}>
+                                    <Edit className={classes.listIcon} /> Edit
+                                </MenuItem>
+                            }
                             <MenuItem onClick={() => reactiveTool(tool)}>
                                 {tool.active ? 
                                     (<React.Fragment> <VisibilityOff className={classes.listIcon} /> Deactivate </React.Fragment>) : 

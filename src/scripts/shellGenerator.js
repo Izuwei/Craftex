@@ -215,6 +215,46 @@ function removeLinesCommand(tool) {
     }
 }
 
+function insertColumnCommand(tool) {
+    const colBubble = (position) => {
+        if (parseInt(position) === 1) {
+            return "";
+        }
+        var res = "t=$1;";
+
+        for (let i = 1; i < position; i++) {
+            res += "$" + i + "=$" + (parseInt(i) + 1) + ";";
+        }
+        return " | awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{" + res + "$" + tool.position + "=t;print;}'";
+    }
+
+    return "paste -d '" + tool.delimiter + "' $COLUMN_FILE /dev/stdin" + colBubble(tool.position);
+}
+
+function swapColumnsCommand(tool) {
+    return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{t=$" + tool.first + ";$" + tool.first + "=$" + tool.second + ";$" + tool.second + "=t;print;}'";
+}
+
+function convertCaseCommand(tool) {
+    switch (tool.textCase) {
+        case "uppercase":
+            return "tr '[:lower:]' '[:upper:]'";
+        case "lowercase":
+            return "tr '[:upper:]' '[:lower:]'";
+        default:
+            return "";
+    }
+}
+
+// https://unix.stackexchange.com/questions/102008/how-do-i-trim-leading-and-trailing-whitespace-from-each-line-of-some-output
+function trimCommand() {
+    return "sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'";
+}
+
+function removeExtraSpacesCommand() {
+    return "tr -s ' '";
+}
+
 function getToolCommand(tool) {
     var command = "";
 
@@ -240,6 +280,21 @@ function getToolCommand(tool) {
         case "removeLines":
             command = removeLinesCommand(tool);
             break;
+        case "insertColumn":
+            command = insertColumnCommand(tool);
+            break;
+        case "swapColumns":
+            command = swapColumnsCommand(tool);
+            break;
+        case "convertCase":
+            command = convertCaseCommand(tool);
+            break;
+        case "trim":
+            command = trimCommand();
+            break;
+        case "removeExtraSpaces":
+            command = removeExtraSpacesCommand();
+            break;
         default:
             return;
     }
@@ -247,7 +302,7 @@ function getToolCommand(tool) {
 }
 
 export default function (pipeline) {
-    var result = "cat FILENAME";
+    var result = "cat $FILENAME";
 
     for (var i = 0; i < pipeline.length; i++) {
         if (pipeline[i].active === true) {

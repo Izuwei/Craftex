@@ -2,12 +2,6 @@ import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, TextField } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
-    flexStart: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        flexWrap: "wrap",
-    },
     opts: {
         width: "100px",
         marginRight: "10px",

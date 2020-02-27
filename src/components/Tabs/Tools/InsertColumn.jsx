@@ -82,6 +82,7 @@ function InsertColumnTool(props) {
                     onChange={event => `${setPosition(event.target.value)} ${setPositionError(false)}`}
                     type="number"
                     className={classes.opts}
+                    required={true}
                     error={positionError === true}
                     helperText={positionError === true ? "Number must be greater than zero!" : ""}
                 />
@@ -91,7 +92,7 @@ function InsertColumnTool(props) {
                     value={delimiter}
                     onChange={event => `${setDelimiter(event.target.value)} ${setDelimiterError(false)}`}
                     className={classes.opts}
-                    required={position === "" ? false : true}
+                    required={true}
                     error={delimiterError === true}
                     helperText={delimiterError === true ? "Delimiter is required!" : ""}
                 />
