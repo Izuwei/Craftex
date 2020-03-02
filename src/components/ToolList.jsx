@@ -91,6 +91,10 @@ const useStyles = makeStyles(theme => ({
         color: "#089dcf",
         fontWeight: "bold",
     },
+    lightBlueWord: {
+        color: "#0fbbff",
+        fontWeight: "bold",
+    },
     yellowWord: {
         color: "#ffcc00",
         fontWeight: "bold",
@@ -294,6 +298,17 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Remove extra spaces</span>
+                    </React.Fragment>
+                );
+            case "sort":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Sort</span>
+                        <span className={`${classes.lightBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>
+                            {tool.order}
+                            {tool.casesensitive === true ? " case sensitive " : " case isensitive "}
+                            {tool.ignoreLeadingBlanks === true ? " ignoring leading blanks" : ""}
+                        </span>
                     </React.Fragment>
                 );
             /*case "reverse":

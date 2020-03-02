@@ -204,11 +204,11 @@ function removeColumnCommand(tool) {
     return "cut -d '" + tool.delimiter + "' -f " + start + (parseInt(tool.position) + 1) + "-";
 }
 
-function removeLinesCommand(tool) {
+function filterLinesCommand(tool) {
     switch (tool.content) {
         case "empty":
             return "sed '/^$/d'";
-        case "whiteSpaces":
+        case "whiteChars":
             return "awk 'NF > 0'";
         default:
             return "";
@@ -255,6 +255,32 @@ function removeExtraSpacesCommand() {
     return "tr -s ' '";
 }
 
+function cutLinesCommand(tool) {
+    switch (tool.variant) {
+        case "head":
+            return "head -n " + tool.count;
+        case "tail":
+            return "tail -n " + tool.count;
+        default:
+            return "";
+    }
+}
+
+function sortCommand(tool) {
+    var command = "LC_ALL=C sort -s";
+    
+    if (tool.order === "descending") {
+        command += "r";
+    }
+    if (tool.casesensitive === false) {
+        command += "f";
+    }
+    if (tool.ignoreLeadingBlanks === true) {
+        command += "b";
+    }
+    return command;
+}
+
 function getToolCommand(tool) {
     var command = "";
 
@@ -277,8 +303,8 @@ function getToolCommand(tool) {
         case "removeColumn":
             command = removeColumnCommand(tool);
             break;
-        case "removeLines":
-            command = removeLinesCommand(tool);
+        case "filterLines":
+            command = filterLinesCommand(tool);
             break;
         case "insertColumn":
             command = insertColumnCommand(tool);
@@ -294,6 +320,12 @@ function getToolCommand(tool) {
             break;
         case "removeExtraSpaces":
             command = removeExtraSpacesCommand();
+            break;
+        case "cutLines":
+            command = cutLinesCommand(tool);
+            break;
+        case "sort":
+            command = sortCommand(tool);
             break;
         default:
             return;

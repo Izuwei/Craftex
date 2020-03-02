@@ -63,22 +63,22 @@ export default () => {
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechno
                 for (var i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
 
-                    text[i] = text[i].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                    text[i].data = text[i].data.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
                 }
                 return text;
             }
             else {          // Prvni vyskyt
                 for (var x = 0; x < text.length; x++) {
-                    if (text[x] === null) {
+                    if (text[x].data === null) {
                         continue;
                     }
 
-                    if (text[x].match(new RegExp(tool.find, option)) !== null) {
-                        text[x] = text[x].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+                    if (text[x].data.match(new RegExp(tool.find, option)) !== null) {
+                        text[x].data = text[x].data.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
                         break;
                     }
                 }
@@ -90,29 +90,29 @@ export default () => {
       
             if (tool.occurrence === "all") {    // Vsechno
                 for (var j = 0; j < text.length; j++) {
-                    if (text[j] === null) {
+                    if (text[j].data === null) {
                         continue;
                     }
-                    columns = text[j].split(tool.delimiter);
+                    columns = text[j].data.split(tool.delimiter);
             
                     if (tool.inColumn <= columns.length) {
                         columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                        text[j] = columns.join(tool.delimiter);
+                        text[j].data = columns.join(tool.delimiter);
                     }
                 }
                 return text;
             }
             else {      // Prvni vyskyt
                 for (var z = 0; z < text.length; z++) {
-                    if (text[z] === null) {
+                    if (text[z].data === null) {
                         continue;
                     }
-                    columns = text[z].split(tool.delimiter);
+                    columns = text[z].data.split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
                         if (columns[tool.inColumn - 1].match(new RegExp(regexEscape(tool.find), option)) !== null) {
                             columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                            text[z] = columns.join(tool.delimiter);
+                            text[z].data = columns.join(tool.delimiter);
                             return text;
                         }
                     }
@@ -222,22 +222,22 @@ export default () => {
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechno
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    text[i] = regexReplaceAll([text[i]], tool)[0];
+                    text[i].data = regexReplaceAll([text[i].data], tool)[0];
                     //text[i] = text[i].replace(new RegExp(tool.find, option), tool.replace);
                 }
                 return text;
             }
             else {          // Prvni vyskyt
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
 
-                    if (text[i].match(new RegExp(tool.find, option)) !== null) {
-                        text[i] = text[i].replace(new RegExp(tool.find, option), tool.replace);
+                    if (text[i].data.match(new RegExp(tool.find, option)) !== null) {
+                        text[i].data = text[i].data.replace(new RegExp(tool.find, option), tool.replace);
                         break;
                     }
                 }
@@ -249,31 +249,31 @@ export default () => {
       
             if (tool.occurrence === "all") {    // Vsechno
                 for (let j = 0; j < text.length; j++) {
-                    if (text[j] === null) {
+                    if (text[j].data === null) {
                         continue;
                     }
 
-                    columns = text[j].split(tool.delimiter);
+                    columns = text[j].data.split(tool.delimiter);
             
                     if (tool.inColumn <= columns.length) {
                         columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(tool.find, option), tool.replace);
-                        text[j] = columns.join(tool.delimiter);
+                        text[j].data = columns.join(tool.delimiter);
                     }
                 }
                 return text;
             }
             else {      // Prvni vyskyt
                 for (let z = 0; z < text.length; z++) {
-                    if (text[z] === null) {
+                    if (text[z].data === null) {
                         continue;
                     }
 
-                    columns = text[z].split(tool.delimiter);
+                    columns = text[z].data.split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
                         if (columns[tool.inColumn - 1].match(new RegExp(tool.find, option)) !== null) {
                             columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(tool.find, option), tool.replace);
-                            text[z] = columns.join(tool.delimiter);
+                            text[z].data = columns.join(tool.delimiter);
                             return text;
                         }
                     }
@@ -331,26 +331,26 @@ export default () => {
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {        // Vsechny radky
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    if (text[i].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option)) === null) {
-                        text[i] = null;
+                    if (text[i].data.match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option)) === null) {
+                        text[i].data = null;
                     }
                 }
                 return text;
             }
             else {  // Prvni vyskyt
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    if (text[i].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option)) === null) {
-                        text[i] = null;
+                    if (text[i].data.match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option)) === null) {
+                        text[i].data = null;
                     }
                     else {
                         for (let j = i + 1; j < text.length; j++) {
-                            text[j] = null;
+                            text[j].data = null;
                         }
                         return text;
                     }
@@ -363,42 +363,42 @@ export default () => {
         
             if (tool.occurrence === "all") {    // Vsechno
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    columns = text[i].split(tool.delimiter);
+                    columns = text[i].data.split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
                         if (null === columns[tool.inColumn - 1].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option))) {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                     else {
-                        text[i] = null;
+                        text[i].data = null;
                     }
                 }
                 return text;
             }
             else {          // Prvni vyskyt
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    columns = text[i].split(tool.delimiter);
+                    columns = text[i].data.split(tool.delimiter);
               
                     if (tool.inColumn <= columns.length) {
                         if (null === columns[tool.inColumn - 1].match(new RegExp(".*" + regexEscape(tool.expression) + ".*", option))) {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                         else {
                             for (let j = i + 1; j < text.length; j++) {
-                                text[j] = null;
+                                text[j].data = null;
                             }
                             return text;
                         }
                     }
                     else {
-                        text[i] = null;
+                        text[i].data = null;
                     }
                 }
                 return text;
@@ -468,25 +468,25 @@ export default () => {
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechny vyskyty
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
 
-                    if (text[i].match(new RegExp(tool.expression, option)) === null) {
-                        text[i] = null;
+                    if (text[i].data.match(new RegExp(tool.expression, option)) === null) {
+                        text[i].data = null;
                     }
                 }
                 return text;
             }
             else {
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
 
-                    if (text[i].match(new RegExp(tool.expression, option)) !== null) {
+                    if (text[i].data.match(new RegExp(tool.expression, option)) !== null) {
                         for (let j = i + 1; j < text.length; j++) {
-                            text[j] = null;
+                            text[j].data = null;
                         }
                         return text;
                     }
@@ -499,41 +499,41 @@ export default () => {
         
             if (tool.occurrence === "all") {    // Vsechno
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    columns = text[i].split(tool.delimiter);
+                    columns = text[i].data.split(tool.delimiter);
                 
                     if (tool.inColumn <= columns.length) {
                         if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) === null) {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                     else {
-                        text[i] = null;
+                        text[i].data = null;
                     }
                 }
                 return text;
             }
             else { 
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    columns = text[i].split(tool.delimiter);
+                    columns = text[i].data.split(tool.delimiter);
               
                     if (tool.inColumn <= columns.length) {
                         if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
                             for (let j = i + 1; j < text.length; j++) {
-                                text[j] = null;
+                                text[j].data = null;
                             }
                         }
                         else {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                     else {
-                        text[i] = null;
+                        text[i].data = null;
                     }
                 }
                 return text;
@@ -560,14 +560,14 @@ export default () => {
         var columns = "";
 
         for (let i = 0; i < text.length; i++) {
-            if (text[i] === null) {
+            if (text[i].data === null) {
                 continue;
             }
-            columns = text[i].split(tool.delimiter);
+            columns = text[i].data.split(tool.delimiter);
 
             if (tool.position <= columns.length) {
                 columns.splice(tool.position - 1, 1);
-                text[i] = columns.join(tool.delimiter);
+                text[i].data = columns.join(tool.delimiter);
             }
         }
         return text;
@@ -694,28 +694,28 @@ export default () => {
             case "gt":
                 if (tool.inColumn === "") {
                     for (let i = 0; i < text.length; i++) {
-                        if (text[i] === null) {
+                        if (text[i].data === null) {
                             continue;
                         }
-                        if (!(text[i] > tool.value)) {
-                            text[i] = null;
+                        if (!(text[i].data > tool.value)) {
+                            text[i].data = null;
                         }
                     }
                 }
                 else {
                     for (let i = 0; i < text.length; i++) {
-                        if (text[i] === null) {
+                        if (text[i].data === null) {
                             continue;
                         }
-                        columns = text[i].split(tool.delimiter);
+                        columns = text[i].data.split(tool.delimiter);
 
                         if (tool.inColumn <= columns.length) {
                             if (!(columns[tool.inColumn - 1] > tool.value)) {
-                                text[i] = null;
+                                text[i].data = null;
                             }
                         }
                         else {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                 }
@@ -723,28 +723,28 @@ export default () => {
             case "ge":
                 if (tool.inColumn === "") {
                     for (let i = 0; i < text.length; i++) {
-                        if (text[i] === null) {
+                        if (text[i].data === null) {
                             continue;
                         }
-                        if (!(text[i] >= tool.value)) {
-                            text[i] = null;
+                        if (!(text[i].data >= tool.value)) {
+                            text[i].data = null;
                         }
                     }
                 }
                 else {
                     for (let i = 0; i < text.length; i++) {
-                        if (text[i] === null) {
+                        if (text[i].data === null) {
                             continue;
                         }
-                        columns = text[i].split(tool.delimiter);
+                        columns = text[i].data.split(tool.delimiter);
 
                         if (tool.inColumn <= columns.length) {
                             if (!(columns[tool.inColumn - 1] >= tool.value)) {
-                                text[i] = null;
+                                text[i].data = null;
                             }
                         }
                         else {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                 }
@@ -752,28 +752,28 @@ export default () => {
             case "lt":
                 if (tool.inColumn === "") {
                     for (let i = 0; i < text.length; i++) {
-                        if (text[i] === null) {
+                        if (text[i].data === null) {
                             continue;
                         }
                         if (!(text[i] < tool.value)) {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                 }
                 else {
                     for (let i = 0; i < text.length; i++) {
-                        if (text[i] === null) {
+                        if (text[i].data === null) {
                             continue;
                         }
-                        columns = text[i].split(tool.delimiter);
+                        columns = text[i].data.split(tool.delimiter);
 
                         if (tool.inColumn <= columns.length) {
                             if (!(columns[tool.inColumn - 1] < tool.value)) {
-                                text[i] = null;
+                                text[i].data = null;
                             }
                         }
                         else {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                     }
                 }
@@ -781,28 +781,28 @@ export default () => {
                 case "le":
                     if (tool.inColumn === "") {
                         for (let i = 0; i < text.length; i++) {
-                            if (text[i] === null) {
+                            if (text[i].data === null) {
                                 continue;
                             }
-                            if (!(text[i] <= tool.value)) {
-                                text[i] = null;
+                            if (!(text[i].data <= tool.value)) {
+                                text[i].data = null;
                             }
                         }
                     }
                     else {
                         for (let i = 0; i < text.length; i++) {
-                            if (text[i] === null) {
+                            if (text[i].data === null) {
                                 continue;
                             }
-                            columns = text[i].split(tool.delimiter);
+                            columns = text[i].data.split(tool.delimiter);
     
                             if (tool.inColumn <= columns.length) {
                                 if (!(columns[tool.inColumn - 1] <= tool.value)) {
-                                    text[i] = null;
+                                    text[i].data = null;
                                 }
                             }
                             else {
-                                text[i] = null;
+                                text[i].data = null;
                             }
                         }
                     }
@@ -810,28 +810,28 @@ export default () => {
                 case "eq":
                         if (tool.inColumn === "") {
                             for (let i = 0; i < text.length; i++) {
-                                if (text[i] === null) {
+                                if (text[i].data === null) {
                                     continue;
                                 }
-                                if (!(text[i] === tool.value)) {
-                                    text[i] = null;
+                                if (!(text[i].data === tool.value)) {
+                                    text[i].data = null;
                                 }
                             }
                         }
                         else {
                             for (let i = 0; i < text.length; i++) {
-                                if (text[i] === null) {
+                                if (text[i].data === null) {
                                     continue;
                                 }
-                                columns = text[i].split(tool.delimiter);
+                                columns = text[i].data.split(tool.delimiter);
         
                                 if (tool.inColumn <= columns.length) {
                                     if (!(columns[tool.inColumn - 1] === tool.value)) {
-                                        text[i] = null;
+                                        text[i].data = null;
                                     }
                                 }
                                 else {
-                                    text[i] = null;
+                                    text[i].data = null;
                                 }
                             }
                         }
@@ -869,15 +869,15 @@ export default () => {
         switch (tool.content) {
             case "empty":
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === "") {
-                        text[i] = null;
+                    if (text[i].data === "") {
+                        text[i].data = null;
                     }
                 }
                 return text;
             case "whiteChars":
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i].trim() === "") {
-                        text[i] = null;
+                    if (text[i].data.trim() === "") {
+                        text[i].data = null;
                     }
                 }
                 return text;
@@ -910,7 +910,7 @@ export default () => {
         switch (tool.variant) {
             case "head":
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
                     else {
@@ -918,7 +918,7 @@ export default () => {
                     }
                     if (count === parseInt(tool.count)) {
                         for (i++; i < text.length; i++) {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                         return text;
                     }
@@ -926,7 +926,7 @@ export default () => {
                 return text;
             case "tail":
                 for (let i = text.length - 1; 0 <= i; i--) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
                     else {
@@ -934,7 +934,7 @@ export default () => {
                     }
                     if (count === parseInt(tool.count)) {
                         for (i--; i >= 0; i--) {
-                            text[i] = null;
+                            text[i].data = null;
                         }
                         return text;
                     }
@@ -975,29 +975,31 @@ export default () => {
 
     function insertColumnInspectTool(text, tool) {
         const givenColumn = tool.content.split('\n');
+        var givenColumnLine = 0;
         var lineNumber = 0;
         var columns = "";
 
         while (lineNumber < text.length) {
-            if (text[lineNumber] === null) {
+            if (text[lineNumber].data === null) {
+                lineNumber++;
                 continue;
             }
-            columns = text[lineNumber].split(tool.delimiter);
+            columns = text[lineNumber].data.split(tool.delimiter);
 
             if (columns.length < tool.position) {
                 columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
             }
-            columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
-            text[lineNumber] = columns.join(tool.delimiter);
+            columns.splice(tool.position - 1, 0, givenColumn[givenColumnLine]);
+            text[lineNumber].data = columns.join(tool.delimiter);
+            givenColumnLine++;
             lineNumber++;
         }
-        while(lineNumber < givenColumn.length) {
-            if (text[lineNumber] === null) {
-                continue;
-            }
-            text.push(Array(tool.position - 1).fill(""));
-            text[lineNumber].splice(tool.position - 1, 0, givenColumn[lineNumber]);
-            text[lineNumber] = text[lineNumber].join(tool.delimiter);
+        while(givenColumnLine < givenColumn.length) {
+            text.push({number: lineNumber + 1, data: Array(tool.position - 1).fill("")});
+            //text.push(Array(tool.position - 1).fill(""));
+            text[lineNumber].data.splice(tool.position - 1, 0, givenColumn[givenColumnLine]);
+            text[lineNumber].data = text[lineNumber].data.join(tool.delimiter);
+            givenColumnLine++;
             lineNumber++;
         }
         return text;
@@ -1032,10 +1034,10 @@ export default () => {
         var temp;
 
         for (let i = 0; i < text.length; i++) {
-            if (text[i] === null) {
+            if (text[i].data === null) {
                 continue;
             }
-            column = text[i].split(tool.delimiter);
+            column = text[i].data.split(tool.delimiter);
 
             if (column.length < width) {
                 column = column.concat(Array(width - column.length - 1).fill(""));
@@ -1043,7 +1045,7 @@ export default () => {
             temp = column[tool.first - 1];
             column[tool.first - 1] = column[tool.second - 1];
             column[tool.second - 1] = temp;
-            text[i] = column.join(tool.delimiter);
+            text[i].data = column.join(tool.delimiter);
         }
         return text;
     }
@@ -1066,18 +1068,18 @@ export default () => {
         switch (tool.textCase) {
             case "uppercase":
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    text[i] = text[i].toUpperCase();
+                    text[i].data = text[i].data.toUpperCase();
                 }
                 return text;
             case "lowercase":
                 for (let i = 0; i < text.length; i++) {
-                    if (text[i] === null) {
+                    if (text[i].data === null) {
                         continue;
                     }
-                    text[i] = text[i].toLowerCase();
+                    text[i].data = text[i].data.toLowerCase();
                 }
                 return text;
             default:
@@ -1100,10 +1102,10 @@ export default () => {
 
     function trimInspectTool(text) {
         for (let i = 0; i < text.length; i++) {
-            if (text[i] === null) {
+            if (text[i].data === null) {
                 continue;
             }
-            text[i] = text[i].trim();
+            text[i].data = text[i].data.trim();
         }
         return text;
     }
@@ -1123,12 +1125,86 @@ export default () => {
 
     function removeExtraSpacesInspectTool(text) {
         for (let i = 0; i < text.length; i++) {
-            if (text[i] === null) {
+            if (text[i].data === null) {
                 continue;
             }
-            text[i] = text[i].replace(/\s+/g, ' ');
+            text[i].data = text[i].data.replace(/\s+/g, ' ');
         }
         return text;
+    }
+
+    /**
+     * Sort nastroj
+     * TODO: Mozna optimalizace porovnavaci funkce
+     */
+    function sortTool(text, tool) {
+        const compare = (a, b) => {
+            if (tool.casesensitive === false) {
+                a = a.toUpperCase();
+                b = b.toUpperCase();
+            }
+            if (tool.ignoreLeadingBlanks === true) {
+                a = a.trim();
+                b = b.trim();
+            }
+            if (tool.order === "ascending") {
+                if (a < b) {
+                    return -1;
+                }
+                if (a > b) {
+                    return 1;
+                }
+                return 0;
+            }
+            else {
+                if (a > b) {
+                    return -1;
+                }
+                if (a < b) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+
+        text = text.split('\n');
+        text.sort(compare);
+        return text.join('\n');
+    }
+
+    function sortInspectTool(text, tool) {
+        const compareData = (a, b) => {
+            if (a.data === null|| b.data === null) {
+                return 0;
+            }
+            if (tool.casesensitive === false) {
+                a.data = a.data.toUpperCase();
+                b.data = b.data.toUpperCase();
+            }
+            if (tool.ignoreLeadingBlanks === true) {
+                a.data = a.data.trim();
+                b.data = b.data.trim();
+            }
+            if (tool.order === "ascending") {
+                if (a.data < b.data) {
+                    return -1;
+                }
+                if (a.data > b.data) {
+                    return 1;
+                }
+                return 0;
+            }
+            else {
+                if (a.data > b.data) {
+                    return -1;
+                }
+                if (a.data < b.data) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+        return text.sort(compareData);
     }
 
     /**
@@ -1177,10 +1253,12 @@ export default () => {
             case "removeExtraSpaces":
                 result = removeExtraSpacesTool(text);
                 break;
+            case "sort":
+                result = sortTool(text, tool);
+                break;
         	default:
         		break;
-        }
-        
+        } 
         return result;
     };
 
@@ -1227,6 +1305,9 @@ export default () => {
             case "removeExtraSpaces":
                 result = removeExtraSpacesInspectTool(text);
                 break;
+            case "sort":
+                result = sortInspectTool(text, tool);
+                break;
             default:
                 break;
         }
@@ -1234,7 +1315,20 @@ export default () => {
     };
 
     self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
-        var processData = event.data.inspectMode === true ? event.data.text.split('\n') : event.data.text;
+        //var processData = event.data.inspectMode === true ? event.data.text.split('\n') : event.data.text;
+        var processData = "";
+
+        if (event.data.inspectMode === false) {
+            processData = event.data.text;
+        }
+        else {
+            let lines = event.data.text.split('\n');
+            processData = Array(lines.length);
+
+            for (let index = 0; index < processData.length; index++) {
+                processData[index] = {number: index + 1, data: lines[index]};
+            }
+        }
 
         const pipeline = event.data.pipeline;
         const unit = Math.ceil(100 / pipeline.length);
@@ -1257,6 +1351,23 @@ export default () => {
         }
 
         if (event.data.inspectMode === true) {
+            let lines = [];
+            let tempData = [];
+            console.log(processData);
+
+            for (var breakpoint in event.data.breakpoints) {
+                lines.push(parseInt(breakpoint) + 1);
+            }
+
+            for (let index = 0; index < processData.length; index++) {
+                if (lines.includes(processData[index].number) && processData[index].data !== null) {
+                    tempData.push(processData[index].data);
+                }
+            }
+
+            processData = tempData.join('\n');
+        }
+        /*if (event.data.inspectMode === true) {
             var temp = [];
             console.log(processData);
             for (var breakpoint in event.data.breakpoints) {
@@ -1265,7 +1376,7 @@ export default () => {
                 }
             }
             processData = temp.join('\n');
-        }
+        }*/
 
         postMessage({type: "result", data: processData});
     });

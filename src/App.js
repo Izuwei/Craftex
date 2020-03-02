@@ -23,119 +23,128 @@ const theme = createMuiTheme({
 
 //-------------------------------DEBUG------------------------------------
 /*
-function regexEscape(regex) {
-  return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-};
+function cutLinesTool(text, tool) {
+  text = text.split('\n');
 
-function replaceGetOpts(tool) {
-if (tool.occurrence === "all") {
-    return tool.casesensitive === true ? "g" : "gi";
-}
-else {
-    return tool.casesensitive === true ? "" : "i";
-}
+  switch (tool.variant) {
+      case "head":
+          text = text.slice(0, tool.count);
+          return text.join('\n');
+      case "tail":
+          text = text.slice(text.length - tool.count);
+          return text.join('\n');
+      default:
+          return text.join('\n');
+  }
 }
 
-function replaceTool(text, tool) {
-const option = replaceGetOpts(tool);
+function cutLinesInspectTool(text, tool) {
+  var count = 0;
 
-if (tool.inColumn === "") {     // Bez sloupcu -> globalne
-    return text.replace(new RegExp(regexEscape(tool.find), option), tool.replace);
+  switch (tool.variant) {
+      case "head":
+          for (let i = 0; i < text.length; i++) {
+              if (text[i].data === null) {
+                  continue;
+              }
+              else {
+                  count++;
+              }
+              if (count === parseInt(tool.count)) {
+                  for (i++; i < text.length; i++) {
+                      text[i].data = null;
+                  }
+                  return text;
+              }
+          }
+          return text;
+      case "tail":
+          for (let i = text.length - 1; 0 <= i; i--) {
+              if (text[i].data === null) {
+                  continue;
+              }
+              else {
+                  count++;
+              }
+              if (count === parseInt(tool.count)) {
+                  for (i--; i >= 0; i--) {
+                      text[i].data = null;
+                  }
+                  return text;
+              }
+          }
+          return text;
+      default:
+          return text;
+  }
 }
-else {      // Ve sloupci
-  var splitedText = text.split('\n');
+function insertColumnTool(text, tool) {
+  text = text.split('\n');
+  const givenColumn = tool.content.split('\n');
+  var lineNumber = 0;
   var columns = "";
 
-    if (tool.occurrence === "all") {
-      for (var i = 0; i < splitedText.length; i++) {
-      columns = splitedText[i].split(tool.delimiter);
-    
-      if (tool.inColumn <= columns.length) {
-          columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-          splitedText[i] = columns.join(tool.delimiter);
+  while (lineNumber < text.length) {
+      columns = text[lineNumber].split(tool.delimiter);
+
+      if (columns.length < tool.position) {
+          columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
       }
-      }
-      return splitedText.join('\n');
-    }
-    else { 
-      for (var z = 0; z < splitedText.length; z++) {
-        columns = splitedText[z].split(tool.delimiter);
-      
-        if (tool.inColumn <= columns.length) {
-            if (columns[tool.inColumn - 1].match(new RegExp(tool.find, option)) !== null) {
-                columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                splitedText[z] = columns.join(tool.delimiter);
-                return splitedText.join('\n');
-            }
-        }
-      }
-      return text;
-    }
+      columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
+      text[lineNumber] = columns.join(tool.delimiter);
+      lineNumber++;
+  }
+  while(lineNumber < givenColumn.length) {
+      text.push(Array(tool.position - 1).fill(""));
+      text[lineNumber].splice(tool.position - 1, 0, givenColumn[lineNumber]);
+      text[lineNumber] = text[lineNumber].join(tool.delimiter);
+      lineNumber++;
+  }
+  return text.join('\n');
 }
-};
+function insertColumnInspectTool(text, tool) {
+  const givenColumn = tool.content.split('\n');
+  var lineNumber = 0;
+  var columns = "";
 
-function replaceInspectTool(text, tool) {
-  const option = replaceGetOpts(tool);
+  while (lineNumber < text.length) {
+      if (text[lineNumber].data === null) {
+        lineNumber++;
+          continue;
+      }
+      columns = text[lineNumber].data.split(tool.delimiter);
 
-  if (tool.inColumn === "") {     // Bez sloupcu -> globalne
-      if (tool.occurrence === "all") {    // Vsechno
-          for (var i = 0; i < text.length; i++) {
-              text[i] = text[i].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-          }
-          return text;
+      if (columns.length < tool.position) {
+          columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
       }
-      else {          // Prvni vyskyt
-          for (var x = 0; x < text.length; x++) {
-              if (text[x].match(new RegExp(tool.find, option)) !== null) {
-                  text[x] = text[x].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                  break;
-              }
-          }
-          return text;
-      }
+      columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
+      text[lineNumber].data = columns.join(tool.delimiter);
+      lineNumber++;
   }
-  else {      // Ve sloupci
-      var columns = "";
-
-      if (tool.occurrence === "all") {    // Vsechno
-          for (var j = 0; j < text.length; j++) {
-              columns = text[j].split(tool.delimiter);
-      
-              if (tool.inColumn <= columns.length) {
-                  columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                  text[j] = columns.join(tool.delimiter);
-              }
-          }
-          return text;
+  while(lineNumber < givenColumn.length) {
+      if (text[lineNumber] === null) {
+        lineNumber++;
+          continue;
       }
-      else {      // Prvni vyskyt
-          for (var z = 0; z < text.length; z++) {
-              columns = text[z].split(tool.delimiter);
-          
-              if (tool.inColumn <= columns.length) {
-                  if (columns[tool.inColumn - 1].match(new RegExp(regexEscape(tool.find), option)) !== null) {
-                      columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(regexEscape(tool.find), option), tool.replace);
-                      text[z] = columns.join(tool.delimiter);
-                      return text;
-                  }
-              }
-          }
-          return text;
-      }
+      text.push({number: lineNumber + 1, data: Array(tool.position - 1).fill("")});
+      //text.push(Array(tool.position - 1).fill(""));
+      text[lineNumber].data.splice(tool.position - 1, 0, givenColumn[lineNumber]);
+      text[lineNumber].data = text[lineNumber].data.join(tool.delimiter);
+      lineNumber++;
   }
+  return text;
 }
 
 function processTool(text, tool) {
   var result;
 
   switch (tool.toolname) {
-    case "replace":
-      result = replaceTool(text, tool);
-      break;
-    case "Match":
-      result = text.match(new RegExp(".*" + regexEscape(tool.pattern) + ".*", 'g'));
-      result === null ? result = "" : result = result.join('\n');
-      break;
+    case "cutLines":
+        result = cutLinesTool(text, tool);
+        break;
+    case "insertColumn":
+        result = insertColumnTool(text, tool);
+        break;
     default:
       break;
   }
@@ -147,13 +156,12 @@ function processInspectTool(text, tool) {
   var result;
 
   switch (tool.toolname) {
-    case "replace":
-      result = replaceInspectTool(text, tool);
-      break;
-    case "Match":
-      result = text.match(new RegExp(".*" + regexEscape(tool.pattern) + ".*", 'g'));
-      result === null ? result = "" : result = result.join('\n');
-      break;
+    case "cutLines":
+        result = cutLinesInspectTool(text, tool);
+        break;
+    case "insertColumn":
+        result = insertColumnInspectTool(text, tool);
+        break;
     default:
       break;
   }
@@ -163,8 +171,19 @@ function processInspectTool(text, tool) {
 
 function proc(data) { // eslint-disable-line no-restricted-globals
   const pipeline = data.pipeline;
+  var processData = "";
 
-  var processData = data.inspectMode === true ? data.text.split('\n') : data.text;
+  if (data.inspectMode === false) {
+    processData = data.text;
+  }
+  else {
+      let lines = data.text.split('\n');
+      processData = Array(lines.length);
+
+      for (let index = 0; index < processData.length; index++) {
+          processData[index] = {number: index + 1, data: lines[index]};
+      }
+  }
   
   for (var i = 0; i < pipeline.length; i++) {
     if (pipeline[i].active === false)
@@ -179,17 +198,25 @@ function proc(data) { // eslint-disable-line no-restricted-globals
   }
 
   if (data.inspectMode === true) {
-    var temp = [];
+    let lines = [];
+    let tempData = [];
 
     for (var breakpoint in data.breakpoints) {
-        temp.push(processData[breakpoint]);
+        lines.push(parseInt(breakpoint) + 1);
     }
-    processData = temp.join('\n');
+
+    for (let index = 0; index < processData.length; index++) {
+        if (lines.includes(processData[index].number) && processData[index].data !== null) {
+            tempData.push(processData[index].data);
+        }
+    }
+
+    processData = tempData.join('\n');
 }
 
   return processData;
-};*/
-
+};
+*/
 //------------------------------------------------------------------------
 
 /**
@@ -275,12 +302,16 @@ function App() {
   // Do dokumentace napsat proc neni async/await ale useEffect
   // Popsat WebWorkers
   useEffect(() => {
-    /*setEditorResult(proc({
+    //---------------DEBUG---------------------
+    /*
+    setEditorResult(proc({
       text: editorContent, 
       pipeline: pipeline, 
       breakpoints: inspectMode.breakpoints, 
       inspectMode: inspectMode.enabled
-    }));*/
+    }));
+    */
+    //-----------------------------------------
     const worker = new WebWorker(pipeWorker);
 
     worker.postMessage({

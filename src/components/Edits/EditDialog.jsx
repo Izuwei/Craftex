@@ -13,6 +13,7 @@ import EditCutLines from "./Tools/EditCutLines";
 import EditInsertColumn from "./Tools/EditInsertColumn";
 import EditSwapColumns from "./Tools/EditSwapColumns";
 import EditConvertCase from "./Tools/EditConvertCase";
+import EditSort from "./Tools/EditSort";
 //import EditReverse from "./Tools/EditReverse";
 
 const theme = createMuiTheme({
@@ -72,6 +73,7 @@ function EditDialog(props) {
             case "insertColumn": return "Insert column";
             case "swapColumns": return "Swap columns";
             case "convertCase": return "Convert case";
+            case "sort": return "Sort";
             //case "reverse": return "Reverse";
             default: return;
         }
@@ -125,6 +127,10 @@ function EditDialog(props) {
             case "convertCase":
                 return (
                     <EditConvertCase ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
+            case "sort":
+                return (
+                    <EditSort ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
             /*case "reverse":
                 return (

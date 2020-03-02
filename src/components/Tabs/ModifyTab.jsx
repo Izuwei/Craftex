@@ -6,6 +6,7 @@ import styles from "./TabStyles";
 import InsertColumn from "./Tools/InsertColumn";
 import SwapColumns from "./Tools/SwapColumns";
 import ConvertCase from "./Tools/ConvertCase";
+import Sort from "./Tools/Sort";
 //import Reverse from "./Tools/Reverse";
 
 const theme = createMuiTheme({
@@ -39,6 +40,10 @@ const ModifyTab = React.memo(({ classes, addTool, showAlert }) => {
                         <div className={classes.flexTool}>
                             <Typography variant="h5" className={classes.toolName}>Swap columns</Typography>
                             <SwapColumns addTool={addTool} showAlert={showAlert} />
+                        </div>
+                        <div className={classes.flexTool}>
+                            <Typography variant="h5" className={classes.toolName}>Sort</Typography>
+                            <Sort addTool={addTool} showAlert={showAlert} />
                         </div>
                         <div className={classes.flexTool}>
                             <Typography variant="h5" className={classes.toolName}>Convert case</Typography>
