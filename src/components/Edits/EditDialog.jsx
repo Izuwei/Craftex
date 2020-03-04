@@ -7,14 +7,15 @@ import EditRegexMatch from "./Tools/EditRegexMatch";
 import EditReplace from "./Tools/EditReplace";
 import EditRegexReplace from "./Tools/EditRegexReplace";
 import EditCompare from "./Tools/EditCompare";
-import EditRemoveColumn from "./Tools/EditRemoveColumn";
+import EditFilterColumns from "./Tools/EditFilterColumns";
 import EditFilterLines from "./Tools/EditFilterLines";
 import EditCutLines from "./Tools/EditCutLines";
 import EditInsertColumn from "./Tools/EditInsertColumn";
 import EditSwapColumns from "./Tools/EditSwapColumns";
 import EditConvertCase from "./Tools/EditConvertCase";
 import EditSort from "./Tools/EditSort";
-//import EditReverse from "./Tools/EditReverse";
+import EditReverse from "./Tools/EditReverse";
+import EditUnique from "./Tools/EditUnique";
 
 const theme = createMuiTheme({
     palette: {
@@ -67,14 +68,15 @@ function EditDialog(props) {
             case "replace": return "Replace";
             case "regexReplace": return "Regex replace";
             case "compare": return "Compare";
-            case "removeColumn": return "Remove column";
+            case "filterColumns": return "Filter columns";
             case "filterLines": return "Filter lines";
             case "cutLines": return "Cut lines";
             case "insertColumn": return "Insert column";
             case "swapColumns": return "Swap columns";
             case "convertCase": return "Convert case";
             case "sort": return "Sort";
-            //case "reverse": return "Reverse";
+            case "reverse": return "Reverse";
+            case "unique": return "Unique";
             default: return;
         }
     };
@@ -104,9 +106,9 @@ function EditDialog(props) {
                 return (
                     <EditCompare ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
-            case "removeColumn":
+            case "filterColumns":
                 return (
-                    <EditRemoveColumn ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                    <EditFilterColumns ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
             case "filterLines":
                 return (
@@ -132,10 +134,14 @@ function EditDialog(props) {
                 return (
                     <EditSort ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
-            /*case "reverse":
+            case "reverse":
                 return (
                     <EditReverse ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
-                );*/
+                );
+            case "unique":
+                return (
+                    <EditUnique ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
             default:
                 return;
         }

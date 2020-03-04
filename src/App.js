@@ -24,127 +24,257 @@ const theme = createMuiTheme({
 //-------------------------------DEBUG------------------------------------
 /*
 function cutLinesTool(text, tool) {
-  text = text.split('\n');
+        text = text.split('\n');
 
-  switch (tool.variant) {
-      case "head":
-          text = text.slice(0, tool.count);
-          return text.join('\n');
-      case "tail":
-          text = text.slice(text.length - tool.count);
-          return text.join('\n');
-      default:
-          return text.join('\n');
-  }
-}
+        switch (tool.variant) {
+            case "head":
+                text = text.slice(0, tool.count);
+                return text.join('\n');
+            case "tail":
+                text = text.slice(text.length - tool.count);
+                return text.join('\n');
+            default:
+                return text.join('\n');
+        }
+    }
 
-function cutLinesInspectTool(text, tool) {
-  var count = 0;
+    function cutLinesInspectTool(text, tool) {
+        var count = 0;
 
-  switch (tool.variant) {
-      case "head":
-          for (let i = 0; i < text.length; i++) {
-              if (text[i].data === null) {
-                  continue;
-              }
-              else {
-                  count++;
-              }
-              if (count === parseInt(tool.count)) {
-                  for (i++; i < text.length; i++) {
-                      text[i].data = null;
+        switch (tool.variant) {
+            case "head":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    else {
+                        count++;
+                    }
+                    if (count === parseInt(tool.count)) {
+                        for (i++; i < text.length; i++) {
+                            text[i].data = null;
+                        }
+                        return text;
+                    }
+                }
+                return text;
+            case "tail":
+                for (let i = text.length - 1; 0 <= i; i--) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    else {
+                        count++;
+                    }
+                    if (count === parseInt(tool.count)) {
+                        for (i--; i >= 0; i--) {
+                            text[i].data = null;
+                        }
+                        return text;
+                    }
+                }
+                return text;
+            default:
+                return text;
+        }
+    }
+
+function uniqueTool(text, tool) {
+        var lines = text;
+        if (tool.casesensitive === false) {
+            lines = lines.toUpperCase();
+        }
+        lines = lines.split('\n');
+        text = text.split('\n');
+        var result = [];
+        var count = 1;
+
+        switch (tool.variant) {
+            case "merge":
+                if (tool.countPrefix === true) {
+                    for (let i = lines.length - 1; i > 0; i--) {
+                        if (lines[i] !== lines[i - 1]) {
+                            result.unshift(count + " " + text[i]);
+                            count = 1;
+                        }
+                        else {
+                            count++;
+                        }
+                    }
+                    result.unshift(count + " " + text[0]);
+                    return result.join('\n');
+                }
+                else {
+                    for (let i = lines.length - 1; i > 0; i--) {
+                        if (lines[i] !== lines[i - 1]) {
+                            result.unshift(text[i]);
+                        }
+                    }
+                    result.unshift(text[0]);
+                    return result.join('\n');
+                }
+            case "unique":
+                if (lines[0] !== lines[1]) {
+                    result.push(text[0]);
+                }
+                for (let i = 1; i < lines.length - 1; i++) {
+                    if (lines[i] !== lines[i - 1] && lines[i] !== lines[i + 1]) {
+                        result.push(text[i]);
+                    }
+                }
+                if (lines[lines.length - 1] !== lines[lines.length - 2]) {
+                    result.push(text[lines.length - 1]);
+                }
+                return result.join('\n');
+            case "duplicate":
+                if (lines[0] === lines[1]) {
+                    result.push(text[0]);
+                }
+                for (let i = 1; i < lines.length - 1; i++) {
+                    if (lines[i] === lines[i - 1] || lines[i] === lines[i + 1]) {
+                        result.push(text[i]);
+                    }
+                }
+                if (lines[lines.length - 1] === lines[lines.length - 2]) {
+                    result.push(text[lines.length - 1]);
+                }
+                return result.join('\n');
+            default:
+                return text.join('\n');
+        }
+    }
+
+    function findNextLine(text, index) {
+      for (let i = index + 1; i < text.length; i++) {
+        if (text[i].data === null) {
+          continue;
+        }
+        return {index: i, line: text[i]};
+      }
+      return null;
+    }
+
+    function findPrevLine(text, index) {
+      for (let i = index - 1; i >= 0; i--) {
+        if (text[i].data === null) {
+          continue;
+        }
+        return {index: i, line: text[i]};
+      }
+      return null;
+    }
+
+    function uniqueInspectTool(text, tool) {
+        var nextLine = null;
+        var prevLine = null;
+        var count = 1;
+
+        switch (tool.variant) {
+            case "merge":
+                if (tool.countPrefix === true) {
+                    for (let i = text.length - 1; i >= 0; i--) {
+                        if (text[i].data === null) {
+                            continue;
+                        }
+                        prevLine = findPrevLine(text, i);
+                        if (prevLine === null) {
+                          text[i].data = count + " " + text[i].data;
+                          return text;
+                        }
+
+                        if ((tool.casesensitive === true && text[i].data !== prevLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() !== prevLine.line.data.toUpperCase())) {
+                            text[i].data = count + " " + text[i].data;
+                            count = 1;
+                        }
+                        else {
+                            text[i].data = null;
+                            count++;
+                        }
+                        i = prevLine.index + 1;  
+                    }
+                    return text;
+                }
+                else {
+                  for (let i = text.length - 1; i >= 0; i--) {
+                      if (text[i].data === null) {
+                          continue;
+                      }
+                      prevLine = findPrevLine(text, i);
+                      if (prevLine === null) {
+                        return text;
+                      }
+
+                      if ((tool.casesensitive === true && text[i].data === prevLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === prevLine.line.data.toUpperCase())) {
+                          text[i].data = null;
+                      }
+                      i = prevLine.index + 1;  
                   }
                   return text;
-              }
-          }
-          return text;
-      case "tail":
-          for (let i = text.length - 1; 0 <= i; i--) {
-              if (text[i].data === null) {
-                  continue;
-              }
-              else {
-                  count++;
-              }
-              if (count === parseInt(tool.count)) {
-                  for (i--; i >= 0; i--) {
+                }
+            case "unique":
+                for (let i = 0; i < text.length - 1; i++) {
+                    if (text[i].data === null) {
+                      continue;
+                    }
+                    nextLine = findNextLine(text, i);
+                    if (nextLine === null) {
+                      return text;
+                    }
+
+                    if ((tool.casesensitive === true && text[i].data === nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === nextLine.line.data.toUpperCase())) {
+                      text[nextLine.index].data = null;
+
+                      while ((nextLine = findNextLine(text, i)) !== null) {
+                        if ((tool.casesensitive === true && text[i].data === nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === nextLine.line.data.toUpperCase())) {
+                          text[nextLine.index].data = null;
+                        }
+                        else {
+                          break;
+                        }
+                      }
                       text[i].data = null;
+                    }
+                }
+                return text;
+            case "duplicate":
+                for (let i = 0; i < text.length; i++) {
+                  if (text[i].data === null) {
+                    continue;
                   }
-                  return text;
+                  nextLine = findNextLine(text, i);
+                  if (nextLine === null) {
+                    text[i].data = null;
+                    continue;
+                  }
+                  if ((tool.casesensitive === true && text[i].data === nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === nextLine.line.data.toUpperCase())) {
+                    for (var j = i; (nextLine = findNextLine(text, nextLine.index)) !== null; j++) {
+                      if ((tool.casesensitive === true && text[i].data !== nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() !== nextLine.line.data.toUpperCase())) {
+                        i = nextLine.index - 1;
+                        break;
+                      }
+                    }
+                    i = j + 1;
+                  }
+                  else {
+                    text[i].data = null;
+                  }
               }
-          }
-          return text;
-      default:
-          return text;
-  }
-}
-function insertColumnTool(text, tool) {
-  text = text.split('\n');
-  const givenColumn = tool.content.split('\n');
-  var lineNumber = 0;
-  var columns = "";
-
-  while (lineNumber < text.length) {
-      columns = text[lineNumber].split(tool.delimiter);
-
-      if (columns.length < tool.position) {
-          columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
-      }
-      columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
-      text[lineNumber] = columns.join(tool.delimiter);
-      lineNumber++;
-  }
-  while(lineNumber < givenColumn.length) {
-      text.push(Array(tool.position - 1).fill(""));
-      text[lineNumber].splice(tool.position - 1, 0, givenColumn[lineNumber]);
-      text[lineNumber] = text[lineNumber].join(tool.delimiter);
-      lineNumber++;
-  }
-  return text.join('\n');
-}
-function insertColumnInspectTool(text, tool) {
-  const givenColumn = tool.content.split('\n');
-  var lineNumber = 0;
-  var columns = "";
-
-  while (lineNumber < text.length) {
-      if (text[lineNumber].data === null) {
-        lineNumber++;
-          continue;
-      }
-      columns = text[lineNumber].data.split(tool.delimiter);
-
-      if (columns.length < tool.position) {
-          columns = columns.concat(Array(tool.position - columns.length - 1).fill(""));
-      }
-      columns.splice(tool.position - 1, 0, givenColumn[lineNumber]);
-      text[lineNumber].data = columns.join(tool.delimiter);
-      lineNumber++;
-  }
-  while(lineNumber < givenColumn.length) {
-      if (text[lineNumber] === null) {
-        lineNumber++;
-          continue;
-      }
-      text.push({number: lineNumber + 1, data: Array(tool.position - 1).fill("")});
-      //text.push(Array(tool.position - 1).fill(""));
-      text[lineNumber].data.splice(tool.position - 1, 0, givenColumn[lineNumber]);
-      text[lineNumber].data = text[lineNumber].data.join(tool.delimiter);
-      lineNumber++;
-  }
-  return text;
-}
+              return text;
+            default:
+                return text;
+            }
+        }
 
 function processTool(text, tool) {
   var result;
 
   switch (tool.toolname) {
+    case "unique":
+        result = uniqueTool(text, tool);
+        break;
     case "cutLines":
-        result = cutLinesTool(text, tool);
-        break;
-    case "insertColumn":
-        result = insertColumnTool(text, tool);
-        break;
+      result = cutLinesTool(text, tool);
+      break;
     default:
       break;
   }
@@ -156,12 +286,12 @@ function processInspectTool(text, tool) {
   var result;
 
   switch (tool.toolname) {
+    case "unique":
+        result = uniqueInspectTool(text, tool);
+        break;
     case "cutLines":
-        result = cutLinesInspectTool(text, tool);
-        break;
-    case "insertColumn":
-        result = insertColumnInspectTool(text, tool);
-        break;
+      result = cutLinesInspectTool(text, tool);
+      break;
     default:
       break;
   }

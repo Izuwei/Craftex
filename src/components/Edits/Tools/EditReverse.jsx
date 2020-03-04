@@ -26,14 +26,13 @@ const EditReverse = forwardRef((props, ref) => {    // TODO: dodelat callbacky
                 <InputLabel id="edit-reverse-direction-label">Direction</InputLabel>
                 <Select
                   labelId="edit-reverse-direction-label"
-                  id="edit-everse-direction"
+                  id="edit-reverse-direction"
                   className={classes.opts}
                   value={direction}
                   onChange={(event) => setDirection(event.target.value)}
                 >
                     <MenuItem value={"horizontal"}>Horizontal</MenuItem>
                     <MenuItem value={"vertical"}>Vertical</MenuItem>
-                    <MenuItem value={"all"}>All</MenuItem>
                 </Select>
             </FormControl>
         </React.Fragment>

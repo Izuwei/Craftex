@@ -541,22 +541,39 @@ export default () => {
         }
     };
 
-    function removeColumnTool(text, tool) {
+    function filterColumnsTool(text, tool) {
         text = text.split('\n');
         var columns = "";
 
-        for (let i = 0; i < text.length; i++) {
-            columns = text[i].split(tool.delimiter);
+        switch (tool.variant) {
+            case "remove":
+                for (let i = 0; i < text.length; i++) {
+                    columns = text[i].split(tool.delimiter);
 
-            if (tool.position <= columns.length) {
-                columns.splice(tool.position - 1, 1);
-                text[i] = columns.join(tool.delimiter);
-            }
+                    if (tool.position <= columns.length) {
+                        columns.splice(tool.position - 1, 1);
+                        text[i] = columns.join(tool.delimiter);
+                    }
+                }
+                return text.join('\n');
+            case "cut":
+                for (let i = 0; i < text.length; i++) {
+                    columns = text[i].split(tool.delimiter);
+
+                    if (tool.position <= columns.length) {
+                        text[i] = columns[tool.position - 1];
+                    }
+                    else {
+                        text[i] = "";
+                    }
+                }
+                return text.join('\n');
+            default:
+                return text.join('\n');
         }
-        return text.join('\n');
     };
 
-    function removeColumnInspectTool(text, tool) {
+    function filterColumnsInspectTool(text, tool) {
         var columns = "";
 
         for (let i = 0; i < text.length; i++) {
@@ -1208,6 +1225,239 @@ export default () => {
     }
 
     /**
+     * Reverse nastroj
+     */
+    function reverseTool(text, tool) {
+        text = text.split('\n');
+
+        switch (tool.direction) {
+            case "horizontal":
+                for (let i = 0; i < text.length; i++) {
+                    text[i] = text[i].split('');
+                    text[i] = text[i].reverse();
+                    text[i] = text[i].join('');
+                }
+                return text.join('\n');
+            case "vertical":
+                text = text.reverse();
+                return text.join('\n');
+            default:
+                return text.join('\n');
+        }
+    }
+
+    function reverseInspectTool(text, tool) {
+        switch (tool.direction) {
+            case "horizontal":
+                for (let i = 0; i < text.length; i++) {
+                    text[i].data = text[i].data.split('');
+                    text[i].data = text[i].data.reverse();
+                    text[i].data = text[i].data.join('');
+                }
+                return text;
+            case "vertical":
+                text = text.reverse();
+                return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
+     * Unique nastroj
+     */
+    function uniqueTool(text, tool) {
+        var lines = text;
+        if (tool.casesensitive === false) {
+            lines = lines.toUpperCase();
+        }
+        lines = lines.split('\n');
+        text = text.split('\n');
+        var result = [];
+        var count = 1;
+
+        switch (tool.variant) {
+            case "merge":
+                if (tool.countPrefix === true) {
+                    for (let i = lines.length - 1; i > 0; i--) {
+                        if (lines[i] !== lines[i - 1]) {
+                            result.unshift(count + " " + text[i]);
+                            count = 1;
+                        }
+                        else {
+                            count++;
+                        }
+                    }
+                    result.unshift(count + " " + text[0]);
+                    return result.join('\n');
+                }
+                else {
+                    for (let i = lines.length - 1; i > 0; i--) {
+                        if (lines[i] !== lines[i - 1]) {
+                            result.unshift(text[i]);
+                        }
+                    }
+                    result.unshift(text[0]);
+                    return result.join('\n');
+                }
+            case "unique":
+                if (lines.length === 1) {
+                    return text[0];
+                }
+                if (lines[0] !== lines[1]) {
+                    result.push(text[0]);
+                }
+                for (let i = 1; i < lines.length - 1; i++) {
+                    if (lines[i] !== lines[i - 1] && lines[i] !== lines[i + 1]) {
+                        result.push(text[i]);
+                    }
+                }
+                if (lines[lines.length - 1] !== lines[lines.length - 2]) {
+                    result.push(text[lines.length - 1]);
+                }
+                return result.join('\n');
+            case "duplicate":
+                if (lines.length === 1) {
+                    return text[0];
+                }
+                if (lines[0] === lines[1]) {
+                    result.push(text[0]);
+                }
+                for (let i = 1; i < lines.length - 1; i++) {
+                    if (lines[i] === lines[i - 1] || lines[i] === lines[i + 1]) {
+                        result.push(text[i]);
+                    }
+                }
+                if (lines[lines.length - 1] === lines[lines.length - 2]) {
+                    result.push(text[lines.length - 1]);
+                }
+                return result.join('\n');
+            default:
+                return text.join('\n');
+        }
+    }
+
+    function findNextLine(text, index) {
+        for (let i = index + 1; i < text.length; i++) {
+            if (text[i].data === null) {
+                continue;
+            }
+            return {index: i, line: text[i]};
+        }
+        return null;
+    }
+
+    function findPrevLine(text, index) {
+        for (let i = index - 1; i >= 0; i--) {
+            if (text[i].data === null) {
+                continue;
+            }
+            return {index: i, line: text[i]};
+        }
+        return null;
+    }
+
+    function uniqueInspectTool(text, tool) {
+        var nextLine = null;
+        var prevLine = null;
+        var count = 1;
+
+        switch (tool.variant) {
+            case "merge":
+                if (tool.countPrefix === true) {
+                    for (let i = text.length - 1; i >= 0; i--) {
+                        if (text[i].data === null) {
+                            continue;
+                        }
+                        prevLine = findPrevLine(text, i);
+                        if (prevLine === null) {
+                          text[i].data = count + " " + text[i].data;
+                          return text;
+                        }
+
+                        if ((tool.casesensitive === true && text[i].data !== prevLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() !== prevLine.line.data.toUpperCase())) {
+                            text[i].data = count + " " + text[i].data;
+                            count = 1;
+                        }
+                        else {
+                            text[i].data = null;
+                            count++;
+                        }
+                        i = prevLine.index + 1;  
+                    }
+                    return text;
+                }
+                else {
+                    for (let i = text.length - 1; i >= 0; i--) {
+                        if (text[i].data === null) {
+                            continue;
+                        }
+                        prevLine = findPrevLine(text, i);
+                        if (prevLine === null) {
+                            return text;
+                        }   
+                        if ((tool.casesensitive === true && text[i].data === prevLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === prevLine.line.data.toUpperCase())) {
+                            text[i].data = null;
+                        }
+                        i = prevLine.index + 1;  
+                    }
+                    return text;
+                }
+            case "unique":
+                for (let i = 0; i < text.length - 1; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    nextLine = findNextLine(text, i);
+                    if (nextLine === null) {
+                        return text;
+                    }
+
+                    if ((tool.casesensitive === true && text[i].data === nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === nextLine.line.data.toUpperCase())) {
+                        text[nextLine.index].data = null;
+
+                        while ((nextLine = findNextLine(text, i)) !== null) {
+                            if ((tool.casesensitive === true && text[i].data === nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === nextLine.line.data.toUpperCase())) {
+                                text[nextLine.index].data = null;
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        text[i].data = null;
+                    }
+                }
+                return text;
+            case "duplicate":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    nextLine = findNextLine(text, i);
+                    if (nextLine === null) {
+                        text[i].data = null;
+                        continue;
+                    }
+                    if ((tool.casesensitive === true && text[i].data === nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() === nextLine.line.data.toUpperCase())) {
+                        for (var lastIndex = nextLine.index; (nextLine = findNextLine(text, nextLine.index)) !== null; lastIndex = nextLine.index) {
+                            if ((tool.casesensitive === true && text[i].data !== nextLine.line.data) || (tool.casesensitive === false && text[i].data.toUpperCase() !== nextLine.line.data.toUpperCase())) {
+                                i = nextLine.index - 1;
+                                break;
+                            }
+                        }
+                        i = lastIndex;
+                    }
+                    else {
+                        text[i].data = null;
+                    }
+                }
+                return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
      * Ridici funkce
      */
     function processTool(text, tool) {
@@ -1229,8 +1479,8 @@ export default () => {
             case "compare":
                 result = compareTool(text, tool);
                 break;
-            case "removeColumn":
-                result = removeColumnTool(text, tool);
+            case "filterColumns":
+                result = filterColumnsTool(text, tool);
                 break;
             case "filterLines":
                 result = filterLinesTool(text, tool);
@@ -1255,6 +1505,12 @@ export default () => {
                 break;
             case "sort":
                 result = sortTool(text, tool);
+                break;
+            case "reverse":
+                result = reverseTool(text, tool);
+                break;
+            case "unique":
+                result = uniqueTool(text, tool);
                 break;
         	default:
         		break;
@@ -1281,8 +1537,8 @@ export default () => {
             case "compare":
                 result = compareInspectTool(text, tool);
                 break;
-            case "removeColumn":
-                result = removeColumnInspectTool(text, tool);
+            case "filterColumns":
+                result = filterColumnsInspectTool(text, tool);
                 break;
             case "filterLines":
                 result = filterLinesInspectTool(text, tool);
@@ -1307,6 +1563,12 @@ export default () => {
                 break;
             case "sort":
                 result = sortInspectTool(text, tool);
+                break;
+            case "reverse":
+                result = reverseInspectTool(text, tool);
+                break;
+            case "unique":
+                result = uniqueInspectTool(text, tool);
                 break;
             default:
                 break;

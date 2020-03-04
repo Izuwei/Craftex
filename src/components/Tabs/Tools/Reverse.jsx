@@ -5,9 +5,13 @@ import { Add } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
     root: {
         padding: "5px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        flexWrap: "wrap",
     },
     button: {
-        margin: "8px 0px 8px 8px",
+        margin: "8px 0px 8px auto",
     },
     opts: {
         width: "150px",
@@ -18,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 function ReverseTool(props) {
     const classes = useStyles();
 
-    const [direction, setDirection] = useState("all");
+    const [direction, setDirection] = useState("vertical");
 
     const handleReverse = () => {
         props.addTool({toolname: "reverse", direction: direction});
@@ -38,7 +42,6 @@ function ReverseTool(props) {
                 >
                     <MenuItem value={"horizontal"}>Horizontal</MenuItem>
                     <MenuItem value={"vertical"}>Vertical</MenuItem>
-                    <MenuItem value={"all"}>All</MenuItem>
                 </Select>
             </FormControl>
             <Button

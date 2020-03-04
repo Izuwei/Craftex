@@ -5,10 +5,7 @@ import { Add } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
     root: {
         padding: "11px 5px 5px 5px",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        flexWrap: "wrap",
+        display: "inline-block",
     },
 }));
 
@@ -26,7 +23,6 @@ function TrimTool(props) {
                 color="secondary"
                 variant="contained"
                 id="add-trim"
-                className={classes.button}
                 onClick={() => handleTrim()}
                 startIcon={<Add />}
             >Add</Button>

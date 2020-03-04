@@ -7,6 +7,15 @@ function awkRegexEscape(regex) {
     return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\\\\\$&");
 };
 
+function awkDelimiter(delimiter) {
+    if (delimiter === ' ') {
+        return "[ ]";
+    }
+    else {
+        return delimiter;
+    }
+}
+
 function replaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
@@ -191,17 +200,24 @@ function compareCommand(tool) {
         default:
             comparator = "";
     }
-    return "awk -F '" + separator + "' '$" + column + " " + comparator + " \"" + awkSlashEscape(tool.value) + "\"'";
+    return "awk -F '" + awkDelimiter(separator) + "' '$" + column + " " + comparator + " \"" + awkSlashEscape(tool.value) + "\"'";
 }
 
-function removeColumnCommand(tool) {
+function filterColumnsCommand(tool) {
     var start = "";
 
-    if (parseInt(tool.position) !== 1) {
-        start = "-" + parseInt(tool.position - 1) + ",";
-    }
+    switch (tool.variant) {
+        case "remove":
+            if (parseInt(tool.position) !== 1) {
+                start = "-" + parseInt(tool.position - 1) + ",";
+            }
 
-    return "cut -d '" + tool.delimiter + "' -f " + start + (parseInt(tool.position) + 1) + "-";
+            return "cut -d '" + tool.delimiter + "' -f " + start + (parseInt(tool.position) + 1) + "-";
+        case "cut":
+            return "awk -F '" + awkDelimiter(tool.delimiter) + "' '{print $" + tool.position + "}'"; 
+        default:
+            return "";
+    }
 }
 
 function filterLinesCommand(tool) {
@@ -281,6 +297,38 @@ function sortCommand(tool) {
     return command;
 }
 
+function reverseCommand(tool) {
+    switch (tool.direction) {
+        case "horizontal":
+            return "rev";
+        case "vertical":
+            return "tac";
+        default:
+            return "";
+    }
+}
+
+function uniqueCommand(tool) {
+    var command = "uniq";
+
+    if (tool.casesensitive === false) {
+        command += " -i";
+    }
+    switch (tool.variant) {
+        case "merge":
+            if (tool.countPrefix === true) {
+                return command += " -c | sed 's/^[[:blank:]]*//'";
+            }
+            return command;
+        case "unique":
+            return command + " -u";
+        case "duplicate":
+            return command + " -D";
+        default:
+            return "";
+    }
+}
+
 function getToolCommand(tool) {
     var command = "";
 
@@ -300,8 +348,8 @@ function getToolCommand(tool) {
         case "compare":
             command = compareCommand(tool);
             break;
-        case "removeColumn":
-            command = removeColumnCommand(tool);
+        case "filterColumns":
+            command = filterColumnsCommand(tool);
             break;
         case "filterLines":
             command = filterLinesCommand(tool);
@@ -326,6 +374,12 @@ function getToolCommand(tool) {
             break;
         case "sort":
             command = sortCommand(tool);
+            break;
+        case "reverse":
+            command = reverseCommand(tool);
+            break;
+        case "unique":
+            command = uniqueCommand(tool);
             break;
         default:
             return;

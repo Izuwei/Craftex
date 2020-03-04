@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
     },
     button: {
-        margin: "8px 0px 8px 8px",
+        margin: "8px 0px 8px auto",
     },
     opts: {
         width: "150px",

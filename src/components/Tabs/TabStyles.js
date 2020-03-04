@@ -7,12 +7,4 @@ export default {
     divider: {
 	    marginTop: "20px",
     },
-    flexToolbox: {
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "flex-start",
-    },
-    flexTool: {
-        marginRight: "40px",
-    },
 };

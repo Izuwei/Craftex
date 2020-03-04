@@ -103,6 +103,10 @@ const useStyles = makeStyles(theme => ({
         color: "#bd0032",
         fontWeight: "bold",
     },
+    lightRedWord: {
+        color: "#ff0a68",
+        fontWeight: "bold",
+    },
     greenBlueWord: {
         color: "#00b87d",
         fontWeight: "bold",
@@ -150,6 +154,19 @@ function mapFilterLinesContent(content) {
             return "with empty content";
         case "whiteChars":
             return "with white characters";
+        default:
+            return "";
+    }
+}
+
+function mapUniqueVariant(variant) {
+    switch (variant) {
+        case "merge":
+            return "merge";
+        case "unique":
+            return "unique only";
+        case "duplicate":
+            return "duplicate only";
         default:
             return "";
     }
@@ -229,11 +246,14 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                         }
                     </React.Fragment>
                 );
-            case "removeColumn":
+            case "filterColumns":
                 return (
                     <React.Fragment>
-                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Remove column</span>
-                        <span className={`${classes.violetWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>at</span>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Filter columns</span>
+                        <span className={`${classes.violetWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>
+                            {tool.variant + " "}
+                            at
+                        </span>
                         {tool.position + "."}
                         <span className={`${classes.violetWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>position delimited by</span> 
                         {tool.delimiter}
@@ -311,13 +331,24 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                         </span>
                     </React.Fragment>
                 );
-            /*case "reverse":
+            case "reverse":
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Reverse</span>
                         <span className={`${classes.redWord} ${!(tool.active) && classes.itemDeactivated}`}>{tool.direction}</span>
                     </React.Fragment>
-                );*/
+                );
+            case "unique":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Unique</span>
+                        <span className={`${classes.lightRedWord} ${!(tool.active) && classes.itemDeactivated}`}>
+                            {tool.casesensitive === true ? "case sensitive " : "case isensitive "}
+                            {mapUniqueVariant(tool.variant)}
+                            {tool.variant === "merge" && tool.countPrefix === true ? " with count prefix" : ""}
+                        </span>
+                    </React.Fragment>
+                );
             default:
                 return;
         }
