@@ -1191,8 +1191,11 @@ export default () => {
 
     function sortInspectTool(text, tool) {
         const compareData = (a, b) => {
-            if (a.data === null|| b.data === null) {
-                return 0;
+            if (a.data === null) {
+                return 1;
+            }
+            if (b.data === null) {
+                return -1;
             }
             if (tool.casesensitive === false) {
                 a.data = a.data.toUpperCase();
@@ -1221,7 +1224,12 @@ export default () => {
                 return 0;
             }
         }
-        return text.sort(compareData);
+        console.log("PRED:");
+        console.log(text);
+        text =text.sort(compareData);
+        console.log("PO:");
+        console.log(text);
+        return text;
     }
 
     /**
