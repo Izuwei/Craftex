@@ -135,7 +135,7 @@ export default () => {
 
             var specificMatch = true;
             for (let j = 0; j < tmp.length; j++) {
-              if (tmp[j] === "") {
+              if (tmp[j] === "" && tmp.length > 1) {
                 specificMatch = false;
                 break;
               }
@@ -1258,6 +1258,9 @@ export default () => {
         switch (tool.direction) {
             case "horizontal":
                 for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
                     text[i].data = text[i].data.split('');
                     text[i].data = text[i].data.reverse();
                     text[i].data = text[i].data.join('');

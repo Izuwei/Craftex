@@ -38,18 +38,18 @@ function replaceCommand(tool) {
     else {  // ve sloupci
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {  // case sensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{gsub(\"" + awkRegexEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{gsub(\"" + awkRegexEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
             }
             else {  // case isensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}{gsub(\"" + awkRegexEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}{gsub(\"" + awkRegexEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
             }
         }
         else {  // prvni vyskyt
             if (tool.casesensitive === true) {  // case sensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '!x{x=sub(\"" + awkRegexEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '!x{x=sub(\"" + awkRegexEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
             }
             else {  // case isensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}!x{x=sub(\"" + awkRegexEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}!x{x=sub(\"" + awkRegexEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
             }
         }
     }
@@ -81,18 +81,18 @@ function regexReplaceCommand(tool) {
     else {  // ve sloupci
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {  // case sensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{gsub(\"" + awkSlashEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{gsub(\"" + awkSlashEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
             }
             else {  // case isensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}{gsub(\"" + awkSlashEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}{gsub(\"" + awkSlashEscape(tool.find) + "\", \"" + tool.replace + "\", $" + tool.inColumn + "); print }'";
             }
         }
         else {  // prvni vyskyt
             if (tool.casesensitive === true) {  // case sensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '!x{x=sub(\"" + awkSlashEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '!x{x=sub(\"" + awkSlashEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
             }
             else {  // case isensitive
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}!x{x=sub(\"" + awkSlashEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1}!x{x=sub(\"" + awkSlashEscape(tool.find) + "\",\"" + tool.replace + "\", $" + tool.inColumn + ")}1'";
             }
         }
     }
@@ -120,18 +120,18 @@ function matchCommand(tool) {
     else {      // ve sloupci
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/'";
             }
             else {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/'";
             }
         }
         else {  // pouze prvni vyskyt
             if (tool.casesensitive === true) {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/ {print; exit}'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/ {print; exit}'";
             }
             else {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/ {print; exit}'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + regexEscape(tool.expression) + "/ {print; exit}'";
             }
         }
     }
@@ -159,18 +159,18 @@ function regexMatchCommand(tool) {
     else {      // ve sloupci
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + tool.expression + "/'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + tool.expression + "/'";
             }
             else {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + tool.expression + "/'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + tool.expression + "/'";
             }
         }
         else {  // pouze prvni vyskyt
             if (tool.casesensitive === true) {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + tool.expression + "/ {print; exit}'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '$" + tool.inColumn + "~/" + tool.expression + "/ {print; exit}'";
             }
             else {
-                return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + tool.expression + "/ {print; exit}'";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{IGNORECASE=1} $" + tool.inColumn + "~/" + tool.expression + "/ {print; exit}'";
             }
         }
     }
@@ -241,14 +241,14 @@ function insertColumnCommand(tool) {
         for (let i = 1; i < position; i++) {
             res += "$" + i + "=$" + (parseInt(i) + 1) + ";";
         }
-        return " | awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{" + res + "$" + tool.position + "=t;print;}'";
+        return " | awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{" + res + "$" + tool.position + "=t;print;}'";
     }
 
     return "paste -d '" + tool.delimiter + "' $COLUMN_FILE /dev/stdin" + colBubble(tool.position);
 }
 
 function swapColumnsCommand(tool) {
-    return "awk -F '" + tool.delimiter + "' -v OFS='" + tool.delimiter + "' '{t=$" + tool.first + ";$" + tool.first + "=$" + tool.second + ";$" + tool.second + "=t;print;}'";
+    return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{t=$" + tool.first + ";$" + tool.first + "=$" + tool.second + ";$" + tool.second + "=t;print;}'";
 }
 
 function convertCaseCommand(tool) {

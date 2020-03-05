@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { AppBar, Typography, Box, Tabs, Tab, makeStyles, MuiThemeProvider, createMuiTheme, useMediaQuery } from "@material-ui/core";
 import { lightBlue } from "@material-ui/core/colors";
-import { Search, Edit, FindReplace, RemoveCircleOutline } from "@material-ui/icons";
+import { Search, Build, FindReplace, RemoveCircleOutline } from "@material-ui/icons";
 import FindTab from "./Tabs/FindTab";
 import ReplaceTab from "./Tabs/ReplaceTab";
 import ReduceTab from "./Tabs/ReduceTab";
@@ -92,7 +92,7 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
             <Tab icon={<Search />} label="Find" {...a11yProps(0)} />
             <Tab icon={<FindReplace />} label="Replace" {...a11yProps(1)} />
             <Tab icon={<RemoveCircleOutline />} label="Reduce" {...a11yProps(2)} />
-            <Tab icon={<Edit />} label="Modify" {...a11yProps(3)} />
+            <Tab icon={<Build />} label="Modify" {...a11yProps(3)} />
           </Tabs>
         </AppBar>
         <TabPanel theme={theme} value={value} index={0}>

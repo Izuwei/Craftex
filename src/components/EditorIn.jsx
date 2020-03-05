@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useEffect, useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useEffect, useRef, useCallback } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/webpack-resolver";
@@ -6,7 +6,7 @@ import "ace-builds/src-noconflict/ext-searchbox";
 import "ace-builds/src-noconflict/theme-idle_fingers";
 
 
-const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint }, ref) => {
+const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint, onCursorChange }, ref) => {
   const aceIn = useRef(null);
 
   useImperativeHandle(ref, () => ({
@@ -33,8 +33,6 @@ const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint 
     clearAllBreakpoints  ()  {
       aceIn.current.editor.session.clearBreakpoints();
     },
-
-
 }));
 
   /**
@@ -75,19 +73,17 @@ useEffect(() => {
   }, [toggleBreakpoint]);
 
 
-  const onChange = (newValue) => {
+  const onChange = useCallback((newValue) => {
     edit(newValue);
     console.log(aceIn.current.editor.session.getBreakpoints());
-  }
-
-//<button onClick={()=> {this.refs.aceIn.editor.undo()}}>Undo</button>
+  }, [edit]);
   
     return ( 
       <AceEditor
         theme="idle_fingers"
         fontSize="20px"
         onChange={onChange}
-        //onSelectionChange={this.onSelectionChange}
+        onCursorChange={(selection, event) => onCursorChange(selection, event)}
         ref={aceIn}
         value={content}
         mode="plain_text"
@@ -101,7 +97,6 @@ useEffect(() => {
         wrapEnabled={wrap}
         editorProps={{ $blockScrolling: true }}
       />);
-  
 }));
  
 export default EditorIn;

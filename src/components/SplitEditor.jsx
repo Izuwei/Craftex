@@ -18,6 +18,7 @@ const ColorLinearProgress = withStyles({
 const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAlert, toggleBreakpoint, inspectMode, toggleInspectMode, pipeProgress, pipeline, setPipelineActivity, clearPipeline }) => {
     const aceIn = useRef();
     const aceOut = useRef();
+    const bottomPanel = useRef();
 
     const [wrap, setWrap] = useState(false);
 
@@ -59,6 +60,10 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
         return height < 480 ? "480px" : height;
     }, []);
 
+    const onCursorChange = useCallback((selection, event) => {
+        bottomPanel.current.setPosition(selection.cursor.row + 1, selection.cursor.column + 1);
+    }, []);
+
     return ( 
         <React.Fragment>
             <EditorToolbar 
@@ -96,11 +101,11 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
                     defaultSize={"50%"} 
                     onChange={() => handleResize()}
                 >
-                    <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} toggleBreakpoint={toggleBreakpoint} />
+                    <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} toggleBreakpoint={toggleBreakpoint} onCursorChange={onCursorChange} />
                     <EditorOut ref={ aceOut } content={editorResult} wrap={wrap} />
                 </SplitPane>
                     <ColorLinearProgress variant="determinate" value={pipeProgress} />
-                    <EditorBottomPanel wrap={wrap} inspectMode={inspectMode} />
+                    <EditorBottomPanel ref={bottomPanel} wrap={wrap} inspectMode={inspectMode} />
             </Resizable>
         </React.Fragment>
     );  

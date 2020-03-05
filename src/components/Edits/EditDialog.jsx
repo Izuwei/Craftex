@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton, useMediaQuery, Tooltip, makeStyles, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-import { Done, Close, Settings } from "@material-ui/icons";
+import { Done, Close, Edit } from "@material-ui/icons";
 import { green, lightBlue } from "@material-ui/core/colors";
 import EditMatch from "./Tools/EditMatch";
 import EditRegexMatch from "./Tools/EditRegexMatch";
@@ -158,7 +158,7 @@ function EditDialog(props) {
             aria-labelledby="responsive-dialog-title"
         >
             <DialogTitle className={classes.title} id="responsive-dialog-title">
-                <Settings className={classes.titleIcon} fontSize="large" />
+                <Edit className={classes.titleIcon} fontSize="large" />
                 {mapToolname(props.tool)}
             </DialogTitle>
             <DialogContent>

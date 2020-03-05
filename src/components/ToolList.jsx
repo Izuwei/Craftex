@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { List, ListItem, makeStyles, IconButton, Menu, MenuItem, Tooltip, useTheme, useMediaQuery } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { Build, Delete, Visibility, VisibilityOff, Edit, MoreVert } from "@material-ui/icons";
+import { Settings, Delete, Visibility, VisibilityOff, Edit, MoreVert } from "@material-ui/icons";
 import { SortableContainer, SortableElement, SortableHandle } from "react-sortable-hoc";
 import EditDialog from "./Edits/EditDialog";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
@@ -413,7 +413,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
             enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
         >
             <div className={classes.title}>
-                <Build style={{fontSize: "22px", paddingLeft: "5px"}}/>
+                <Settings style={{fontSize: "22px", paddingLeft: "5px"}}/>
                 <div className={classes.titleLabel}>Pipeline</div>
                 <div />
             </div>
