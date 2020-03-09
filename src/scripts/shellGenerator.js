@@ -244,7 +244,7 @@ function insertColumnCommand(tool) {
         return " | awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{" + res + "$" + tool.position + "=t;print;}'";
     }
 
-    return "paste -d '" + tool.delimiter + "' $COLUMN_FILE /dev/stdin" + colBubble(tool.position);
+    return "pr -mts'" + tool.delimiter + "' $COLUMN_FILE /dev/stdin" + colBubble(tool.position);
 }
 
 function swapColumnsCommand(tool) {

@@ -576,18 +576,38 @@ export default () => {
     function filterColumnsInspectTool(text, tool) {
         var columns = "";
 
-        for (let i = 0; i < text.length; i++) {
-            if (text[i].data === null) {
-                continue;
-            }
-            columns = text[i].data.split(tool.delimiter);
+        switch (tool.variant) {
+            case "remove":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    columns = text[i].data.split(tool.delimiter);
 
-            if (tool.position <= columns.length) {
-                columns.splice(tool.position - 1, 1);
-                text[i].data = columns.join(tool.delimiter);
-            }
+                    if (tool.position <= columns.length) {
+                        columns.splice(tool.position - 1, 1);
+                        text[i].data = columns.join(tool.delimiter);
+                    }
+                }
+                return text;
+            case "cut":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    columns = text[i].data.split(tool.delimiter);
+
+                    if (tool.position <= columns.length) {
+                        text[i].data = columns[tool.position - 1];
+                    }
+                    else {
+                        text[i].data = "";
+                    }
+                }
+                return text;
+            default:
+                return text;
         }
-        return text;
     };
 
     /**
@@ -893,6 +913,9 @@ export default () => {
                 return text;
             case "whiteChars":
                 for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
                     if (text[i].data.trim() === "") {
                         text[i].data = null;
                     }
@@ -1224,11 +1247,7 @@ export default () => {
                 return 0;
             }
         }
-        console.log("PRED:");
-        console.log(text);
         text =text.sort(compareData);
-        console.log("PO:");
-        console.log(text);
         return text;
     }
 
