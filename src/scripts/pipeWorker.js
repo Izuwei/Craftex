@@ -1008,6 +1008,9 @@ export default () => {
             text.push(Array(tool.position - 1).fill(""));
             text[lineNumber].splice(tool.position - 1, 0, givenColumn[lineNumber]);
             text[lineNumber] = text[lineNumber].join(tool.delimiter);
+            if (parseInt(tool.position) === 1) {
+                text[lineNumber] += tool.delimiter;
+            }
             lineNumber++;
         }
         return text.join('\n');
@@ -1039,6 +1042,9 @@ export default () => {
             //text.push(Array(tool.position - 1).fill(""));
             text[lineNumber].data.splice(tool.position - 1, 0, givenColumn[givenColumnLine]);
             text[lineNumber].data = text[lineNumber].data.join(tool.delimiter);
+            if (parseInt(tool.position) === 1) {
+                text[lineNumber].data += tool.delimiter;
+            }
             givenColumnLine++;
             lineNumber++;
         }
