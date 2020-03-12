@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditInsertColumn = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     const classes = useStyles();
 
     const [content, setContent] = useState(props.tool.content);
@@ -83,4 +83,4 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     );
 });
 
-export default EditMatch;
+export default EditInsertColumn;

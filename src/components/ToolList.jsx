@@ -99,6 +99,10 @@ const useStyles = makeStyles(theme => ({
         color: "#ffcc00",
         fontWeight: "bold",
     },
+    darkYellowWord: {
+        color: "#ffb700",
+        fontWeight: "bold",
+    },
     redWord: {
         color: "#bd0032",
         fontWeight: "bold",
@@ -347,6 +351,16 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                             {mapUniqueVariant(tool.variant)}
                             {tool.variant === "merge" && tool.countPrefix === true ? " with count prefix" : ""}
                         </span>
+                    </React.Fragment>
+                );
+            case "lineNumbers":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Line numbers</span>
+                        <span className={`${classes.darkYellowWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.variant + " starting with"}</span>
+                        {tool.startingNumber}
+                        <span className={`${classes.darkYellowWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>after that</span>
+                        {tool.delimiter}
                     </React.Fragment>
                 );
             default:

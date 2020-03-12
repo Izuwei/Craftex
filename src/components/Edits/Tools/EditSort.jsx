@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditConvertCase = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditSort = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     const classes = useStyles();
 
     const [order, setOrder] = useState(props.tool.order);
@@ -73,4 +73,4 @@ const EditConvertCase = forwardRef((props, ref) => {    // TODO: dodelat callbac
     );
 });
 
-export default EditConvertCase;
+export default EditSort;

@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditCutLinesTool = forwardRef((props, ref) => {
+const EditCutLines = forwardRef((props, ref) => {
     const classes = useStyles();
 
     const [variant, setVariant] = useState(props.tool.variant);
@@ -61,4 +61,4 @@ const EditCutLinesTool = forwardRef((props, ref) => {
     );
 });
 
-export default EditCutLinesTool;
+export default EditCutLines;

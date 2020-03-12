@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditSwapColumns = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     const classes = useStyles();
 
     const [firstPosition, setFirstPosition] = useState(props.tool.first);
@@ -78,4 +78,4 @@ const EditMatch = forwardRef((props, ref) => {    // TODO: dodelat callbacky
     );
 });
 
-export default EditMatch;
+export default EditSwapColumns;

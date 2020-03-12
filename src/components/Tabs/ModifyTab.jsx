@@ -8,6 +8,7 @@ import SwapColumns from "./Tools/SwapColumns";
 import ConvertCase from "./Tools/ConvertCase";
 import Sort from "./Tools/Sort";
 import Reverse from "./Tools/Reverse";
+import LineNumbers from "./Tools/LineNumbers";
 
 const theme = createMuiTheme({
     palette: {
@@ -43,6 +44,11 @@ const ModifyTab = React.memo(({ classes, addTool, showAlert }) => {
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.toolName}>Swap columns</Typography>
                     <SwapColumns addTool={addTool} showAlert={showAlert} />
+                    <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h5" className={classes.toolName}>Line numbers</Typography>
+                    <LineNumbers addTool={addTool} showAlert={showAlert} />
                     <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
                 </Grid>
                 <Grid item xs={12}>

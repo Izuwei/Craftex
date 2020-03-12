@@ -329,6 +329,19 @@ function uniqueCommand(tool) {
     }
 }
 
+function lineNumbersCommand(tool) {
+    var command = "nl -s '" + tool.delimiter + "' -v " + tool.startingNumber;
+
+    switch (tool.variant) {
+        case "all":
+            return command + " -b a | sed 's/^[[:blank:]]*//'";
+        case "nonempty":
+            return command + " -b t | sed 's/^[[:blank:]]*//'";
+        default:
+            return "";
+    }
+}
+
 function getToolCommand(tool) {
     var command = "";
 
@@ -380,6 +393,9 @@ function getToolCommand(tool) {
             break;
         case "unique":
             command = uniqueCommand(tool);
+            break;
+        case "lineNumbers":
+            command = lineNumbersCommand(tool);
             break;
         default:
             return;

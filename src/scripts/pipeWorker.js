@@ -1494,6 +1494,61 @@ export default () => {
     }
 
     /**
+     * Line numbers nastroj
+     */
+    function lineNumbersTool(text, tool) {
+        text = text.split('\n');
+        var lineNumber = parseInt(tool.startingNumber);
+
+        switch (tool.variant) {
+            case "all":
+                for (let i = 0; i < text.length; i++) {
+                    text[i] = lineNumber + tool.delimiter + text[i];
+                    lineNumber++;
+                }
+                return text.join('\n');
+            case "nonempty":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] === "") {
+                        continue;
+                    }
+                    text[i] = lineNumber + tool.delimiter + text[i];
+                    lineNumber++;
+                }
+                return text.join('\n');
+            default:
+                return text.join('\n');
+        }
+    }
+
+    function lineNumbersInspectTool(text, tool) {
+        var lineNumber = parseInt(tool.startingNumber);
+
+        switch (tool.variant) {
+            case "all":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null) {
+                        continue;
+                    }
+                    text[i].data = lineNumber + tool.delimiter + text[i].data;
+                    lineNumber++;
+                }
+                return text;
+            case "nonempty":
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i].data === null || text[i].data === "") {
+                        continue;
+                    }
+                    text[i].data = lineNumber + tool.delimiter + text[i].data;
+                    lineNumber++;
+                }
+                return text;
+            default:
+                return text;
+        }
+    }
+
+    /**
      * Ridici funkce
      */
     function processTool(text, tool) {
@@ -1547,6 +1602,9 @@ export default () => {
                 break;
             case "unique":
                 result = uniqueTool(text, tool);
+                break;
+            case "lineNumbers":
+                result = lineNumbersTool(text, tool);
                 break;
         	default:
         		break;
@@ -1605,6 +1663,9 @@ export default () => {
                 break;
             case "unique":
                 result = uniqueInspectTool(text, tool);
+                break;
+            case "lineNumbers":
+                result = lineNumbersInspectTool(text, tool);
                 break;
             default:
                 break;

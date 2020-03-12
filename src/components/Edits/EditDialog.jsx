@@ -16,6 +16,7 @@ import EditConvertCase from "./Tools/EditConvertCase";
 import EditSort from "./Tools/EditSort";
 import EditReverse from "./Tools/EditReverse";
 import EditUnique from "./Tools/EditUnique";
+import EditLineNumbers from "./Tools/EditLineNumbers";
 
 const theme = createMuiTheme({
     palette: {
@@ -77,6 +78,7 @@ function EditDialog(props) {
             case "sort": return "Sort";
             case "reverse": return "Reverse";
             case "unique": return "Unique";
+            case "lineNumbers": return "Line numbers";
             default: return;
         }
     };
@@ -141,6 +143,10 @@ function EditDialog(props) {
             case "unique":
                 return (
                     <EditUnique ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
+            case "lineNumbers":
+                return (
+                    <EditLineNumbers ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
             default:
                 return;
