@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
         marginBottom: "0px",
     },
     closeButton: {
-        position: 'absolute',
+        position: "absolute",
         right: "10px",
         top: "10px",
         color: "rgba(255, 255, 255, 0.7)",
