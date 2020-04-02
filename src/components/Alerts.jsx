@@ -5,7 +5,6 @@ import { CheckCircle, Close, Warning, Error, Info } from '@material-ui/icons';
 import { green, amber, blue } from '@material-ui/core/colors';
 import clsx from 'clsx';
 
-
 const variantIcon = {
     success: CheckCircle,
     warning: Warning,
@@ -15,27 +14,27 @@ const variantIcon = {
 
 const useStyles = makeStyles(theme => ({
     success: {
-      backgroundColor: green[600],
+        backgroundColor: green[600],
     },
     error: {
-      backgroundColor: theme.palette.error.dark,
+        backgroundColor: theme.palette.error.dark,
     },
     info: {
-      backgroundColor: blue[500],
+        backgroundColor: blue[500],
     },
     warning: {
-      backgroundColor: amber[700],
+        backgroundColor: amber[700],
     },
     icon: {
-      fontSize: 25,
+        fontSize: 25,
     },
     iconVariant: {
-      opacity: 0.9,
-      marginRight: theme.spacing(1),
+        opacity: 0.9,
+        marginRight: theme.spacing(1),
     },
     message: {
-      display: 'flex',
-      alignItems: 'center',
+        display: 'flex',
+        alignItems: 'center',
     },
 }));
   

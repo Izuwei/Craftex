@@ -226,6 +226,15 @@ function filterLinesCommand(tool) {
             return "sed '/^$/d'";
         case "whiteChars":
             return "awk 'NF > 0'";
+        case "custom":
+            if (tool.column === "") {
+                let ignoreCase = tool.casesensitive === false ? "I" : "";
+                return "sed -E '/" + regexEscape(tool.customContent) + "/" + ignoreCase + "d'";
+            }
+            else {
+                let ignoreCase = tool.casesensitive === false ? "{IGNORECASE=1}" : "";
+                return "awk -F '" + awkDelimiter(tool.delimiter) + "' '" + ignoreCase + "$" + tool.column + " !~ \"" + regexEscape(tool.customContent) + "\" {print}'";
+            }
         default:
             return "";
     }

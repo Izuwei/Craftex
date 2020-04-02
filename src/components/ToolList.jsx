@@ -155,9 +155,11 @@ function mapCase(textCase) {
 function mapFilterLinesContent(content) {
     switch (content) {
         case "empty":
-            return "with empty content";
+            return "empty content";
         case "whiteChars":
-            return "with white characters";
+            return "white characters";
+        case "custom":
+            return "custom content";
         default:
             return "";
     }
@@ -267,7 +269,18 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                     return (
                         <React.Fragment>
                             <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Filter lines</span>
-                            <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>{mapFilterLinesContent(tool.content)}</span>
+                            <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>with {tool.content === "custom" && (tool.casesensitive === true ? "case sensitive " : "case isensitive ")}{mapFilterLinesContent(tool.content)}</span>
+                            {tool.content === "custom" && <span className={`${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>
+                                {tool.customContent}
+                                {tool.column === "" ? "" : 
+                                    <React.Fragment>
+                                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
+                                        {tool.column + "."}
+                                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
+                                        {tool.delimiter}
+                                    </React.Fragment>
+                                }
+                            </span>}
                         </React.Fragment>
                     );
             case "cutLines":

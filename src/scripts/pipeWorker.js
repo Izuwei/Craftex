@@ -286,7 +286,7 @@ export default () => {
     /**
      * Match nastroj
      */
-    function matchTool(text, tool) {    // TODO: tady pokracovat
+    function matchTool(text, tool) {
         const option = getMatchOptions(tool);
         
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
@@ -879,7 +879,7 @@ export default () => {
     }
 
     /**
-     * RemoveLines nastroj
+     * FilterLines nastroj
      */
     function filterLinesTool(text, tool) {
         switch (tool.content) {
@@ -890,6 +890,32 @@ export default () => {
                 text = text.replace(/^\s*[\r\n]/gm, '');
                 text = text.replace(/[\r\n]\s*$/g, '');
                 break;
+            case "custom":
+                text = text.split('\n');
+                var option = tool.casesensitive === true ? "g" : "gi";
+
+                if (tool.column === "") {   // Cele radky
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i].match(new RegExp(".*" + regexEscape(tool.customContent) + ".*", option)) !== null) {
+                            text.splice(i, 1);
+                            i--;
+                        }
+                    }
+                }
+                else {      // Ve sloupci
+                    var column = "";
+                    for (let i = 0; i < text.length; i++) {
+                        column = text[i].split(tool.delimiter);
+                        if (column.length < tool.column) {
+                            continue;
+                        }
+                        if (column[tool.column - 1].match(new RegExp(".*" + regexEscape(tool.customContent) + ".*", option)) !== null) {
+                            text.splice(i, 1);
+                            i--;
+                        }
+                    }
+                }
+                return text.join('\n');
             default:
                 return text;
         }
@@ -918,6 +944,35 @@ export default () => {
                     }
                     if (text[i].data.trim() === "") {
                         text[i].data = null;
+                    }
+                }
+                return text;
+            case "custom":
+                var option = tool.casesensitive === true ? "g" : "gi";
+
+                if (tool.column === "") {   // Cele radky
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i].data === null) {
+                            continue;
+                        }
+                        if (text[i].data.match(new RegExp(".*" + regexEscape(tool.customContent) + ".*", option)) !== null) {
+                            text[i].data = null;
+                        }
+                    }
+                }
+                else {      // Ve sloupci
+                    var column = "";
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i].data === null) {
+                            continue;
+                        }
+                        column = text[i].data.split(tool.delimiter);
+                        if (column.length < tool.column) {
+                            continue;
+                        }
+                        if (column[tool.column - 1].match(new RegExp(".*" + regexEscape(tool.customContent) + ".*", option)) !== null) {
+                            text[i].data = null;
+                        }
                     }
                 }
                 return text;

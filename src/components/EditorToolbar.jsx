@@ -97,7 +97,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
     const [openSearch, setOpenSearch] = useState(false);
     const [openShellDialog, setOpenShellDialog] = useState(false);
 
-    const [searchExpression, setSearchExpression] = useState("");   // TODO: Predelat jednotlivy casti na mensi komponenty (asi)
+    const [searchExpression, setSearchExpression] = useState("");
     const [searchRegExp, setSearchRegExp] = useState(false);
     const [searchCaseSensitive, setSearchCaseSensitive] = useState(false);
 

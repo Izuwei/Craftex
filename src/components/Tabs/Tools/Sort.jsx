@@ -39,11 +39,11 @@ function SortTool(props) {
             <FormControl>
                 <InputLabel id="sort-order-label">Order</InputLabel>
                 <Select
-                  labelId="sort-order-label"
-                  id="sort-order"
-                  className={classes.opts}
-                  value={order}
-                  onChange={(event) => setOrder(event.target.value)}
+                    labelId="sort-order-label"
+                    id="sort-order"
+                    className={classes.opts}
+                    value={order}
+                    onChange={(event) => setOrder(event.target.value)}
                 >
                     <MenuItem value={"ascending"}>Ascending</MenuItem>
                     <MenuItem value={"descending"}>Descending</MenuItem>
@@ -52,11 +52,11 @@ function SortTool(props) {
             <FormControl>
                 <InputLabel id="sort-case-label">Case</InputLabel>
                 <Select
-                  labelId="sort-case-label"
-                  id="sort-case"
-                  className={classes.opts}
-                  value={caseSensitive}
-                  onChange={(event) => setCaseSensitive(event.target.value)}
+                    labelId="sort-case-label"
+                    id="sort-case"
+                    className={classes.opts}
+                    value={caseSensitive}
+                    onChange={(event) => setCaseSensitive(event.target.value)}
                 >
                     <MenuItem value={true}>Sensitive</MenuItem>
                     <MenuItem value={false}>Isensitive</MenuItem>
