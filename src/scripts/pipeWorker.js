@@ -8,7 +8,6 @@ export default () => {
       
     /**
      * Replace nastroj
-     * TODO: dodelat osetreni na undefined
      */
     function getMatchOptions(tool) {
       if (tool.occurrence === "all") {
@@ -191,7 +190,10 @@ export default () => {
             if (tool.occurrence === "all") {    // Vsechno
                 for (let i = 0; i < splitedText.length; i++) {
                     columns = splitedText[i].split(tool.delimiter);
-                
+                    
+                    if (columns.length < tool.inColumn && "".match(new RegExp(tool.find, option))) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
                     if (tool.inColumn <= columns.length) {
                         columns[tool.inColumn - 1] = regexReplaceAll([columns[tool.inColumn - 1]], tool);
                         splitedText[i] = columns.join(tool.delimiter);
@@ -202,7 +204,10 @@ export default () => {
             else {                              // Prvni vyskyt
                 for (let z = 0; z < splitedText.length; z++) {
                     columns = splitedText[z].split(tool.delimiter);
-              
+                    
+                    if (columns.length < tool.inColumn && "".match(new RegExp(tool.find, option))) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
                     if (tool.inColumn <= columns.length) {
                         if (columns[tool.inColumn - 1].match(new RegExp(tool.find, option)) !== null) {
                             columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(tool.find, option), tool.replace);
@@ -254,7 +259,9 @@ export default () => {
                     }
 
                     columns = text[j].data.split(tool.delimiter);
-            
+                    if (columns.length < tool.inColumn && "".match(new RegExp(tool.find, option))) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
                     if (tool.inColumn <= columns.length) {
                         columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(tool.find, option), tool.replace);
                         text[j].data = columns.join(tool.delimiter);
@@ -269,7 +276,9 @@ export default () => {
                     }
 
                     columns = text[z].data.split(tool.delimiter);
-                
+                    if (columns.length < tool.inColumn && "".match(new RegExp(tool.find, option))) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
                     if (tool.inColumn <= columns.length) {
                         if (columns[tool.inColumn - 1].match(new RegExp(tool.find, option)) !== null) {
                             columns[tool.inColumn - 1] = columns[tool.inColumn - 1].replace(new RegExp(tool.find, option), tool.replace);
@@ -409,7 +418,7 @@ export default () => {
     /**
      * Regex match nastroj
      */
-    function regexMatchTool(text, tool) {    // TODO: tady pokracovat
+    function regexMatchTool(text, tool) {
         const option = getMatchOptions(tool);
         var lines = text.split('\n');
         var result = "";
@@ -439,10 +448,11 @@ export default () => {
                 for (let i = 0; i < lines.length; i++) {
                     columns = lines[i].split(tool.delimiter);
                 
-                    if (tool.inColumn <= columns.length) {
-                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
-                            result += lines[i] + '\n';
-                        }
+                    if (columns.length < tool.inColumn) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
+                    if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
+                        result += lines[i] + '\n';
                     }
                 }
                 return result.slice(0, -1);
@@ -451,10 +461,11 @@ export default () => {
                 for (let i = 0; i < lines.length; i++) {
                     columns = lines[i].split(tool.delimiter);
               
-                    if (tool.inColumn <= columns.length) {
-                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
-                            return lines[i];
-                        }
+                    if (columns.length < tool.inColumn) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
+                    if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
+                        return lines[i];
                     }
                 }
                 return "";
@@ -503,33 +514,27 @@ export default () => {
                         continue;
                     }
                     columns = text[i].data.split(tool.delimiter);
-                
-                    if (tool.inColumn <= columns.length) {
-                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) === null) {
-                            text[i].data = null;
-                        }
+                    if (columns.length < tool.inColumn) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
                     }
-                    else {
+                    if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) === null) {
                         text[i].data = null;
                     }
                 }
                 return text;
             }
-            else { 
+            else {      // Prvni vyskyt
                 for (let i = 0; i < text.length; i++) {
                     if (text[i].data === null) {
                         continue;
                     }
                     columns = text[i].data.split(tool.delimiter);
-              
-                    if (tool.inColumn <= columns.length) {
-                        if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
-                            for (let j = i + 1; j < text.length; j++) {
-                                text[j].data = null;
-                            }
-                        }
-                        else {
-                            text[i].data = null;
+                    if (columns.length < tool.inColumn) {
+                        columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                    }
+                    if (columns[tool.inColumn - 1].match(new RegExp(tool.expression, option)) !== null) {
+                        for (let j = i + 1; j < text.length; j++) {
+                            text[j].data = null;
                         }
                     }
                     else {
@@ -1001,7 +1006,7 @@ export default () => {
             for (let i = 0; i < text.length; i++) {
                 column = text[i].split(tool.delimiter);
                 if (column.length < tool.column) {
-                    continue;
+                    column = column.concat(Array(tool.column - column.length).fill(""));
                 }
                 if (column[tool.column - 1].match(new RegExp(tool.expression, option)) !== null) {
                     text.splice(i, 1);
@@ -1033,7 +1038,7 @@ export default () => {
                 }
                 column = text[i].data.split(tool.delimiter);
                 if (column.length < tool.column) {
-                    continue;
+                    column = column.concat(Array(tool.column - column.length).fill(""));
                 }
                 if (column[tool.column - 1].match(new RegExp(tool.expression, option)) !== null) {
                     text[i].data = null;

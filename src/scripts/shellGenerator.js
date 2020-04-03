@@ -4,7 +4,8 @@ function regexEscape(regex) {
 };
 
 function awkRegexEscape(regex) {
-    return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\\\\\$&");
+    regex = regexEscape(regex);
+    return regex.replace(/\\/g, "\\$&");
 };
 
 function awkDelimiter(delimiter) {
