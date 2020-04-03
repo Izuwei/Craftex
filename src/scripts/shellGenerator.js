@@ -240,6 +240,17 @@ function filterLinesCommand(tool) {
     }
 }
 
+function regexFilterLinesCommand(tool) {
+    if (tool.column === "") {
+        var ignoreCase = tool.casesensitive === false ? "I" : "";
+        return "sed -E '/" + tool.expression + "/" + ignoreCase + "d'";
+    }
+    else {
+        let ignoreCase = tool.casesensitive === false ? "{IGNORECASE=1}" : "";
+        return "awk -F '" + awkDelimiter(tool.delimiter) + "' '" + ignoreCase + "$" + tool.column + " !~ /" + tool.expression + "/'";
+    }
+}
+
 function insertColumnCommand(tool) {
     const colBubble = (position) => {
         if (parseInt(position) === 1) {
@@ -375,6 +386,9 @@ function getToolCommand(tool) {
             break;
         case "filterLines":
             command = filterLinesCommand(tool);
+            break;
+        case "regexFilterLines":
+            command = regexFilterLinesCommand(tool);
             break;
         case "insertColumn":
             command = insertColumnCommand(tool);

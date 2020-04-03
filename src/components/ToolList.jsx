@@ -266,23 +266,39 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                     </React.Fragment>
                 );
             case "filterLines":
-                    return (
-                        <React.Fragment>
-                            <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Filter lines</span>
-                            <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>with {tool.content === "custom" && (tool.casesensitive === true ? "case sensitive " : "case isensitive ")}{mapFilterLinesContent(tool.content)}</span>
-                            {tool.content === "custom" && <span className={`${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>
-                                {tool.customContent}
-                                {tool.column === "" ? "" : 
-                                    <React.Fragment>
-                                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
-                                        {tool.column + "."}
-                                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
-                                        {tool.delimiter}
-                                    </React.Fragment>
-                                }
-                            </span>}
-                        </React.Fragment>
-                    );
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Filter lines</span>
+                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>with {tool.content === "custom" && (tool.casesensitive === true ? "case sensitive " : "case isensitive ")}{mapFilterLinesContent(tool.content)}</span>
+                        {tool.content === "custom" && <span className={`${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>
+                            {tool.customContent}
+                            {tool.column === "" ? "" : 
+                                <React.Fragment>
+                                    <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
+                                    {tool.column + "."}
+                                    <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
+                                    {tool.delimiter}
+                                </React.Fragment>
+                            }
+                        </span>}
+                    </React.Fragment>
+                );
+            case "regexFilterLines":
+                return (
+                    <React.Fragment>
+                        <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Regex filter lines</span> 
+                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.casesensitive === true ? "case sensitive" : "case isensitive"}</span>
+                        {tool.expression}
+                        {tool.column === "" ? "" : 
+                            <React.Fragment>
+                                <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>in</span>
+                                {tool.column + "."}
+                                <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>column delimited by</span>
+                                {tool.delimiter}
+                            </React.Fragment>
+                        }
+                    </React.Fragment>
+                );
             case "cutLines":
                 return (
                     <React.Fragment>

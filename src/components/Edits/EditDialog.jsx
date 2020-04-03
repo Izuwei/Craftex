@@ -9,6 +9,7 @@ import EditRegexReplace from "./Tools/EditRegexReplace";
 import EditCompare from "./Tools/EditCompare";
 import EditFilterColumns from "./Tools/EditFilterColumns";
 import EditFilterLines from "./Tools/EditFilterLines";
+import EditRegexFilterLines from "./Tools/EditRegexFilterLines";
 import EditCutLines from "./Tools/EditCutLines";
 import EditInsertColumn from "./Tools/EditInsertColumn";
 import EditSwapColumns from "./Tools/EditSwapColumns";
@@ -71,6 +72,7 @@ function EditDialog(props) {
             case "compare": return "Compare";
             case "filterColumns": return "Filter columns";
             case "filterLines": return "Filter lines";
+            case "regexFilterLines": return "Regex filter lines";
             case "cutLines": return "Cut lines";
             case "insertColumn": return "Insert column";
             case "swapColumns": return "Swap columns";
@@ -115,6 +117,10 @@ function EditDialog(props) {
             case "filterLines":
                 return (
                     <EditFilterLines ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
+                );
+            case "regexFilterLines":
+                return (
+                    <EditRegexFilterLines ref={toolRef} updateTool={props.updateTool} tool={props.tool} close={props.close} />
                 );
             case "cutLines":
                 return (

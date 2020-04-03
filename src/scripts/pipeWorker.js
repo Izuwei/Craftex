@@ -982,6 +982,68 @@ export default () => {
     }
 
     /**
+     * Regex filter lines nastroj
+     */
+    function regexFilterLinesTool(text, tool) {
+        text = text.split('\n');
+        var option = tool.casesensitive === true ? "g" : "gi";
+
+        if (tool.column === "") {   // Cele radky
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].match(new RegExp(tool.expression, option)) !== null) {
+                    text.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        else {      // Ve sloupci
+            var column = "";
+            for (let i = 0; i < text.length; i++) {
+                column = text[i].split(tool.delimiter);
+                if (column.length < tool.column) {
+                    continue;
+                }
+                if (column[tool.column - 1].match(new RegExp(tool.expression, option)) !== null) {
+                    text.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        return text.join('\n');
+    }
+
+    function regexFilterLinesInspectTool(text, tool) {
+        var option = tool.casesensitive === true ? "g" : "gi";
+
+        if (tool.column === "") {   // Cele radky
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].data === null) {
+                    continue;
+                }
+                if (text[i].data.match(new RegExp(tool.expression, option)) !== null) {
+                    text[i].data = null;
+                }
+            }
+        }
+        else {      // Ve sloupci
+            var column = "";
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].data === null) {
+                    continue;
+                }
+                column = text[i].data.split(tool.delimiter);
+                if (column.length < tool.column) {
+                    continue;
+                }
+                if (column[tool.column - 1].match(new RegExp(tool.expression, option)) !== null) {
+                    text[i].data = null;
+                }
+            }
+        }
+        return text;
+    }
+
+    /**
      * Cut lines nastroj
      */
     function cutLinesTool(text, tool) {
@@ -1631,6 +1693,9 @@ export default () => {
             case "filterLines":
                 result = filterLinesTool(text, tool);
                 break;
+            case "regexFilterLines":
+                result = regexFilterLinesTool(text, tool);
+                break;
             case "cutLines":
                 result = cutLinesTool(text, tool);
                 break;
@@ -1691,6 +1756,9 @@ export default () => {
                 break;
             case "filterLines":
                 result = filterLinesInspectTool(text, tool);
+                break;
+            case "regexFilterLines":
+                result = regexFilterLinesInspectTool(text, tool);
                 break;
             case "cutLines":
                 result = cutLinesInspectTool(text, tool);

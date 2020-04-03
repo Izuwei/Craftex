@@ -6,6 +6,7 @@ import styles from "./TabStyles";
 import ToolHeader from "./ToolHeader";
 import FilterColumns from "./Tools/FilterColumns";
 import FilterLines from "./Tools/FilterLines";
+import RegexFilterLines from "./Tools/RegexFilterLines";
 import CutLines from "./Tools/CutLines";
 import Trim from "./Tools/Trim";
 import RemoveExtraSpaces from "./Tools/RemoveExtraSpaces";
@@ -79,6 +80,23 @@ const ReduceTab = React.memo(({ classes, addTool, showAlert }) => {
                         } 
                     />
                     <FilterLines addTool={addTool} showAlert={showAlert} />
+                    <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
+                </Grid>
+                <Grid item xs={12}>
+                    <ToolHeader toolname="Regex filter lines" description={
+                            <React.Fragment>
+                                <p>Removes lines from the text using <b>extended regular expression</b>.</p>
+                                <h4>Options:</h4>
+                                <ul>
+                                    <li><b>Case -</b> specify match that is sensitive to capitalization of letters.</li>
+                                    <li><b>Column -</b> sets a column specifically for <b>regex</b> search. Text out of specified column is ignored. This option is <b>optional</b>.</li>
+                                    <li><b>Delimiter -</b> sets separator between cloumns. This option is required only if <b>Column</b> option is set.</li>
+                                    <li><b>Regular expression -</b> A place to define a regular expression. This field is required.</li>
+                                </ul>
+                            </React.Fragment>
+                        } 
+                    />
+                    <RegexFilterLines addTool={addTool} showAlert={showAlert} />
                     <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
                 </Grid>
                 <Grid item xs={12}>
