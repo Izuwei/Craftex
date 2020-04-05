@@ -68,8 +68,8 @@ const EditMatch = forwardRef((props, ref) => {
                       value={occurrence}
                       onChange={(event) => setOccurrence(event.target.value)}
                     >
-                        <MenuItem value={"first"}>First</MenuItem>
-                        <MenuItem value={"all"}>All</MenuItem>
+                        <MenuItem id="edit-match-occurence-first" value={"first"}>First</MenuItem>
+                        <MenuItem id="edit-match-occurence-all" value={"all"}>All</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -81,8 +81,8 @@ const EditMatch = forwardRef((props, ref) => {
                       value={matchCaseSensitive}
                       onChange={(event) => setMatchCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-match-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="edit-match-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

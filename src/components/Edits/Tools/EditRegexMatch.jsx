@@ -78,8 +78,8 @@ const EditRegexMatch = forwardRef((props, ref) => {
                       value={occurrence}
                       onChange={(event) => setOccurrence(event.target.value)}
                     >
-                        <MenuItem value={"first"}>First</MenuItem>
-                        <MenuItem value={"all"}>All</MenuItem>
+                        <MenuItem id="edit-regex-match-occurence-first" value={"first"}>First</MenuItem>
+                        <MenuItem id="edit-regex-match-occurence-all" value={"all"}>All</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -91,8 +91,8 @@ const EditRegexMatch = forwardRef((props, ref) => {
                       value={regexMatchCaseSensitive}
                       onChange={(event) => setRegexMatchCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-regex-match-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="edit-regex-match-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

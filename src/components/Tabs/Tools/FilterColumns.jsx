@@ -69,8 +69,8 @@ function FilterColumnsTool(props) {
                   value={variant}
                   onChange={(event) => setVariant(event.target.value)}
                 >
-                    <MenuItem value={"remove"}>Remove</MenuItem>
-                    <MenuItem value={"cut"}>Cut</MenuItem>
+                    <MenuItem id="filter-columns-variant-remove" value={"remove"}>Remove</MenuItem>
+                    <MenuItem id="filter-columns-variant-cut" value={"cut"}>Cut</MenuItem>
                 </Select>
             </FormControl>
             <TextField

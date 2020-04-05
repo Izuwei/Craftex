@@ -36,8 +36,8 @@ const EditReverse = forwardRef((props, ref) => {
                   value={direction}
                   onChange={(event) => setDirection(event.target.value)}
                 >
-                    <MenuItem value={"horizontal"}>Horizontal</MenuItem>
-                    <MenuItem value={"vertical"}>Vertical</MenuItem>
+                    <MenuItem id="edit-reverse-direction-horizontal" value={"horizontal"}>Horizontal</MenuItem>
+                    <MenuItem id="edit-reverse-direction-vertical" value={"vertical"}>Vertical</MenuItem>
                 </Select>
             </FormControl>
         </React.Fragment>

@@ -45,8 +45,8 @@ function ConvertCaseTool(props) {
                   value={textCase}
                   onChange={(event) => setTextCase(event.target.value)}
                 >
-                    <MenuItem value={"uppercase"}>Upper case</MenuItem>
-                    <MenuItem value={"lowercase"}>Lower case</MenuItem>
+                    <MenuItem id="convert-case-case-uppercase" value={"uppercase"}>Upper case</MenuItem>
+                    <MenuItem id="convert-case-case-lowercase" value={"lowercase"}>Lower case</MenuItem>
                 </Select>
             </FormControl>
             <Button

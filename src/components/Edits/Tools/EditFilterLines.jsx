@@ -78,9 +78,9 @@ const EditFilterLines = forwardRef((props, ref) => {
                       value={content}
                       onChange={(event) => setContent(event.target.value)}
                     >
-                        <MenuItem value={"empty"}>Empty</MenuItem>
-                        <MenuItem value={"whiteChars"}>White characters</MenuItem>
-                        <MenuItem value={"custom"}>Custom</MenuItem>
+                        <MenuItem id="edit-filter-lines-content-empty" value={"empty"}>Empty</MenuItem>
+                        <MenuItem id="edit-filter-lines-content-whitechars" value={"whiteChars"}>White characters</MenuItem>
+                        <MenuItem id="edit-filter-lines-content-custom" value={"custom"}>Custom</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -93,8 +93,8 @@ const EditFilterLines = forwardRef((props, ref) => {
                       value={caseSensitive}
                       onChange={(event) => setCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-filter-lines-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="edit-filter-lines-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

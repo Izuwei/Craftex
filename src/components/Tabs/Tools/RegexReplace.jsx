@@ -90,16 +90,16 @@ function RegexReplaceTool(props) {
         <div className={classes.root}>
             <div className={classes.flexStart}>
                 <FormControl>
-                    <InputLabel id="regex-replace-occurence-label">Occurrence</InputLabel>
+                    <InputLabel id="regex-replace-occurrence-label">Occurrence</InputLabel>
                     <Select
-                      labelId="regex-replace-occurence-label"
+                      labelId="regex-replace-occurrence-label"
                       id="regex-replace-occurrence"
                       className={classes.opts}
                       value={occurrence}
                       onChange={(event) => setOccurrence(event.target.value)}
                     >
-                        <MenuItem value={"first"}>First</MenuItem>
-                        <MenuItem value={"all"}>All</MenuItem>
+                        <MenuItem id="regex-replace-occurrence-first" value={"first"}>First</MenuItem>
+                        <MenuItem id="regex-replace-occurrence-all" value={"all"}>All</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -111,8 +111,8 @@ function RegexReplaceTool(props) {
                       value={regexReplaceCaseSensitive}
                       onChange={(event) => setRegexReplaceCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="regex-replace-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="regex-replace-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

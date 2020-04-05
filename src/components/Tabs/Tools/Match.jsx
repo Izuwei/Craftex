@@ -86,8 +86,8 @@ function MatchTool(props) {
                       value={occurrence}
                       onChange={(event) => setOccurrence(event.target.value)}
                     >
-                        <MenuItem value={"first"}>First</MenuItem>
-                        <MenuItem value={"all"}>All</MenuItem>
+                        <MenuItem id="match-occurrence-first" value={"first"}>First</MenuItem>
+                        <MenuItem id="match-occurrence-all" value={"all"}>All</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -99,8 +99,8 @@ function MatchTool(props) {
                       value={matchCaseSensitive}
                       onChange={(event) => setMatchCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="match-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="match-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

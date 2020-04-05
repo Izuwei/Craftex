@@ -85,16 +85,16 @@ function ReplaceTool(props) {
         <div className={classes.root}>
             <div className={classes.flexStart}>
                 <FormControl>
-                    <InputLabel id="replace-occurence-label">Occurrence</InputLabel>
+                    <InputLabel id="replace-occurrence-label">Occurrence</InputLabel>
                     <Select
-                      labelId="replace-occurence-label"
+                      labelId="replace-occurrence-label"
                       id="replace-occurrence"
                       className={classes.opts}
                       value={occurrence}
                       onChange={(event) => setOccurrence(event.target.value)}
                     >
-                        <MenuItem value={"first"}>First</MenuItem>
-                        <MenuItem value={"all"}>All</MenuItem>
+                        <MenuItem id="replace-occurrence-first" value={"first"}>First</MenuItem>
+                        <MenuItem id="replace-occurrence-all" value={"all"}>All</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -106,8 +106,8 @@ function ReplaceTool(props) {
                       value={replaceCaseSensitive}
                       onChange={(event) => setReplaceCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="replace-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="replace-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

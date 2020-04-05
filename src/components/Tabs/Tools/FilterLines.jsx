@@ -84,29 +84,29 @@ function FilterLinesTool(props) {
                 <FormControl>
                     <InputLabel id="filter-lines-content-label">Content</InputLabel>
                     <Select
-                      labelId="filter-lines-content-label"
-                      id="filter-lines-content"
-                      className={classes.opts}
-                      value={content}
-                      onChange={(event) => `${setContent(event.target.value)} ${setColumnError(false)} ${setDelimiterError(false)} ${setCustomContentError(false)}`}
+                        labelId="filter-lines-content-label"
+                        id="filter-lines-content"
+                        className={classes.opts}
+                        value={content}
+                        onChange={(event) => `${setContent(event.target.value)} ${setColumnError(false)} ${setDelimiterError(false)} ${setCustomContentError(false)}`}
                     >
-                        <MenuItem value={"empty"}>Empty</MenuItem>
-                        <MenuItem value={"whiteChars"}>White characters</MenuItem>
-                        <MenuItem value={"custom"}>Custom</MenuItem>
+                        <MenuItem id="filter-lines-content-empty" value={"empty"}>Empty</MenuItem>
+                        <MenuItem id="filter-lines-content-whitechars" value={"whiteChars"}>White characters</MenuItem>
+                        <MenuItem id="filter-lines-content-custom" value={"custom"}>Custom</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
                     <InputLabel id="filter-lines-case-label">Case</InputLabel>
                     <Select
-                      labelId="filter-lines-case-label"
-                      id="filter-lines-case"
-                      disabled={content !== "custom"}
-                      className={classes.opts}
-                      value={caseSensitive}
-                      onChange={(event) => setCaseSensitive(event.target.value)}
+                        labelId="filter-lines-case-label"
+                        id="filter-lines-case"
+                        disabled={content !== "custom"}
+                        className={classes.opts}
+                        value={caseSensitive}
+                        onChange={(event) => setCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="filter-lines-case-sensitive"value={true}>Sensitive</MenuItem>
+                        <MenuItem id="filter-lines-case-isensitive"value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField
@@ -121,15 +121,15 @@ function FilterLinesTool(props) {
                     helperText={columnError === true ? "Number must be greater than zero!" : ""}
                 />
                 <TextField
-                        id="filter-lines-delimiter"
-                        label="Delimiter"
-                        disabled={content !== "custom"}
-                        value={delimiter}
-                        onChange={event => `${setDelimiter(event.target.value)} ${setDelimiterError(false)}`}
-                        className={classes.textField}
-                        required={column === "" ? false : true}
-                        error={delimiterError === true}
-                        helperText={delimiterError === true ? "Delimiter is required!" : ""}
+                    id="filter-lines-delimiter"
+                    label="Delimiter"
+                    disabled={content !== "custom"}
+                    value={delimiter}
+                    onChange={event => `${setDelimiter(event.target.value)} ${setDelimiterError(false)}`}
+                    className={classes.textField}
+                    required={column === "" ? false : true}
+                    error={delimiterError === true}
+                    helperText={delimiterError === true ? "Delimiter is required!" : ""}
                 />
             </div>
             <div className={classes.flexCenter}>

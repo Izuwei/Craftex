@@ -53,8 +53,8 @@ function LineNumbersTool(props) {
                   value={variant}
                   onChange={(event) => setVariant(event.target.value)}
                 >
-                    <MenuItem value={"all"}>All lines</MenuItem>
-                    <MenuItem value={"nonempty"}>Nonempty lines</MenuItem>
+                    <MenuItem id="line-numbers-variant-all" value={"all"}>All lines</MenuItem>
+                    <MenuItem id="line-numbers-variant-nonempty" value={"nonempty"}>Nonempty lines</MenuItem>
                 </Select>
             </FormControl>
             <TextField

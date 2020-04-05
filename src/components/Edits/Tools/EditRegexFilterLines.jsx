@@ -77,8 +77,8 @@ const EditRegexFilterLines = forwardRef((props, ref) => {
                       value={caseSensitive}
                       onChange={(event) => setCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-regex-filter-lines-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="edit-regex-filter-lines-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

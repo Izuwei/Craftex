@@ -47,7 +47,7 @@ const FindTab = React.memo(({ classes, addTool, showAlert }) => {
                             </ul>
                         </React.Fragment>
                     } 
-                />
+                    />
                     <Match addTool={addTool} showAlert={showAlert} />
                     <Divider className={classes.divider} orientation="horizontal" variant="fullWidth" />
                 </Grid>

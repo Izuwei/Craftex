@@ -183,12 +183,12 @@ function EditDialog(props) {
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Tooltip className={classes.tooltip} title="Close">
-                    <IconButton className={classes.closeIcon} onClick={() => props.close()}>
+                    <IconButton id="close-edit" className={classes.closeIcon} onClick={() => props.close()}>
                         <Close fontSize="large"/>
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Confirm">
-                    <IconButton className={classes.confirmIcon} onClick={() => toolRef.current.handleUpdate()}>
+                    <IconButton id="confirm-edit" className={classes.confirmIcon} onClick={() => toolRef.current.handleUpdate()}>
                         <Done fontSize="large"/>
                     </IconButton>
                 </Tooltip>

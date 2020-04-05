@@ -45,8 +45,8 @@ const EditSort = forwardRef((props, ref) => {
                   value={order}
                   onChange={(event) => setOrder(event.target.value)}
                 >
-                    <MenuItem value={"ascending"}>Ascending</MenuItem>
-                    <MenuItem value={"descending"}>Descending</MenuItem>
+                    <MenuItem id="edit-sort-order-ascending" value={"ascending"}>Ascending</MenuItem>
+                    <MenuItem id="edit-sort-order-descending" value={"descending"}>Descending</MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -58,8 +58,8 @@ const EditSort = forwardRef((props, ref) => {
                   value={caseSensitive}
                   onChange={(event) => setCaseSensitive(event.target.value)}
                 >
-                    <MenuItem value={true}>Sensitive</MenuItem>
-                    <MenuItem value={false}>Isensitive</MenuItem>
+                    <MenuItem id="edit-sort-case-sensitive" value={true}>Sensitive</MenuItem>
+                    <MenuItem id="edit-sort-case-isensitive" value={false}>Isensitive</MenuItem>
                 </Select>
             </FormControl>
             <FormControlLabel

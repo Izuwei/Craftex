@@ -62,8 +62,8 @@ function CutLinesTool(props) {
                     value={variant}
                     onChange={(event) => setVariant(event.target.value)}
                 >
-                    <MenuItem value={"head"}>Head</MenuItem>
-                    <MenuItem value={"tail"}>Tail</MenuItem>
+                    <MenuItem id="cut-lines-variant-head" value={"head"}>Head</MenuItem>
+                    <MenuItem id="cut-lines-variant-tail" value={"tail"}>Tail</MenuItem>
                 </Select>
             </FormControl>
             <TextField

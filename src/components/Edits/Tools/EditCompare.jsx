@@ -67,11 +67,11 @@ const EditCompare = forwardRef((props, ref) => {
                       value={comparator}
                       onChange={(event) => setComparator(event.target.value)}
                     >
-                        <MenuItem value={"gt"}>Greater than</MenuItem>
-                        <MenuItem value={"ge"}>Greater equal</MenuItem>
-                        <MenuItem value={"lt"}>Less than</MenuItem>
-                        <MenuItem value={"le"}>Less equal</MenuItem>
-                        <MenuItem value={"eq"}>Equal</MenuItem>
+                        <MenuItem id="edit-compare-comparator-gt" value={"gt"}>Greater than</MenuItem>
+                        <MenuItem id="edit-compare-comparator-ge" value={"ge"}>Greater equal</MenuItem>
+                        <MenuItem id="edit-compare-comparator-lt" value={"lt"}>Less than</MenuItem>
+                        <MenuItem id="edit-compare-comparator-le" value={"le"}>Less equal</MenuItem>
+                        <MenuItem id="edit-compare-comparator-eq" value={"eq"}>Equal</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

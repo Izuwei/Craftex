@@ -74,8 +74,8 @@ const EditReplace = forwardRef((props, ref) => {
                       value={occurrence}
                       onChange={(event) => setOccurrence(event.target.value)}
                     >
-                        <MenuItem value={"first"}>First</MenuItem>
-                        <MenuItem value={"all"}>All</MenuItem>
+                        <MenuItem id="edit-replace-occurence-first" value={"first"}>First</MenuItem>
+                        <MenuItem id="edit-replace-occurence-all" value={"all"}>All</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -87,8 +87,8 @@ const EditReplace = forwardRef((props, ref) => {
                       value={replaceCaseSensitive}
                       onChange={(event) => setReplaceCaseSensitive(event.target.value)}
                     >
-                        <MenuItem value={true}>Sensitive</MenuItem>
-                        <MenuItem value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-replace-case-sensitive" value={true}>Sensitive</MenuItem>
+                        <MenuItem id="edit-replace-case-isensitive" value={false}>Isensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

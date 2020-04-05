@@ -47,8 +47,8 @@ const EditCutLines = forwardRef((props, ref) => {
                     value={variant}
                     onChange={(event) => setVariant(event.target.value)}
                 >
-                    <MenuItem value={"head"}>Head</MenuItem>
-                    <MenuItem value={"tail"}>Tail</MenuItem>
+                    <MenuItem id="edit-cut-lines-variant-head" value={"head"}>Head</MenuItem>
+                    <MenuItem id="edit-cut-lines-variant-tail" value={"tail"}>Tail</MenuItem>
                 </Select>
             </FormControl>
             <TextField

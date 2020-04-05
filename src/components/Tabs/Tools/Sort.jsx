@@ -50,8 +50,8 @@ function SortTool(props) {
                     value={order}
                     onChange={(event) => setOrder(event.target.value)}
                 >
-                    <MenuItem value={"ascending"}>Ascending</MenuItem>
-                    <MenuItem value={"descending"}>Descending</MenuItem>
+                    <MenuItem id="sort-order-ascending" value={"ascending"}>Ascending</MenuItem>
+                    <MenuItem id="sort-order-descending" value={"descending"}>Descending</MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -63,8 +63,8 @@ function SortTool(props) {
                     value={caseSensitive}
                     onChange={(event) => setCaseSensitive(event.target.value)}
                 >
-                    <MenuItem value={true}>Sensitive</MenuItem>
-                    <MenuItem value={false}>Isensitive</MenuItem>
+                    <MenuItem id="sort-case-sensitive" value={true}>Sensitive</MenuItem>
+                    <MenuItem id="sort-case-sensitive" value={false}>Isensitive</MenuItem>
                 </Select>
             </FormControl>
             <FormControlLabel

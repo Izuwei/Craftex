@@ -108,7 +108,7 @@ const DenseAppBar = React.memo(() => {
     	            		</span>
     	          		</Typography>
     	          		<Tooltip title="Menu">
-    	            		<IconButton edge='start' color="inherit" aria-label="menu" onClick={handleOpen}>
+    	            		<IconButton id="menu" edge='start' color="inherit" aria-label="menu" onClick={handleOpen}>
     	              			<MenuIcon />
     	            		</IconButton>
     	          		</Tooltip>
@@ -120,7 +120,7 @@ const DenseAppBar = React.memo(() => {
     	            	    onClose={handleClose}
     	            	>
     	                	<a className={classes.link} href="https://github.com/Izuwei/production">
-    	                	    <StyledMenuItem>
+    	                	    <StyledMenuItem id="documentation">
     	                	      	<ListItemIcon>
     	                	      	  	<Description fontSize="small" className={classes.itemIcon}/>
     	                	      	</ListItemIcon>
@@ -128,7 +128,7 @@ const DenseAppBar = React.memo(() => {
     	                	    </StyledMenuItem>
     	                	</a>
     	                	<a className={classes.link} href="https://github.com/Izuwei/production">
-    	                	    <StyledMenuItem>
+    	                	    <StyledMenuItem id="video">
     	                	      	<ListItemIcon>
     	                	      	  	<Videocam fontSize="small" className={classes.itemIcon}/>
     	                	      	</ListItemIcon>
@@ -136,7 +136,7 @@ const DenseAppBar = React.memo(() => {
     	                	    </StyledMenuItem>
     	                	</a>
     	                	<a className={classes.link} href="https://github.com/Izuwei/production">
-    	                	    <StyledMenuItem>
+    	                	    <StyledMenuItem id="github">
     	                	      	<ListItemIcon>
     	                	      	  	<GitHub fontSize="small" className={classes.itemIcon}/>
     	                	      	</ListItemIcon>

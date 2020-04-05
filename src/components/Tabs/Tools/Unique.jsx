@@ -71,9 +71,9 @@ function UniqueTool(props) {
                   value={variant}
                   onChange={(event) => handleVariant(event.target.value)}
                 >
-                    <MenuItem value={"merge"}>Merge</MenuItem>
-                    <MenuItem value={"unique"}>Unique only</MenuItem>
-                    <MenuItem value={"duplicate"}>Duplicate only</MenuItem>
+                    <MenuItem id="unique-variant-merge" value={"merge"}>Merge</MenuItem>
+                    <MenuItem id="unique-variant-unique" value={"unique"}>Unique only</MenuItem>
+                    <MenuItem id="unique-variant-duplicate" value={"duplicate"}>Duplicate only</MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -85,8 +85,8 @@ function UniqueTool(props) {
                   value={caseSensitive}
                   onChange={(event) => setCaseSensitive(event.target.value)}
                 >
-                    <MenuItem value={true}>Sensitive</MenuItem>
-                    <MenuItem value={false}>Isensitive</MenuItem>
+                    <MenuItem id="unique-case-sensitive" value={true}>Sensitive</MenuItem>
+                    <MenuItem id="unique-case-isensitive" value={false}>Isensitive</MenuItem>
                 </Select>
             </FormControl>
             <FormControlLabel

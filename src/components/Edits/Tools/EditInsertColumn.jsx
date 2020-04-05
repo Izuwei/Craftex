@@ -51,15 +51,15 @@ const EditInsertColumn = forwardRef((props, ref) => {
     return (
         <React.Fragment>
             <TextField
-                    id="edit-insert-column-position"
-                    label="Position"
-                    value={position}
-                    onChange={event => `${setPosition(event.target.value)} ${setPositionError(false)}`}
-                    type="number"
-                    className={classes.opts}
-                    error={positionError === true}
-                    helperText={positionError === true ? "Number must be greater than zero!" : ""}
-                />
+                id="edit-insert-column-position"
+                label="Position"
+                value={position}
+                onChange={event => `${setPosition(event.target.value)} ${setPositionError(false)}`}
+                type="number"
+                className={classes.opts}
+                error={positionError === true}
+                helperText={positionError === true ? "Number must be greater than zero!" : ""}
+            />
             <TextField
                 id="edit-insert-column-delimiter"
                 label="Delimiter"

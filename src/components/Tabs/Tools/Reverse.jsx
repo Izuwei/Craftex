@@ -45,8 +45,8 @@ function ReverseTool(props) {
                   value={direction}
                   onChange={(event) => setDirection(event.target.value)}
                 >
-                    <MenuItem value={"horizontal"}>Horizontal</MenuItem>
-                    <MenuItem value={"vertical"}>Vertical</MenuItem>
+                    <MenuItem id="reverse-direction-horizontal" value={"horizontal"}>Horizontal</MenuItem>
+                    <MenuItem id="reverse-direction-vertical" value={"vertical"}>Vertical</MenuItem>
                 </Select>
             </FormControl>
             <Button

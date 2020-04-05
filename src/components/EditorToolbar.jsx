@@ -190,6 +190,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
     return (
         <Toolbar className={classes.root}>
             <Button 
+                id="file-sec"
                 className={classes.btn}
                 ref={fileButtonRef}
                 onClick={expandFile}
@@ -216,12 +217,12 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                             onChange={e => `${loadFile(e)} ${handleClose(e)}`}
                         />
                         <label htmlFor="contained-button-file">
-                            <MenuItem>
+                            <MenuItem id="import">
                                 <Publish fontSize="small" className={classes.toolbarIcon}/>
                                 Import
                             </MenuItem>
                         </label>
-                        <MenuItem onClick={downloadResult}>
+                        <MenuItem id="download" onClick={downloadResult}>
                             <GetApp fontSize="small" className={classes.toolbarIcon} />
                             Download
                         </MenuItem>
@@ -233,6 +234,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
             </Popper>
 
             <Button 
+                id="editor-sec"
                 className={classes.btn}
                 ref={editorButtonRef}
                 onClick={expandEditor}
@@ -249,23 +251,23 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
                       <MenuList autoFocusItem={openEditor} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                        <MenuItem onClick={e => `${undo(e)} ${handleClose(e)}`}>
+                        <MenuItem id="undo" onClick={e => `${undo(e)} ${handleClose(e)}`}>
                             <Undo fontSize="small" className={classes.toolbarIcon} />
                             Undo
                         </MenuItem>
-                        <MenuItem onClick={e => `${redo(e)} ${handleClose(e)}`}>
+                        <MenuItem id="redo" onClick={e => `${redo(e)} ${handleClose(e)}`}>
                             <Redo fontSize="small" className={classes.toolbarIcon} />
                             Redo
                         </MenuItem>
-                        <MenuItem onClick={e => `${toggleWrap(e)} ${handleClose(e)}`}>
+                        <MenuItem id="wrap" onClick={e => `${toggleWrap(e)} ${handleClose(e)}`}>
                             <WrapText fontSize="small" className={classes.toolbarIcon} />
                             { wrap ? "Disable wrap" : "Enable wrap" }
                         </MenuItem>
-                        <MenuItem onClick={e => `${toggleInspectMode(e)} ${handleClose(e)}`}>
+                        <MenuItem id="toggle-inspector" onClick={e => `${toggleInspectMode(e)} ${handleClose(e)}`}>
                             <ViewDay fontSize="small" className={classes.toolbarIcon} />
                             { inspectMode ? "Disable inspector" : "Enable inspector" }
                         </MenuItem>
-                        <MenuItem onClick={e => `${clearAllBreakpoints(e)} ${handleClose(e)}`}>
+                        <MenuItem id="remove-breakpoints" onClick={e => `${clearAllBreakpoints(e)} ${handleClose(e)}`}>
                             <Clear fontSize="small" className={classes.toolbarIcon} />
                             Remove all breakpoints
                         </MenuItem>
@@ -277,6 +279,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
             </Popper>
 
             <Button 
+                id="pipeline-sec"
                 className={classes.btn}
                 ref={pipelineButtonRef}
                 onClick={expandInspect}
@@ -293,19 +296,19 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
                     <MenuList autoFocusItem={openPipeline} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                        <MenuItem onClick={e => `${setPipelineActivity(true)} ${handleClose(e)}`}>
+                        <MenuItem id="enable-tools" onClick={e => `${setPipelineActivity(true)} ${handleClose(e)}`}>
                             <Done fontSize="small" className={classes.toolbarIcon} />
                             Enable all tools
                         </MenuItem>
-                        <MenuItem onClick={e => `${setPipelineActivity(false)} ${handleClose(e)}`}>
+                        <MenuItem id="disable-tools" onClick={e => `${setPipelineActivity(false)} ${handleClose(e)}`}>
                             <Clear fontSize="small" className={classes.toolbarIcon} />
                             Disable all tools
                         </MenuItem>
-                        <MenuItem onClick={e => `${clearPipeline()} ${handleClose(e)}`}>
+                        <MenuItem id="clear-pipeline" onClick={e => `${clearPipeline()} ${handleClose(e)}`}>
                             <ClearAll fontSize="small" className={classes.toolbarIcon} />
                             Clear pipeline
                         </MenuItem>
-                        <MenuItem onClick={e => `${setOpenShellDialog(true)} ${handleClose(e)}`}>
+                        <MenuItem id="create-shell" onClick={e => `${setOpenShellDialog(true)} ${handleClose(e)}`}>
                             <FiberNew fontSize="small" className={classes.toolbarIcon} />
                             Create shell script
                         </MenuItem>
@@ -317,6 +320,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
             </Popper>
 
             <Button 
+                id="search-sec"
                 className={classes.btn}
                 ref={searchButtonRef}
                 onClick={expandSearch}
@@ -334,14 +338,14 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                         <ClickAwayListener onClickAway={handleClose}>
                             <div className={classes.searchBox}>
                                 <Tooltip title="RegExp">
-                                <IconButton size="small" className={`${classes.searchBtns} ${searchRegExp && classes.activeButton }`}
+                                <IconButton id="search-regexp" size="small" className={`${classes.searchBtns} ${searchRegExp && classes.activeButton }`}
                                     onClick={() => setSearchRegExp(prev => !prev)}
                                 >
                                     <Translate />
                                 </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Case sensitive">
-                                <IconButton size="small" className={`${classes.searchBtns} ${searchCaseSensitive && classes.activeButton }`}
+                                <IconButton id="search-case" size="small" className={`${classes.searchBtns} ${searchCaseSensitive && classes.activeButton }`}
                                     onClick={() => setSearchCaseSensitive(prev => !prev)}
                                 >
                                     <TextFields />
@@ -352,6 +356,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                                         <Search />
                                     </div>
                                     <InputBase
+                                        id="search-pattern"
                                         placeholder="Search…"
                                         classes={{
                                             root: classes.inputRoot,
@@ -362,7 +367,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                                         value={searchExpression}
                                     />
                                     <Tooltip title="Remove">
-                                    <IconButton size="small" style={{marginRight: "5px"}} 
+                                    <IconButton id="search-clear" size="small" style={{marginRight: "5px"}} 
                                         onClick={() => setSearchExpression("")}
                                     >
                                         <Clear />
@@ -370,21 +375,21 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
                                     </Tooltip>
                                 </div>
                                 <Tooltip title="Previous">
-                                <IconButton size="small" className={classes.searchBtns} 
+                                <IconButton id="search-prev" size="small" className={classes.searchBtns} 
                                     onClick={() => find(searchExpression, { backwards: true, wrap: true, caseSensitive: searchCaseSensitive, wholeWord: false, regExp: searchRegExp })}
                                 >
                                     <SkipPrevious />
                                 </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Next">
-                                <IconButton size="small" className={classes.searchBtns}
+                                <IconButton id="search-next" size="small" className={classes.searchBtns}
                                      onClick={() => find(searchExpression, { backwards: false, wrap: true, caseSensitive: searchCaseSensitive, wholeWord: false, regExp: searchRegExp })}
                                 >
                                     <SkipNext />
                                 </IconButton>
                                 </Tooltip>
                                 <Tooltip title="All">
-                                <IconButton size="small" className={classes.searchBtns} 
+                                <IconButton id="search-all" size="small" className={classes.searchBtns} 
                                      onClick={() => findAll(searchExpression, { backwards: false, wrap: true, caseSensitive: searchCaseSensitive, wholeWord: false, regExp: searchRegExp })}
                                 >
                                     <AllInclusive />
