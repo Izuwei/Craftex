@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { forwardRef, useImperativeHandle, useEffect, useRef, useCallback } from "react";
 import AceEditor from "react-ace";
 

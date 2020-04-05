@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, FormControl, InputLabel, Select, MenuItem, TextField } from "@material-ui/core";
 

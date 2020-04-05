@@ -1,8 +1,13 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState } from 'react';
 import { Button, makeStyles, TextField, Collapse } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
-const useStyles = makeStyles(theme => ({    // TODO: Nejspis predelat na sdileny styly pro tento tab
+const useStyles = makeStyles(theme => ({
     root: {
         padding: "5px",
     },

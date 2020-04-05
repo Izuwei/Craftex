@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, InputLabel, MenuItem, FormControl, Select, FormControlLabel, Checkbox } from "@material-ui/core";
 
@@ -11,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditUnique = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditUnique = forwardRef((props, ref) => {
     const classes = useStyles();
 
     const [variant, setVariant] = useState(props.tool.variant);

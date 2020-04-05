@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 export default () => {
 
     function emptyBreakpoints(breakpoints) {

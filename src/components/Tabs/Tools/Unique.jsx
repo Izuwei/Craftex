@@ -1,8 +1,13 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState } from 'react';
 import { Button, makeStyles, InputLabel, MenuItem, FormControl, Select, FormControlLabel, Checkbox } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
-const useStyles = makeStyles(theme => ({    // TODO: Nejspis predelat na sdileny styly pro tento tab
+const useStyles = makeStyles(theme => ({
     root: {
         padding: "5px",
         display: "flex",

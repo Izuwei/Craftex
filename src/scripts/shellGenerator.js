@@ -1,3 +1,7 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
 
 function regexEscape(regex) {
     return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");

@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useRef, useState, useCallback } from "react";
 import EditorToolbar from "./EditorToolbar";
 import SplitPane from "react-split-pane";

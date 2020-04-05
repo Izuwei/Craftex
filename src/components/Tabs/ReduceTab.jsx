@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React from "react";
 import { Grid, MuiThemeProvider, createMuiTheme, Divider } from "@material-ui/core";
 import { green, lightBlue } from "@material-ui/core/colors";

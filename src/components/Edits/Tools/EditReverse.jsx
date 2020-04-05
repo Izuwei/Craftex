@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 
@@ -8,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditReverse = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditReverse = forwardRef((props, ref) => {
     const classes = useStyles();
 
     const [direction, setDirection] = useState(props.tool.direction);

@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState } from 'react';
 import { Button, makeStyles, InputLabel, MenuItem, FormControl, Select } from '@material-ui/core';
 import { Add } from '@material-ui/icons';

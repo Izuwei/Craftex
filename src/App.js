@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './App.css';
 import TopPanel from './components/TopPanel';
@@ -354,148 +359,146 @@ function proc(data) { // eslint-disable-line no-restricted-globals
  * Kdyby byla velmi pomala, vytvorit workera.
  */
 function emptyBreakpoints(breakpoints) {
-  for (var i in breakpoints) {
-      if (typeof breakpoints[i] !== typeof undefined) {
-          return false;
-      }
-  }
-  return true;
+  	for (var i in breakpoints) {
+  	    if (typeof breakpoints[i] !== typeof undefined) {
+  	        return false;
+  	    }
+  	}
+  	return true;
 };
 
 function App() {
-  const alertRef = useRef();
-  const [pipeline, setPipeline] = useState([]);
+  	const alertRef = useRef();
+  	const [pipeline, setPipeline] = useState([]);
 
-  const [editorContent, setEditorContent] = useState("");
-  const [editorResult, setEditorResult] = useState("");
-  const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});
-  const [pipeProgress, setPipeProgress] = useState(100);
-  //const [inspectMode, setInspectMode] = useState(false);
+  	const [editorContent, setEditorContent] = useState("");
+  	const [editorResult, setEditorResult] = useState("");
+  	const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});
+  	const [pipeProgress, setPipeProgress] = useState(100);
+  	//const [inspectMode, setInspectMode] = useState(false);
 
-  const addTool = useCallback((tool) => {
-    tool.id = newID();
-    tool.active = true;
-    setPipeline(c => [...c, tool]);
-  }, [setPipeline]);
+  	const addTool = useCallback((tool) => {
+  	  	tool.id = newID();
+  	  	tool.active = true;
+  	  	setPipeline(c => [...c, tool]);
+  	}, [setPipeline]);
 
-  const removeTool = useCallback((tool) => {
-    setPipeline(c => c.filter(each => each.id !== tool.id));
-  }, [setPipeline]);
+  	const removeTool = useCallback((tool) => {
+  	  	setPipeline(c => c.filter(each => each.id !== tool.id));
+  	}, [setPipeline]);
 
-  const updateTool = useCallback((tool) => {  // TODO: opravit jen na set
-    const tmp = [...pipeline];
+  	const updateTool = useCallback((tool) => {  // TODO: opravit jen na set
+  	  	const tmp = [...pipeline];
 
-    for (var i in tmp) {
-      if (tmp[i].id === tool.id) {
-        tmp[i] = tool;
-        break;
-      }
-    }
-    setPipeline(tmp);
-  }, [pipeline, setPipeline]);
+  	  	for (var i in tmp) {
+  	  	  	if (tmp[i].id === tool.id) {
+  	  	  	  	tmp[i] = tool;
+  	  	  	  	break;
+  	  	  	}
+  	  	}
+  	  	setPipeline(tmp);
+  	}, [pipeline, setPipeline]);
 
-  const reactiveTool = useCallback((tool) => {
-    setPipeline(state => state.map(each => {
-      if (each.id === tool.id) {
-        return {...each, active: !each.active}
-      }
-      else return each}));
-  }, [setPipeline]);
+  	const reactiveTool = useCallback((tool) => {
+  	  	setPipeline(state => state.map(each => {
+  	  	  	if (each.id === tool.id) {
+  	  	  	  	return {...each, active: !each.active}
+  	  	  	}
+  	  	  	else return each}));
+  	}, [setPipeline]);
 
-  const onSortPipeline = useCallback(({ oldIndex, newIndex }) => {
-    if (oldIndex !== newIndex) {
-      setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
-    }
-    console.log(pipeline);
-  }, [pipeline, setPipeline]);
+  	const onSortPipeline = useCallback(({ oldIndex, newIndex }) => {
+  	  	if (oldIndex !== newIndex) {
+  	  	  	setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
+  	  	}
+  	  	console.log(pipeline);
+  	}, [pipeline, setPipeline]);
 
-  const editText = useCallback((newValue) => {
-    setEditorContent(newValue);
-  }, [setEditorContent]);
+  	const editText = useCallback((newValue) => {
+  	  	setEditorContent(newValue);
+  	}, [setEditorContent]);
 
-  const toggleInspectMode = useCallback(() => {
-    setInspectMode(state => ({ ...state, enabled: !state.enabled}));
-  }, [setInspectMode]);
+  	const toggleInspectMode = useCallback(() => {
+  	  	setInspectMode(state => ({ ...state, enabled: !state.enabled}));
+  	}, [setInspectMode]);
 
-  const toggleBreakpoint = useCallback((breakpoints) => {
-    setInspectMode(state => ({ ...state, enabled: !emptyBreakpoints(breakpoints), breakpoints: breakpoints}));
-  }, [setInspectMode]);
+  	const toggleBreakpoint = useCallback((breakpoints) => {
+  	  	setInspectMode(state => ({ ...state, enabled: !emptyBreakpoints(breakpoints), breakpoints: breakpoints}));
+  	}, [setInspectMode]);
 
-  const setPipelineActivity = useCallback((value) => {
-    setPipeline(state => state.map(tool => {return {...tool, active: value}}));
-  }, [setPipeline]);
+  	const setPipelineActivity = useCallback((value) => {
+  	  	setPipeline(state => state.map(tool => {return {...tool, active: value}}));
+  	}, [setPipeline]);
 
-  const clearPipeline = useCallback(() => {
-    setPipeline([]);
-  }, [setPipeline]);
+  	const clearPipeline = useCallback(() => {
+  	  	setPipeline([]);
+  	}, [setPipeline]);
 
-  // Do dokumentace napsat proc neni async/await ale useEffect
-  // Popsat WebWorkers
-  useEffect(() => {
-    //---------------DEBUG---------------------
-    /*
-    setEditorResult(proc({
-      text: editorContent, 
-      pipeline: pipeline, 
-      breakpoints: inspectMode.breakpoints, 
-      inspectMode: inspectMode.enabled
-    }));
-    */
-    //-----------------------------------------
-    const worker = new WebWorker(pipeWorker);
+  	useEffect(() => {
+  	  	//---------------DEBUG---------------------
+  	  	/*
+  	  	setEditorResult(proc({
+  	  	  text: editorContent, 
+  	  	  pipeline: pipeline, 
+  	  	  breakpoints: inspectMode.breakpoints, 
+  	  	  inspectMode: inspectMode.enabled
+  	  	}));
+  	  	*/
+  	  	//-----------------------------------------
+  	  	const worker = new WebWorker(pipeWorker);
 
-    worker.postMessage({
-      text: editorContent, 
-      pipeline: pipeline, 
-      breakpoints: inspectMode.breakpoints, 
-      inspectMode: inspectMode.enabled
-    });
+  	  	worker.postMessage({
+  	  	  	text: editorContent, 
+  	  	  	pipeline: pipeline, 
+  	  	  	breakpoints: inspectMode.breakpoints, 
+  	  	  	inspectMode: inspectMode.enabled
+  	  	});
 
-    worker.onmessage = (event) => {
-      if (event.data.type === "progress")
-        setPipeProgress(event.data.data);
-      else
-        setEditorResult(event.data.data);
-    };
+  	  	worker.onmessage = (event) => {
+  	  	  	if (event.data.type === "progress")
+  	  	  	  	setPipeProgress(event.data.data);
+  	  	  	else
+  	  	  	  	setEditorResult(event.data.data);
+  	  	};
 
-    return () => {  // Cleanup
-      worker.terminate();
-    };
-  }, [editorContent, pipeline, inspectMode, setEditorResult]);
-  
-  const showAlert = useCallback((variant, message) => {
-    alertRef.current.openSnackbar(variant, message);
-  }, []);
+  	  	return () => {  // Cleanup
+  	  	  	worker.terminate();
+  	  	};
+  	}, [editorContent, pipeline, inspectMode, setEditorResult]);
 
-  return (
-    <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <TopPanel />
-        <SplitEditor 
-          editorContent={editorContent} 
-          editText={editText} 
-          editorResult={editorResult}
-          showAlert={showAlert} 
-          toggleBreakpoint={toggleBreakpoint}
-          inspectMode={inspectMode.enabled}
-          toggleInspectMode={toggleInspectMode}
-          pipeProgress={pipeProgress}
-          pipeline={pipeline}
-          setPipelineActivity={setPipelineActivity}
-          clearPipeline={clearPipeline}
-        />
-        <ToolList 
-          tools={pipeline}
-          removeTool={removeTool}
-          reactiveTool={reactiveTool}
-          updateTool={updateTool}
-          sort={onSortPipeline}
-        />
-        <ToolTabs showAlert={showAlert} addTool={addTool}/>
-        <Alerts ref={alertRef} />
-      </div>
-    </MuiThemeProvider>
-  );
+  	const showAlert = useCallback((variant, message) => {
+  	  	alertRef.current.openSnackbar(variant, message);
+  	}, []);
+
+  	return (
+  	  	<MuiThemeProvider theme={theme}>
+  	  	  	<div className="App">
+  	  	  	  	<TopPanel />
+  	  	  	  	<SplitEditor 
+  	  	  	  	  	editorContent={editorContent} 
+  	  	  	  	  	editText={editText} 
+  	  	  	  	  	editorResult={editorResult}
+  	  	  	  	  	showAlert={showAlert} 
+  	  	  	  	  	toggleBreakpoint={toggleBreakpoint}
+  	  	  	  	  	inspectMode={inspectMode.enabled}
+  	  	  	  	  	toggleInspectMode={toggleInspectMode}
+  	  	  	  	  	pipeProgress={pipeProgress}
+  	  	  	  	  	pipeline={pipeline}
+  	  	  	  	  	setPipelineActivity={setPipelineActivity}
+  	  	  	  	  	clearPipeline={clearPipeline}
+  	  	  	  	/>
+  	  	  	  	<ToolList 
+  	  	  	  	  	tools={pipeline}
+  	  	  	  	  	removeTool={removeTool}
+  	  	  	  	  	reactiveTool={reactiveTool}
+  	  	  	  	  	updateTool={updateTool}
+  	  	  	  	  	sort={onSortPipeline}
+  	  	  	  	/>
+  	  	  	  	<ToolTabs showAlert={showAlert} addTool={addTool}/>
+  	  	  	  	<Alerts ref={alertRef} />
+  	  	  	</div>
+  	  	</MuiThemeProvider>
+  	);
 }
 
 export default App;

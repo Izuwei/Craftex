@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, TextField } from "@material-ui/core";
 
@@ -11,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditInsertColumn = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditInsertColumn = forwardRef((props, ref) => {
     const classes = useStyles();
 
     const [content, setContent] = useState(props.tool.content);

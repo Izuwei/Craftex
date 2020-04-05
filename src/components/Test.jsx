@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React from "react";
 
 const Test = React.memo(({ clear }) => {

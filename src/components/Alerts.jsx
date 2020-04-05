@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { makeStyles, Snackbar, SnackbarContent, IconButton } from '@material-ui/core';
 import PropTypes from 'prop-types';

@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useRef, useState, useCallback } from "react";
 import { Toolbar, Button, IconButton, makeStyles, Popper, Grow, Paper, MenuItem, MenuList, ClickAwayListener, InputBase, Tooltip } from "@material-ui/core";
 import { Description, FiberNew, Done, Publish, GetApp, Undo, Redo, BugReport, Clear, ClearAll, ListAlt, WrapText, Search, Translate, TextFields, SkipNext, SkipPrevious, AllInclusive, ViewDay } from "@material-ui/icons";

@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React from "react";
 import { Dialog, Tooltip, useTheme, makeStyles, DialogTitle, DialogContent, useMediaQuery, MuiThemeProvider, DialogContentText } from "@material-ui/core";
 import IconButton from '@material-ui/core/IconButton';

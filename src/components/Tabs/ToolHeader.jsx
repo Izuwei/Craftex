@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState } from "react";
 import { Typography, IconButton, Tooltip, useTheme, useMediaQuery, MuiThemeProvider, Dialog, DialogTitle, DialogContent } from "@material-ui/core";
 import { Info, Close } from "@material-ui/icons";

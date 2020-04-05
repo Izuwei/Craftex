@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, TextField, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 
@@ -11,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditFilterColumns = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditFilterColumns = forwardRef((props, ref) => {
     const classes = useStyles();
 
     const [variant, setVariant] = useState(props.tool.variant);

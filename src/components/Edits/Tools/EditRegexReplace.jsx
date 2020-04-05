@@ -1,3 +1,8 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
+
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { makeStyles, InputLabel, MenuItem, FormControl, Select, TextField } from "@material-ui/core";
 
@@ -17,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EditRegexReplace = forwardRef((props, ref) => {    // TODO: dodelat callbacky
+const EditRegexReplace = forwardRef((props, ref) => {
     const classes = useStyles();
 
     const [regexReplaceFind, setRegexReplaceFind] = useState(props.tool.find);

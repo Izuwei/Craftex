@@ -1,3 +1,7 @@
+/**
+ * FIT VUT 2020
+ * @author Jakub Sadilek
+ */
 
 export default () => {
 
@@ -473,7 +477,7 @@ export default () => {
         }
     };
 
-    function regexMatchInspectTool(text, tool) {    // TODO: osetreni na null
+    function regexMatchInspectTool(text, tool) {
         const option = getMatchOptions(tool);
         
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
@@ -1303,7 +1307,6 @@ export default () => {
 
     /**
      * Sort nastroj
-     * TODO: Mozna optimalizace porovnavaci funkce
      */
     function sortTool(text, tool) {
         const compare = (a, b) => {
