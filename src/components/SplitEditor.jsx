@@ -3,7 +3,7 @@
  * @author Jakub Sadilek
  */
 
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import EditorToolbar from "./EditorToolbar";
 import SplitPane from "react-split-pane";
 import { Resizable } from "re-resizable";
@@ -26,6 +26,10 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
     const bottomPanel = useRef();
 
     const [wrap, setWrap] = useState(false);
+    const [windowResize, setWindowResize] = useState(false);
+    const [panelSize, setPanelSize] = useState("50%");
+
+    const split = useRef();
 
     const find = useCallback((expression, properties) => {
         aceIn.current.find(expression, properties);
@@ -41,10 +45,19 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
         setWrap(prev => !prev);
     }, [setWrap]);
 
+    // Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
     const handleResize = useCallback(() => {
+        const draggedSize = split.current.state.draggedSize;
+
+        if (draggedSize && split.current.splitPane.clientWidth) {
+            const percentage = draggedSize / split.current.splitPane.clientWidth;
+
+            setPanelSize(`${percentage * 100}%`);
+        }
+        
         aceIn.current.resize();
         aceOut.current.resize();
-    }, []);
+    }, [setPanelSize]);
 
     const undo = useCallback(() => {
         aceIn.current.undo();
@@ -68,6 +81,24 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
     const onCursorChange = useCallback((selection, event) => {
         bottomPanel.current.setPosition(selection.cursor.row + 1, selection.cursor.column + 1);
     }, []);
+    
+    useEffect(() => {
+        const windowUpdate = (e) => {
+            setWindowResize(true);
+        }
+
+        window.addEventListener("resize", windowUpdate);
+
+        return () => {
+            window.removeEventListener("resize", windowUpdate);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (windowResize === true) {
+            setWindowResize(false);
+        }
+    }, [windowResize, setWindowResize])
 
     return ( 
         <React.Fragment>
@@ -100,10 +131,12 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
             >
                 <SplitPane 
                     className="SplitEditor" 
-                    split="vertical" 
+                    split="vertical"
+                    ref={split}
                     style={{height: "100%", position: "static"}} 
                     minSize={200} maxSize={-200} 
-                    defaultSize={"50%"} 
+                    defaultSize={panelSize} 
+                    size={windowResize ? panelSize : undefined}
                     onChange={() => handleResize()}
                 >
                     <EditorIn ref={ aceIn } content={editorContent} edit={editText} wrap={wrap} toggleBreakpoint={toggleBreakpoint} onCursorChange={onCursorChange} />
