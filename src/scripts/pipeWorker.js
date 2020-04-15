@@ -640,10 +640,11 @@ export default () => {
                     for (let i = 0; i < lines.length; i++) {
                         columns = lines[i].split(tool.delimiter);
 
-                        if (tool.inColumn <= columns.length) {
-                            if (columns[tool.inColumn - 1] > tool.value) {
-                                result += lines[i] + '\n';
-                            }
+                        if (tool.inColumn > columns.length) {
+                            columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                        }
+                        if (columns[tool.inColumn - 1] > tool.value) {
+                            result += lines[i] + '\n';
                         }
                     }
                 }
@@ -660,10 +661,11 @@ export default () => {
                     for (let i = 0; i < lines.length; i++) {
                         columns = lines[i].split(tool.delimiter);
 
-                        if (tool.inColumn <= columns.length) {
-                            if (columns[tool.inColumn - 1] >= tool.value) {
-                                result += lines[i] + '\n';
-                            }
+                        if (tool.inColumn > columns.length) {
+                            columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                        }
+                        if (columns[tool.inColumn - 1] >= tool.value) {
+                            result += lines[i] + '\n';
                         }
                     }
                 }
@@ -680,10 +682,11 @@ export default () => {
                     for (let i = 0; i < lines.length; i++) {
                         columns = lines[i].split(tool.delimiter);
 
-                        if (tool.inColumn <= columns.length) {
-                            if (columns[tool.inColumn - 1] < tool.value) {
-                                result += lines[i] + '\n';
-                            }
+                        if (tool.inColumn > columns.length) {
+                            columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                        }
+                        if (columns[tool.inColumn - 1] < tool.value) {
+                            result += lines[i] + '\n';
                         }
                     }
                 }
@@ -700,10 +703,11 @@ export default () => {
                         for (let i = 0; i < lines.length; i++) {
                             columns = lines[i].split(tool.delimiter);
     
-                            if (tool.inColumn <= columns.length) {
-                                if (columns[tool.inColumn - 1] <= tool.value) {
-                                    result += lines[i] + '\n';
-                                }
+                            if (tool.inColumn > columns.length) {
+                                columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                            }
+                            if (columns[tool.inColumn - 1] <= tool.value) {
+                                result += lines[i] + '\n';
                             }
                         }
                     }
@@ -719,11 +723,12 @@ export default () => {
                         else {
                             for (let i = 0; i < lines.length; i++) {
                                 columns = lines[i].split(tool.delimiter);
-        
-                                if (tool.inColumn <= columns.length) {
-                                    if (columns[tool.inColumn - 1] === tool.value) {
-                                        result += lines[i] + '\n';
-                                    }
+
+                                if (tool.inColumn > columns.length) {
+                                    columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
+                                }
+                                if (columns[tool.inColumn - 1] === tool.value) {
+                                    result += lines[i] + '\n';
                                 }
                             }
                         }
@@ -755,12 +760,10 @@ export default () => {
                         }
                         columns = text[i].data.split(tool.delimiter);
 
-                        if (tool.inColumn <= columns.length) {
-                            if (!(columns[tool.inColumn - 1] > tool.value)) {
-                                text[i].data = null;
-                            }
+                        if (tool.inColumn > columns.length) {
+                            columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
                         }
-                        else {
+                        if (!(columns[tool.inColumn - 1] > tool.value)) {
                             text[i].data = null;
                         }
                     }
@@ -784,12 +787,10 @@ export default () => {
                         }
                         columns = text[i].data.split(tool.delimiter);
 
-                        if (tool.inColumn <= columns.length) {
-                            if (!(columns[tool.inColumn - 1] >= tool.value)) {
-                                text[i].data = null;
-                            }
+                        if (tool.inColumn > columns.length) {
+                            columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
                         }
-                        else {
+                        if (!(columns[tool.inColumn - 1] >= tool.value)) {
                             text[i].data = null;
                         }
                     }
@@ -813,12 +814,10 @@ export default () => {
                         }
                         columns = text[i].data.split(tool.delimiter);
 
-                        if (tool.inColumn <= columns.length) {
-                            if (!(columns[tool.inColumn - 1] < tool.value)) {
-                                text[i].data = null;
-                            }
+                        if (tool.inColumn > columns.length) {
+                            columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
                         }
-                        else {
+                        if (!(columns[tool.inColumn - 1] < tool.value)) {
                             text[i].data = null;
                         }
                     }
@@ -842,12 +841,10 @@ export default () => {
                             }
                             columns = text[i].data.split(tool.delimiter);
     
-                            if (tool.inColumn <= columns.length) {
-                                if (!(columns[tool.inColumn - 1] <= tool.value)) {
-                                    text[i].data = null;
-                                }
+                            if (tool.inColumn > columns.length) {
+                                columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
                             }
-                            else {
+                            if (!(columns[tool.inColumn - 1] <= tool.value)) {
                                 text[i].data = null;
                             }
                         }
@@ -870,13 +867,11 @@ export default () => {
                                     continue;
                                 }
                                 columns = text[i].data.split(tool.delimiter);
-        
-                                if (tool.inColumn <= columns.length) {
-                                    if (!(columns[tool.inColumn - 1] === tool.value)) {
-                                        text[i].data = null;
-                                    }
+
+                                if (tool.inColumn > columns.length) {
+                                    columns = columns.concat(Array(tool.inColumn - columns.length).fill(""));
                                 }
-                                else {
+                                if (!(columns[tool.inColumn - 1] === tool.value)) {
                                     text[i].data = null;
                                 }
                             }
