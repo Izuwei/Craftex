@@ -1058,7 +1058,11 @@ export default () => {
                 text = text.slice(0, tool.count);
                 return text.join('\n');
             case "tail":
-                text = text.slice(text.length - tool.count);
+                var place = text.length - tool.count;
+                if (place < 0) {
+                    place = 0;
+                }
+                text = text.slice(place);
                 return text.join('\n');
             default:
                 return text.join('\n');
