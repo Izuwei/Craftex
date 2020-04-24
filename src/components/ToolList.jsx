@@ -203,6 +203,9 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
         setOpenEditDialog(true);
     }
 
+    /**
+     * Funkce zobrazi obsah polozky v seznamu podle typu nastroje
+     */
     const mapTool = (tool) => {
         switch (tool.toolname) {
             case "regexMatch":
@@ -402,12 +405,18 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
         }
     }
 
+    /**
+     * Text v seznamu u nastroje (mozne pretahovat)
+     */
     const DragHandle = SortableHandle(({tool}) => (
         <div className={classes.toolText}>
           {mapTool(tool)}
         </div>
     ));
 
+    /**
+     * Kontejner pro kazdou polozku v seznamu nastroju zvlast (ikona + text)
+     */
     const SortableItem = SortableElement(({ tool }) => (
         <ListItem key={tool.id} ContainerComponent="li" divider={true} className={`${classes.listItem} ${!(tool.active) && classes.itemDeactivated}`}>
             <PopupState variant="popover" popupId="demo-popup-menu">
@@ -445,6 +454,9 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
         </ListItem>
     ));
 
+    /**
+     * Kontejner pro list nastroju
+     */
     const SortableListContainer = SortableContainer(({ tools }) => (
         <List component="ul" className={classes.list}>
                 {tools.map((tool, index) => (

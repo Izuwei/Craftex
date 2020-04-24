@@ -5,6 +5,9 @@
 
 let lastID = 0;
 
+/**
+ * Funkce vraci unikatni identifikatory
+ */
 export default function() {
     lastID++;
     return lastID;

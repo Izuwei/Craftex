@@ -14,6 +14,9 @@ import "ace-builds/src-noconflict/theme-idle_fingers";
 const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint, onCursorChange }, ref) => {
   	const aceIn = useRef(null);
 
+	/**
+	 * Propojeni funkci z nadrazene komponenty do editoru
+	 */
   	useImperativeHandle(ref, () => ({
     	find(expression, properties){
     	  	aceIn.current.editor.find(expression, properties);
@@ -42,6 +45,7 @@ const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint,
 
 	/**
 	 * https://ourcodeworld.com/articles/read/1052/how-to-add-toggle-breakpoints-on-the-ace-editor-gutter
+	 * Funkce nastavi breakpoint podle udalosti od uzivatele
      */
 	useEffect(() => {
   		aceIn.current.editor.on("guttermousedown", function(e) {
@@ -76,7 +80,6 @@ const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint,
     	toggleBreakpoint(breakpoints);
     	});
   	}, [toggleBreakpoint]);
-
 
   	const onChange = useCallback((newValue) => {
   	  	edit(newValue);

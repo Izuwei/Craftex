@@ -355,8 +355,9 @@ function proc(data) { // eslint-disable-line no-restricted-globals
 //------------------------------------------------------------------------
 
 /**
- * Funkce zkontroluje pole, zda nejsou nastavene breakpointy.
- * Kdyby byla velmi pomala, vytvorit workera.
+ * Funkce zkontroluje, zda seznam breakpointu je prazdny
+ * @param breakpoints seznam breakpointu
+ * @returns true v pridape ze je seznam prazdny, jinak false pokud seznam obsahuje aktivni breakpoint
  */
 function emptyBreakpoints(breakpoints) {
   	for (var i in breakpoints) {
@@ -369,24 +370,36 @@ function emptyBreakpoints(breakpoints) {
 
 function App() {
   	const alertRef = useRef();
-  	const [pipeline, setPipeline] = useState([]);
+  	const [pipeline, setPipeline] = useState([]);             // List pro pouzite nastroje
 
-  	const [editorContent, setEditorContent] = useState("");
-  	const [editorResult, setEditorResult] = useState("");
-  	const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});
-  	const [pipeProgress, setPipeProgress] = useState(100);
+  	const [editorContent, setEditorContent] = useState("");   // Obsah vstupniho editoru
+  	const [editorResult, setEditorResult] = useState("");     // Obsah vystupniho editoru
+  	const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});  // Data pro ladici rezim
+  	const [pipeProgress, setPipeProgress] = useState(100);    // Ukazatel prubehu (v procentech)
   	//const [inspectMode, setInspectMode] = useState(false);
 
+    /**
+     * Funkce prida nastroj na konec pipeline, vcetne nutnych parametru
+     * @param tool nastroj, ktery bude pridan. Obsahuje jmeno a konfiguraci
+     */
   	const addTool = useCallback((tool) => {
   	  	tool.id = newID();
   	  	tool.active = true;
   	  	setPipeline(c => [...c, tool]);
   	}, [setPipeline]);
 
+    /**
+     * Funkce odstrani nastroj z pipeline podle ID
+     * @param tool nastroj, ktery bude ostranen
+     */
   	const removeTool = useCallback((tool) => {
   	  	setPipeline(c => c.filter(each => each.id !== tool.id));
   	}, [setPipeline]);
 
+    /**
+     * Funkce aktualizuje nastroj v pipeline
+     * @param tool obsahuje novou konfiguraci nastroje, kterou bude nahrazen
+     */
   	const updateTool = useCallback((tool) => {  // TODO: opravit jen na set
   	  	const tmp = [...pipeline];
 
@@ -399,6 +412,10 @@ function App() {
   	  	setPipeline(tmp);
   	}, [pipeline, setPipeline]);
 
+    /**
+     * Funkce zamenuje ucinost nastroje
+     * @param tool nastroj, ktery bude zapnut/vypnut
+     */
   	const reactiveTool = useCallback((tool) => {
   	  	setPipeline(state => state.map(each => {
   	  	  	if (each.id === tool.id) {
@@ -407,6 +424,11 @@ function App() {
   	  	  	else return each}));
   	}, [setPipeline]);
 
+    /**
+     * Funkce nastavi nastroj na novou pozici v seznamu nastroju
+     * @param oldIndex stara pozice nastroje v seznamu
+     * @param newIndex nova pozice nastroje, kam bude umisten
+     */
   	const onSortPipeline = useCallback(({ oldIndex, newIndex }) => {
   	  	if (oldIndex !== newIndex) {
   	  	  	setPipeline(pipeline => arrayMove(pipeline, oldIndex, newIndex));
@@ -414,26 +436,47 @@ function App() {
   	  	console.log(pipeline);
   	}, [pipeline, setPipeline]);
 
+    /**
+     * Funkce nastavi obsah vstupniho editoru
+     * @param newValue novy obsah editoru reprezentovan jako string
+     */
   	const editText = useCallback((newValue) => {
   	  	setEditorContent(newValue);
   	}, [setEditorContent]);
 
+    /**
+     * Funkce zamenuje stav ladiciho rezimu editoru
+     */
   	const toggleInspectMode = useCallback(() => {
   	  	setInspectMode(state => ({ ...state, enabled: !state.enabled}));
   	}, [setInspectMode]);
 
+    /**
+     * Funkce je zavolana vzdy pri zmene stavu breakpointu
+     * @param breakpoints seznam breakpointu
+     */
   	const toggleBreakpoint = useCallback((breakpoints) => {
   	  	setInspectMode(state => ({ ...state, enabled: !emptyBreakpoints(breakpoints), breakpoints: breakpoints}));
   	}, [setInspectMode]);
 
+    /**
+     * Funkce nastavi hromadne stejny stav pro vsechny pouzite nastroje
+     * @param value boolovska hodnota urcujici zda budou nastroje aktivni nebo vyple
+     */
   	const setPipelineActivity = useCallback((value) => {
   	  	setPipeline(state => state.map(tool => {return {...tool, active: value}}));
   	}, [setPipeline]);
 
+    /**
+     * Funkce vymaze vsechny nastroje z pipeline
+     */
   	const clearPipeline = useCallback(() => {
   	  	setPipeline([]);
   	}, [setPipeline]);
 
+    /**
+     * Funkce je zavolana pria kazde zmene editoru, nastroje nebo pipeline
+     */
   	useEffect(() => {
   	  	//---------------DEBUG---------------------
   	  	/*
@@ -445,27 +488,32 @@ function App() {
   	  	}));
   	  	*/
   	  	//-----------------------------------------
-  	  	const worker = new WebWorker(pipeWorker);
+  	  	const worker = new WebWorker(pipeWorker);   // Vytvoreni workera pro zpracovani vysledku
 
-  	  	worker.postMessage({
+  	  	worker.postMessage({          // Zaslani dat workerovi pro zpracovani vysledku
   	  	  	text: editorContent, 
   	  	  	pipeline: pipeline, 
   	  	  	breakpoints: inspectMode.breakpoints, 
   	  	  	inspectMode: inspectMode.enabled
   	  	});
 
-  	  	worker.onmessage = (event) => {
+  	  	worker.onmessage = (event) => {   // Definice reakci na odpovedi
   	  	  	if (event.data.type === "progress")
-  	  	  	  	setPipeProgress(event.data.data);
+  	  	  	  	setPipeProgress(event.data.data);   // Zobrazeni postupu
   	  	  	else
-  	  	  	  	setEditorResult(event.data.data);
+  	  	  	  	setEditorResult(event.data.data);   // Zobrazeni vysledneho textu
   	  	};
 
   	  	return () => {  // Cleanup
-  	  	  	worker.terminate();
+  	  	  	worker.terminate();   // Ukonceni workera
   	  	};
   	}, [editorContent, pipeline, inspectMode, setEditorResult]);
 
+    /**
+     * Funkce zobrazi hlasku uzivateli
+     * @param variant typ zpravy (informacni, uspechova, upozornujici nebo chybova)
+     * @param message obsah zpravy v podobe stringu
+     */
   	const showAlert = useCallback((variant, message) => {
   	  	alertRef.current.openSnackbar(variant, message);
   	}, []);

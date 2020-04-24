@@ -42,7 +42,10 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
     },
 }));
-  
+
+/**
+ * Funkce nastavi obsah zpravy
+ */
 function CustomSnackbarContent(props) {
     const classes = useStyles();
     const { className, message, onClose, variant, ...other } = props;
@@ -97,6 +100,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
           }
     }));
 
+    /**
+     * Funkce zpracuje dalsi pozadavek na zpravu ve fronte
+     */
     const processSnackbarQueue = () => {
         if (snackbarQueue.current.length > 0) {
             setSnackbarInfo(snackbarQueue.current.shift());
@@ -104,6 +110,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
         }
     };
     
+    /**
+     * Uzavreni zpravy
+     */
     const closeSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
           return;
@@ -111,6 +120,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
         setShowSnackbar(false);
     };
     
+    /**
+     * Po uzavreni zpravy
+     */
     const handleExited = () => {
         processSnackbarQueue();
     };

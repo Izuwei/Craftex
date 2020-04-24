@@ -31,21 +31,37 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
 
     const split = useRef();
 
+    /**
+     * Funkce vyhleda vyraz v obou editorech soucasne
+     * @param expression vyraz, ktery ma byt vyhledan
+     * @param properties struktura vlastnosti upresnujici chovani vyhledavani
+     */
     const find = useCallback((expression, properties) => {
         aceIn.current.find(expression, properties);
         aceOut.current.find(expression, properties);
     }, []);
 
+    /**
+     * Funkce vyhleda vsechny vyrazy v obou editorech soucasne
+     * @param expression vyraz, ktery ma byt vyhledan
+     * @param properties struktura vlastnosti upresnujici chovani vyhledavani
+     */
     const findAll = useCallback((expression, properties) => {
         aceIn.current.findAll(expression, properties);
         aceOut.current.findAll(expression, properties);
     }, []);
 
+    /**
+     * Funkce prepina zalamovani radku
+     */
     const toggleWrap = useCallback(() => {
         setWrap(prev => !prev);
     }, [setWrap]);
 
-    // Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
+    /**
+     * Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
+     * Funkce nastavuje velikost editoru pri zmene velikosti okna nebo panelu
+     */
     const handleResize = useCallback(() => {
         const draggedSize = split.current.state.draggedSize;
 
@@ -59,29 +75,47 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
         aceOut.current.resize();
     }, [setPanelSize]);
 
+    /**
+     * Funkce vrati zmeny ve vstupnim editoru o krok vzad
+     */
     const undo = useCallback(() => {
         aceIn.current.undo();
     }, []);
 
+    /**
+     * Funkce vrati zmeny ve vstupnim editoru o krok vpred
+     */
     const redo = useCallback(() => {
         aceIn.current.redo();
     }, []);
 
+    /**
+     * Funkce odstrani vsechny nastavene breakpointy
+     */
     const clearAllBreakpoints = useCallback(() => {
         aceIn.current.clearAllBreakpoints();
         toggleBreakpoint([]);
     }, [toggleBreakpoint]);
 
+    /**
+     * Funkce spocita vychozi vysku editoru (podle velikosti okna prohlizece)
+     */
     const initialEditorHeight = useCallback(() => {
         const height = window.innerHeight - 1047;   // 1047 celkova vyska ostatniho contentu
 
         return height < 480 ? "480px" : height;
     }, []);
 
+    /**
+     * Funkce nastavi aktualni pocizi kurzoru v editoru (spodni panel)
+     */
     const onCursorChange = useCallback((selection, event) => {
         bottomPanel.current.setPosition(selection.cursor.row + 1, selection.cursor.column + 1);
     }, []);
     
+    /**
+     * Pri montovani komponenty nastavi naslouchani eventu pri zmene velikosti okna
+     */
     useEffect(() => {
         const windowUpdate = (e) => {
             setWindowResize(true);
@@ -94,6 +128,9 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
         };
     }, []);
 
+    /**
+     * Pri zmene okna prepocita velikost editoru
+     */
     useEffect(() => {
         if (windowResize === true) {
             setWindowResize(false);

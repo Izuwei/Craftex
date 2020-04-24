@@ -13,6 +13,9 @@ import "ace-builds/src-noconflict/theme-idle_fingers";
 const EditorOut = React.memo(forwardRef(({ content, wrap }, ref) => {
   	const aceOut = useRef(null);
   
+	/**
+	 * Propojeni funkci z nadrazene komponenty do editoru
+	 */
   	useImperativeHandle(ref, () => ({
   		find(expression, properties) {
   			aceOut.current.editor.find(expression, properties);

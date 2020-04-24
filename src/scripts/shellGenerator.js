@@ -25,18 +25,18 @@ function replaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E 's/" + regexEscape(tool.find) + "/" + tool.replace + "/g'";
+                return "sed -E 's/" + regexEscape(tool.find) + "/" + regexEscape(tool.replace) + "/g'";
             }
             else {  // case isensitive
-                return "sed -E 's/" + regexEscape(tool.find) + "/" + tool.replace + "/gI'";
+                return "sed -E 's/" + regexEscape(tool.find) + "/" + regexEscape(tool.replace) + "/gI'";
             }
         }
         else {  // prvni vyskyt
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E '0,/" + regexEscape(tool.find) + "/s//" + tool.replace + "/'";
+                return "sed -E '0,/" + regexEscape(tool.find) + "/s//" + regexEscape(tool.replace) + "/'";
             }
             else {  // case isensitive
-                return "sed -E '0,/" + regexEscape(tool.find) + "/Is//" + tool.replace + "/'";
+                return "sed -E '0,/" + regexEscape(tool.find) + "/Is//" + regexEscape(tool.replace) + "/'";
             }
         }
     }
@@ -68,18 +68,18 @@ function regexReplaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E 's/" + tool.find + "/" + tool.replace + "/g'";
+                return "sed -E 's/" + tool.find + "/" + regexEscape(tool.replace) + "/g'";
             }
             else {  // case isensitive
-                return "sed -E 's/" + tool.find + "/" + tool.replace + "/gI'";
+                return "sed -E 's/" + tool.find + "/" + regexEscape(tool.replace) + "/gI'";
             }
         }
         else {  // prvni vyskyt
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E '0,/" + tool.find + "/s//" + tool.replace + "/'";
+                return "sed -E '0,/" + tool.find + "/s//" + regexEscape(tool.replace) + "/'";
             }
             else {  // case isensitive
-                return "sed -E '0,/" + tool.find + "/Is//" + tool.replace + "/'";
+                return "sed -E '0,/" + tool.find + "/Is//" + regexEscape(tool.replace) + "/'";
             }
         }
     }
@@ -431,6 +431,11 @@ function getToolCommand(tool) {
     return " | " + command;
 }
 
+/**
+ * Funkce generuje shell skript realizujici transformaci podle aktivnich nastroju v pipeline
+ * @param pipeline seznam nastroju
+ * @returns retezec ekvivalentniho shell skriptu
+ */
 export default function (pipeline) {
     var result = "cat $FILENAME";
 

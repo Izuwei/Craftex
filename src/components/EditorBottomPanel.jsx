@@ -38,7 +38,6 @@ const EditorBottomPanel = React.memo(forwardRef(({wrap, inspectMode}, ref) => {
 
     const [position, setPosition] = useState({line: 1, column: 1});
 
-
     useImperativeHandle(ref, () => ({
         setPosition(line, column) {
             setPosition(state => ({...state, line: line, column: column}));

@@ -75,8 +75,12 @@ const ToolTabs = React.memo(({ showAlert, addTool }) => {
   	const classes = useStyles();
   	const [value, setValue] = React.useState(0);
 
+	// True pokud velikost okna je mensi nez "sm", jinak false
   	const fullWidth = useMediaQuery(theme.breakpoints.down('sm'));
 
+	/**
+	 * Funkce nastavi zobrazeni nove karty
+	 */
   	const handleChange = (event, newValue) => {
   	  	setValue(newValue);
   	};

@@ -113,6 +113,7 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
     const pipelineButtonRef = useRef(null);
     const searchButtonRef = useRef(null);
 
+    // Nasledujici funkce slouzi k nastaveni chovani expaze jednotlivych rolovacich tlacitek
     const expandFile = useCallback(() => {
         setOpenFile(prev => !prev);
         setOpenEditor(false);
@@ -165,6 +166,9 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
         }
     }, [setOpenFile, setOpenEditor, setOpenPipeline]);
 
+    /**
+     * Funkce nacte soubor z pc v textovem formatu a nastavi ho jako vstupni text
+     */
     const loadFile = useCallback(async(e) => {
         e.preventDefault();
 
@@ -177,6 +181,9 @@ const EditorToolbar = React.memo(({ setInput, result, undo, redo, clearAllBreakp
         showAlert("info", "Info: File imported.");
     }, [setInput, showAlert]);
 
+    /**
+     * Funkce stahne vysledny text z editoru ve formatu .txt
+     */
     const downloadResult = useCallback(async() => {
         const element = document.createElement("a");
         const file = new Blob([result], {type: 'text/plain'});

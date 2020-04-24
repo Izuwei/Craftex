@@ -75,7 +75,7 @@ const ReduceTab = React.memo(({ classes, addTool, showAlert }) => {
                                 <p>Removes lines from the input text.</p>
                                 <h4>Options:</h4>
                                 <ul>
-                                    <li><b>Content -</b> sets the content of the row to be filtered.<br /><b>Empty</b> removes all lines without content.<br /><b>White characters</b> removes all lines containing white characters like spaces, tabs, etc.<br /><b>Custom</b> allows you to define custom value to be filtered. Also makes other options available for description.</li>
+                                    <li><b>Content -</b> sets the content of the row to be filtered.<br /><b>Empty</b> removes all lines without content.<br /><b>White characters</b> removes all lines containing white characters (including empty lines) like spaces, tabs, etc.<br /><b>Custom</b> allows you to define custom value to be filtered. Also makes other options available for description.</li>
                                     <li><b>Case -</b> specify match that is sensitive to capitalization of letters.</li>
                                     <li><b>Column -</b> sets a column specifically for pattern search. Text out of specified column is ignored. This option is <b>optional</b>.</li>
                                     <li><b>Delimiter -</b> sets separator between cloumns. This option is required only if <b>Column</b> option is set.</li>
