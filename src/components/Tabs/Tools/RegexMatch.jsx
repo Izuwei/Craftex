@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
     },
     opts: {
-        width: "100px",
+        width: "120px",
         marginRight: "10px",
     },
 }));
@@ -110,7 +110,7 @@ function RegexMatchTool(props) {
                       onChange={(event) => setRegexMatchCaseSensitive(event.target.value)}
                     >
                         <MenuItem id="regex-match-case-sensitive" value={true}>Sensitive</MenuItem>
-                        <MenuItem id="regex-match-case-isensitive" value={false}>Isensitive</MenuItem>
+                        <MenuItem id="regex-match-case-isensitive" value={false}>Insensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

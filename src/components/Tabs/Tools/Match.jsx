@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
     },
     opts: {
-        width: "100px",
+        width: "120px",
         marginRight: "10px",
     },
 }));
@@ -100,7 +100,7 @@ function MatchTool(props) {
                       onChange={(event) => setMatchCaseSensitive(event.target.value)}
                     >
                         <MenuItem id="match-case-sensitive" value={true}>Sensitive</MenuItem>
-                        <MenuItem id="match-case-isensitive" value={false}>Isensitive</MenuItem>
+                        <MenuItem id="match-case-isensitive" value={false}>Insensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

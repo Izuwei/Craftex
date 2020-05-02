@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
     },
     opts: {
-        width: "100px",
+        width: "120px",
         marginRight: "10px",
     },
 }));
@@ -107,7 +107,7 @@ function ReplaceTool(props) {
                       onChange={(event) => setReplaceCaseSensitive(event.target.value)}
                     >
                         <MenuItem id="replace-case-sensitive" value={true}>Sensitive</MenuItem>
-                        <MenuItem id="replace-case-isensitive" value={false}>Isensitive</MenuItem>
+                        <MenuItem id="replace-case-isensitive" value={false}>Insensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

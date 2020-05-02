@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
     },
     opts: {
-        width: "100px",
+        width: "120px",
         marginRight: "10px",
     },
     textField: {
@@ -82,7 +82,7 @@ const EditMatch = forwardRef((props, ref) => {
                       onChange={(event) => setMatchCaseSensitive(event.target.value)}
                     >
                         <MenuItem id="edit-match-case-sensitive" value={true}>Sensitive</MenuItem>
-                        <MenuItem id="edit-match-case-isensitive" value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-match-case-isensitive" value={false}>Insensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

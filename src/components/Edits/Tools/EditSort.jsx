@@ -59,7 +59,7 @@ const EditSort = forwardRef((props, ref) => {
                   onChange={(event) => setCaseSensitive(event.target.value)}
                 >
                     <MenuItem id="edit-sort-case-sensitive" value={true}>Sensitive</MenuItem>
-                    <MenuItem id="edit-sort-case-isensitive" value={false}>Isensitive</MenuItem>
+                    <MenuItem id="edit-sort-case-isensitive" value={false}>Insensitive</MenuItem>
                 </Select>
             </FormControl>
             <FormControlLabel

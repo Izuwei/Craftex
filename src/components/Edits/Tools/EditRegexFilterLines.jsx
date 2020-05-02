@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
     },
     opts: {
-        width: "100px",
+        width: "120px",
         marginRight: "10px",
     },
     textField: {
@@ -78,7 +78,7 @@ const EditRegexFilterLines = forwardRef((props, ref) => {
                       onChange={(event) => setCaseSensitive(event.target.value)}
                     >
                         <MenuItem id="edit-regex-filter-lines-case-sensitive" value={true}>Sensitive</MenuItem>
-                        <MenuItem id="edit-regex-filter-lines-case-isensitive" value={false}>Isensitive</MenuItem>
+                        <MenuItem id="edit-regex-filter-lines-case-isensitive" value={false}>Insensitive</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField

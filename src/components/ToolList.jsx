@@ -213,7 +213,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "match" ?  "Match" :"Regex match"}</span> 
-                        <span className={`${classes.blueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
+                        <span className={`${classes.blueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case insensitive"}</span>
                         {tool.expression}
                         {tool.inColumn === "" ? "" : 
                             <React.Fragment>
@@ -230,7 +230,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>{tool.toolname === "replace" ?  "Replace" : "Regex replace"}</span>
-                        <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case isensitive"}</span>
+                        <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.occurrence}{tool.casesensitive === true ? " case sensitive" : " case insensitive"}</span>
                         {tool.find}
                         <span className={`${classes.greenWord} ${!(tool.active) && classes.itemDeactivated} ${classes.marginLR}`}>with</span> 
                         {tool.replace}
@@ -277,7 +277,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Filter lines</span>
-                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>with {tool.content === "custom" && (tool.casesensitive === true ? "case sensitive " : "case isensitive ")}{mapFilterLinesContent(tool.content)}</span>
+                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>with {tool.content === "custom" && (tool.casesensitive === true ? "case sensitive " : "case insensitive ")}{mapFilterLinesContent(tool.content)}</span>
                         {tool.content === "custom" && <span className={`${!(tool.active) && classes.itemDeactivated}`} style={{marginLeft: "8px"}}>
                             {tool.customContent}
                             {tool.column === "" ? "" : 
@@ -295,7 +295,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                 return (
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Regex filter lines</span> 
-                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.casesensitive === true ? "case sensitive" : "case isensitive"}</span>
+                        <span className={`${classes.greenBlueWord} ${!(tool.active) && classes.itemDeactivated}`} style={{marginRight: "8px"}}>{tool.casesensitive === true ? "case sensitive" : "case insensitive"}</span>
                         {tool.expression}
                         {tool.column === "" ? "" : 
                             <React.Fragment>
@@ -367,7 +367,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Sort</span>
                         <span className={`${classes.lightBlueWord} ${!(tool.active) && classes.itemDeactivated}`}>
                             {tool.order}
-                            {tool.casesensitive === true ? " case sensitive " : " case isensitive "}
+                            {tool.casesensitive === true ? " case sensitive " : " case insensitive "}
                             {tool.ignoreLeadingBlanks === true ? " ignoring leading blanks" : ""}
                         </span>
                     </React.Fragment>
@@ -384,7 +384,7 @@ const ToolList = React.memo(({ tools, removeTool, reactiveTool, updateTool, sort
                     <React.Fragment>
                         <span className={`${classes.toolName} ${!(tool.active) && classes.itemDeactivated}`}>Unique</span>
                         <span className={`${classes.lightRedWord} ${!(tool.active) && classes.itemDeactivated}`}>
-                            {tool.casesensitive === true ? "case sensitive " : "case isensitive "}
+                            {tool.casesensitive === true ? "case sensitive " : "case insensitive "}
                             {mapUniqueVariant(tool.variant)}
                             {tool.variant === "merge" && tool.countPrefix === true ? " with count prefix" : ""}
                         </span>

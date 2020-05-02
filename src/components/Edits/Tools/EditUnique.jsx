@@ -78,7 +78,7 @@ const EditUnique = forwardRef((props, ref) => {
                   onChange={(event) => setCaseSensitive(event.target.value)}
                 >
                     <MenuItem id="edit-unique-case-sensitive" value={true}>Sensitive</MenuItem>
-                    <MenuItem id="edit-unique-case-isensitive" value={false}>Isensitive</MenuItem>
+                    <MenuItem id="edit-unique-case-isensitive" value={false}>Insensitive</MenuItem>
                 </Select>
             </FormControl>
             <FormControlLabel
