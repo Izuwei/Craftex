@@ -12,6 +12,10 @@ function awkRegexEscape(regex) {
     return regex.replace(/\\/g, "\\$&");
 };
 
+function escapeForwardSlash(pattern) {
+    return pattern.replace(/\//g, "\\$&");
+}
+
 function awkDelimiter(delimiter) {
     if (delimiter === ' ') {
         return "[ ]";
@@ -25,18 +29,18 @@ function replaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E 's/" + regexEscape(tool.find) + "/" + regexEscape(tool.replace) + "/g'";
+                return "sed -E 's/" + escapeForwardSlash(regexEscape(tool.find)) + "/" + escapeForwardSlash(regexEscape(tool.replace)) + "/g'";
             }
             else {  // case isensitive
-                return "sed -E 's/" + regexEscape(tool.find) + "/" + regexEscape(tool.replace) + "/gI'";
+                return "sed -E 's/" + escapeForwardSlash(regexEscape(tool.find)) + "/" + escapeForwardSlash(regexEscape(tool.replace)) + "/gI'";
             }
         }
         else {  // prvni vyskyt
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E '0,/" + regexEscape(tool.find) + "/s//" + regexEscape(tool.replace) + "/'";
+                return "sed -E '0,/" + escapeForwardSlash(regexEscape(tool.find)) + "/s//" + escapeForwardSlash(regexEscape(tool.replace)) + "/'";
             }
             else {  // case isensitive
-                return "sed -E '0,/" + regexEscape(tool.find) + "/Is//" + regexEscape(tool.replace) + "/'";
+                return "sed -E '0,/" + escapeForwardSlash(regexEscape(tool.find)) + "/Is//" + escapeForwardSlash(regexEscape(tool.replace)) + "/'";
             }
         }
     }
@@ -68,18 +72,18 @@ function regexReplaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E 's/" + tool.find + "/" + regexEscape(tool.replace) + "/g'";
+                return "sed -E 's/" + escapeForwardSlash(tool.find) + "/" + escapeForwardSlash(regexEscape(tool.replace)) + "/g'";
             }
             else {  // case isensitive
-                return "sed -E 's/" + tool.find + "/" + regexEscape(tool.replace) + "/gI'";
+                return "sed -E 's/" + escapeForwardSlash(tool.find) + "/" + escapeForwardSlash(regexEscape(tool.replace)) + "/gI'";
             }
         }
         else {  // prvni vyskyt
             if (tool.casesensitive === true) {  // case sensitive
-                return "sed -E '0,/" + tool.find + "/s//" + regexEscape(tool.replace) + "/'";
+                return "sed -E '0,/" + escapeForwardSlash(tool.find) + "/s//" + escapeForwardSlash(regexEscape(tool.replace)) + "/'";
             }
             else {  // case isensitive
-                return "sed -E '0,/" + tool.find + "/Is//" + regexEscape(tool.replace) + "/'";
+                return "sed -E '0,/" + escapeForwardSlash(tool.find) + "/Is//" + escapeForwardSlash(regexEscape(tool.replace)) + "/'";
             }
         }
     }
@@ -234,7 +238,7 @@ function filterLinesCommand(tool) {
         case "custom":
             if (tool.column === "") {
                 let ignoreCase = tool.casesensitive === false ? "I" : "";
-                return "sed -E '/" + regexEscape(tool.customContent) + "/" + ignoreCase + "d'";
+                return "sed -E '/" + escapeForwardSlash(regexEscape(tool.customContent)) + "/" + ignoreCase + "d'";
             }
             else {
                 let ignoreCase = tool.casesensitive === false ? "{IGNORECASE=1}" : "";
@@ -248,7 +252,7 @@ function filterLinesCommand(tool) {
 function regexFilterLinesCommand(tool) {
     if (tool.column === "") {
         var ignoreCase = tool.casesensitive === false ? "I" : "";
-        return "sed -E '/" + tool.expression + "/" + ignoreCase + "d'";
+        return "sed -E '/" + escapeForwardSlash(tool.expression) + "/" + ignoreCase + "d'";
     }
     else {
         let ignoreCase = tool.casesensitive === false ? "{IGNORECASE=1}" : "";
