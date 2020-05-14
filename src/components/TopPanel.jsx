@@ -15,7 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Description, GitHub, Videocam } from '@material-ui/icons';
+import { GitHub, Videocam } from '@material-ui/icons';
 import { MuiThemeProvider, createMuiTheme, Tooltip } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
@@ -119,15 +119,7 @@ const DenseAppBar = React.memo(() => {
     	            	    open={Boolean(anchorEl)}
     	            	    onClose={handleClose}
     	            	>
-    	                	<a className={classes.link} href="https://github.com/Izuwei/production">
-    	                	    <StyledMenuItem id="documentation">
-    	                	      	<ListItemIcon>
-    	                	      	  	<Description fontSize="small" className={classes.itemIcon}/>
-    	                	      	</ListItemIcon>
-    	                	      	<ListItemText primary="Documentation" />
-    	                	    </StyledMenuItem>
-    	                	</a>
-    	                	<a className={classes.link} href="https://github.com/Izuwei/production">
+    	                	<a className={classes.link} href="https://youtu.be/ytunBb8NHPc">
     	                	    <StyledMenuItem id="video">
     	                	      	<ListItemIcon>
     	                	      	  	<Videocam fontSize="small" className={classes.itemIcon}/>

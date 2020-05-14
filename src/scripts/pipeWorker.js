@@ -1805,6 +1805,7 @@ export default () => {
 
     self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
         //var processData = event.data.inspectMode === true ? event.data.text.split('\n') : event.data.text;
+        event.data.text = event.data.text.replace(/\r\n/g, "\n");
         var processData = "";
 
         if (event.data.inspectMode === false) {
