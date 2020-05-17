@@ -1,4 +1,4 @@
-Instalační manuál - Následující kroky nainstalují potřebný software stejných verzí, které byly použity při implementaci, přestože mohou fungovat i jiné. Aplikace je také dostupná na portálu: https://craftex.app/
+Instalační manuál - Následující kroky nainstalují potřebný software stejných verzí, které byly použity při implementaci, přestože mohou fungovat i jiné. Aplikace je také dostupná na webovém portálu: https://craftex.app/
 
 Testováno na Linux Ubuntu 20.04 LTS
 
@@ -38,11 +38,11 @@ Instalace aplikace:
 
 	Nainstalujeme závislosti aplikace:
 		2) npm install
-	    (Poznámka) Zobrazení zranitelností po instalaci si nevšímejte, v době odevzdání byly v pořádku a přibívájí poměrně pravidelně a spousta z nich jich je stále neoprava NPM. V následujícím odkaze si můžete zobrazit přehled: https://www.npmjs.com/advisories
+	    (Poznámka) Zobrazení zranitelností po instalaci si nevšímejte, v době odevzdání byly v pořádku a přibývají poměrně pravidelně a spousta z nich jich je stále neopravena NPM. V následujícím odkaze si můžete zobrazit přehled: https://www.npmjs.com/advisories
 
 	Spustíme aplikaci (může chvíli trvat):
 		3) npm start
 		V případě potíží použijte právo root uživatele (sudo npm start).
 
 	Aplikace bude poté dostupná přes webový prohlížeč na adrese http://localhost:3000/
-	V tomhle případě kód běžicí na dev serveru není optimalizovaný a aplikace může být pomalejší. Pro vygenerování optimalizovaného kódu spusťte npm run build. Optimalizovaný kód bude poté umístěn v adresáři /build.
+	V tomhle případě kód běžící na dev serveru není optimalizovaný a aplikace může být pomalejší. Pro vygenerování optimalizovaného kódu spusťte npm run build. Optimalizovaný kód bude poté umístěn v adresáři /build.
