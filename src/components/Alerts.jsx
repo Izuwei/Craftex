@@ -87,6 +87,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
     const [snackbarInfo, setSnackbarInfo] = useState(undefined);
     const snackbarQueue = useRef([]);
 
+    /**
+     * Zpristupneni instanci nadrazene komponente
+     */
     useImperativeHandle(ref, () => ({
         openSnackbar(variant, message) {
             snackbarQueue.current.push({ variant, message, key: new Date().getTime() });

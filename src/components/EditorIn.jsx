@@ -15,8 +15,8 @@ const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint,
   	const aceIn = useRef(null);
 
 	/**
-	 * Propojeni funkci z nadrazene komponenty do editoru
-	 */
+     * Zpristupneni instanci nadrazene komponente
+     */
   	useImperativeHandle(ref, () => ({
     	find(expression, properties){
     	  	aceIn.current.editor.find(expression, properties);

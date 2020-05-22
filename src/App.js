@@ -368,6 +368,9 @@ function emptyBreakpoints(breakpoints) {
   	return true;
 };
 
+/**
+ * Komponenta na nejvyssi urovni, odtud se vetvi cele rozhrani aplikace.
+ */
 function App() {
   	const alertRef = useRef();
   	const [pipeline, setPipeline] = useState([]);             // List pro pouzite nastroje
@@ -376,7 +379,6 @@ function App() {
   	const [editorResult, setEditorResult] = useState("");     // Obsah vystupniho editoru
   	const [inspectMode, setInspectMode] = useState({enabled: false, breakpoints: []});  // Data pro ladici rezim
   	const [pipeProgress, setPipeProgress] = useState(100);    // Ukazatel prubehu (v procentech)
-  	//const [inspectMode, setInspectMode] = useState(false);
 
     /**
      * Funkce prida nastroj na konec pipeline, vcetne nutnych parametru
@@ -400,7 +402,7 @@ function App() {
      * Funkce aktualizuje nastroj v pipeline
      * @param tool obsahuje novou konfiguraci nastroje, kterou bude nahrazen
      */
-  	const updateTool = useCallback((tool) => {  // TODO: opravit jen na set
+  	const updateTool = useCallback((tool) => {
   	  	const tmp = [...pipeline];
 
   	  	for (var i in tmp) {

@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function ShellDialog(props) {    // TODO: dodelat (ikonky, stylyzace)
+function ShellDialog(props) {
     const classes = useStyles();
 
     const theme = useTheme();

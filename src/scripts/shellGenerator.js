@@ -3,19 +3,40 @@
  * @author Jakub Sadilek
  */
 
+ /**
+  * Funkce escapuje specialni znaky v regularnim vyrazu.
+  * https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
+  * @param regex string s regularnim vyrazem
+  * @returns string s escapovanym regularnim vyrazem
+  */
 function regexEscape(regex) {
     return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
 
+/**
+ * Funkce ecapuje ve stringu zpetna lomitka.
+ * @param regex vstupni retezec
+ * @returns retezec s escapovanymi zpetnymi lomitky
+ */
 function awkRegexEscape(regex) {
     regex = regexEscape(regex);
     return regex.replace(/\\/g, "\\$&");
 };
 
+/**
+ * Funkce ecapuje ve stringu dopredna lomitka.
+ * @param regex vstupni retezec
+ * @returns retezec s escapovanymi doprednymi lomitky
+ */
 function escapeForwardSlash(pattern) {
     return pattern.replace(/\//g, "\\$&");
 }
 
+/**
+ * Funkce obali vstupni retezec do hranatych zavorek v pripade ze se jedna o mezeru.
+ * @param vstupni retezec
+ * @returns v pripade mezery obali string do hranatych zavorek, jinak vraci puvodni retezec.
+ */
 function awkDelimiter(delimiter) {
     if (delimiter === ' ') {
         return "[ ]";
@@ -25,6 +46,11 @@ function awkDelimiter(delimiter) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj replace.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function replaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
@@ -68,6 +94,11 @@ function awkSlashEscape(regex) {
     return regex.replace(/[\\]/g, "\\$&");
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj regex replace.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function regexReplaceCommand(tool) {
     if (tool.inColumn === "")  {    // globalne
         if (tool.occurrence === "all") {    // vsechny vyskyty
@@ -107,6 +138,11 @@ function regexReplaceCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj match.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function matchCommand(tool) {
     if (tool.inColumn === "") {     // globalne
         if (tool.casesensitive === true) {  // case-sensitive
@@ -146,6 +182,11 @@ function matchCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj regex match.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function regexMatchCommand(tool) {
     if (tool.inColumn === "") {     // globalne
         if (tool.casesensitive === true) {  // case-sensitive
@@ -185,6 +226,11 @@ function regexMatchCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj compare.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function compareCommand(tool) {
     var separator = tool.inColumn === "" ? "\\n" : tool.delimiter;
     var column = tool.inColumn === "" ? "1" : tool.inColumn;
@@ -212,6 +258,11 @@ function compareCommand(tool) {
     return "awk -F '" + awkDelimiter(separator) + "' '$" + column + " " + comparator + " \"" + awkSlashEscape(tool.value) + "\"'";
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj filter columns.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function filterColumnsCommand(tool) {
     var start = "";
 
@@ -229,6 +280,11 @@ function filterColumnsCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj filter lines.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function filterLinesCommand(tool) {
     switch (tool.content) {
         case "empty":
@@ -249,6 +305,11 @@ function filterLinesCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj regex filter lines.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function regexFilterLinesCommand(tool) {
     if (tool.column === "") {
         var ignoreCase = tool.casesensitive === false ? "I" : "";
@@ -260,6 +321,11 @@ function regexFilterLinesCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj insert column.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function insertColumnCommand(tool) {
     const colBubble = (position) => {
         if (parseInt(position) === 1) {
@@ -276,6 +342,11 @@ function insertColumnCommand(tool) {
     return "pr -mts'" + tool.delimiter + "' $COLUMN_FILE /dev/stdin" + colBubble(tool.position);
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj swap columns.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function swapColumnsCommand(tool) {
     return "awk -F '" + awkDelimiter(tool.delimiter) + "' -v OFS='" + tool.delimiter + "' '{t=$" + tool.first + ";$" + tool.first + "=$" + tool.second + ";$" + tool.second + "=t;print;}'";
 }
@@ -291,15 +362,30 @@ function convertCaseCommand(tool) {
     }
 }
 
-// https://unix.stackexchange.com/questions/102008/how-do-i-trim-leading-and-trailing-whitespace-from-each-line-of-some-output
+/**
+ * Funkce vytvori shell command pro nastroj trim.
+ * https://unix.stackexchange.com/questions/102008/how-do-i-trim-leading-and-trailing-whitespace-from-each-line-of-some-output
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function trimCommand() {
     return "sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'";
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj remove extra spaces.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function removeExtraSpacesCommand() {
     return "tr -s ' '";
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj cut lines.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function cutLinesCommand(tool) {
     switch (tool.variant) {
         case "head":
@@ -311,6 +397,11 @@ function cutLinesCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj sort.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function sortCommand(tool) {
     var command = "LC_ALL=C sort -s";
     
@@ -326,6 +417,11 @@ function sortCommand(tool) {
     return command;
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj reverse.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function reverseCommand(tool) {
     switch (tool.direction) {
         case "horizontal":
@@ -337,6 +433,11 @@ function reverseCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj unique.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function uniqueCommand(tool) {
     var command = "uniq";
 
@@ -358,6 +459,11 @@ function uniqueCommand(tool) {
     }
 }
 
+/**
+ * Funkce vytvori shell command pro nastroj line numbers.
+ * @param tool konfigurace nastroje
+ * @returns string s prikazem
+ */
 function lineNumbersCommand(tool) {
     var command = "nl -s '" + tool.delimiter + "' -v " + tool.startingNumber;
 
@@ -371,6 +477,11 @@ function lineNumbersCommand(tool) {
     }
 }
 
+/**
+ * Funcke slouzi jako rozbocovac pro zadany nastroj. Podle nazvu nastroje vrati jeho odpovidajici prikaz.
+ * @param tool zadany nastroj
+ * @returns string s shell prikazem
+ */
 function getToolCommand(tool) {
     var command = "";
 
@@ -436,7 +547,7 @@ function getToolCommand(tool) {
 }
 
 /**
- * Funkce generuje shell skript realizujici transformaci podle aktivnich nastroju v pipeline
+ * Funkce generuje shell skript realizujici transformaci podle aktivnich nastroju v pipeline.
  * @param pipeline seznam nastroju
  * @returns retezec ekvivalentniho shell skriptu
  */

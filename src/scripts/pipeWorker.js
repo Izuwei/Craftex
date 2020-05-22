@@ -5,13 +5,20 @@
 
 export default () => {
 
-    // https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
+    /**
+     * Funkce escapuje specialni znaky v regularnim vyrazu.
+     * https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
+     * @param regex string s regularnim vyrazem
+     * @returns string s escapovanym regularnim vyrazem
+     */
     function regexEscape(regex) {
         return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     };
       
     /**
-     * Replace nastroj
+     * Funkce vrati priznak definuci chovani nastroje podle jeho konfigurace.
+     * @param tool konfigurace na stroje
+     * @returns priznak chovani
      */
     function getMatchOptions(tool) {
       if (tool.occurrence === "all") {
@@ -21,7 +28,13 @@ export default () => {
           return tool.casesensitive === true ? "" : "i";
       }
     }
-    
+
+    /**
+     * Replace nastroj.
+     * @param text retezec s textem
+     * @param tool konfigurace nastroje
+     * @returns zpracovany text
+     */
     function replaceTool(text, tool) {
         const option = getMatchOptions(tool);
         
@@ -60,6 +73,12 @@ export default () => {
         }
     };
     
+    /**
+     * Replace nastroj v ladicim rezimu.
+     * @param text struktura s textem
+     * @param tool konfigurace nastroje
+     * @returns zpracovana struktura s textem
+     */
     function replaceInspectTool(text, tool) {
         const option = getMatchOptions(tool);
       
@@ -172,7 +191,7 @@ export default () => {
         
         if (tool.inColumn === "") {     // Bez sloupcu -> globalne
             if (tool.occurrence === "all") {    // Vsechno
-                /*for (var y = 0; y < splitedText.length; y++) {  // TODO: otestovat na fullmatch
+                /*for (var y = 0; y < splitedText.length; y++) {
                     splitedText[y] = splitedText[y].replace(new RegExp(tool.find, option), tool.replace);
                 }
                 return splitedText.join('\n');*/
@@ -1497,6 +1516,12 @@ export default () => {
         }
     }
 
+    /**
+     * Funkce najde nasledujici aktivni zaznam v textove strukture
+     * @param text textova struktura
+     * @param index aktualni pozice
+     * @returns index a data nasledujiciho zaznamu, v pripade neuspechu vraci null.
+     */
     function findNextLine(text, index) {
         for (let i = index + 1; i < text.length; i++) {
             if (text[i].data === null) {
@@ -1507,6 +1532,12 @@ export default () => {
         return null;
     }
 
+    /**
+     * Funkce najde predchozi aktivni zaznam v textove strukture
+     * @param text textova struktura
+     * @param index aktualni pozice
+     * @returns index a data predchoziho zaznamu, v pripade neuspechu vraci null.
+     */
     function findPrevLine(text, index) {
         for (let i = index - 1; i >= 0; i--) {
             if (text[i].data === null) {
@@ -1803,15 +1834,19 @@ export default () => {
         return result;
     };
 
+    /**
+     * Chovani web workera (po prijeti zpravy).
+     * @param event prijata udalost
+     */
     self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
         //var processData = event.data.inspectMode === true ? event.data.text.split('\n') : event.data.text;
-        event.data.text = event.data.text.replace(/\r\n/g, "\n");
+        event.data.text = event.data.text.replace(/\r\n/g, "\n");   // CLRF -> LF
         var processData = "";
 
-        if (event.data.inspectMode === false) {
+        if (event.data.inspectMode === false) {     // Text jako string
             processData = event.data.text;
         }
-        else {
+        else {                                      // Ulozeni textu do struktury pro ladici rozhrani
             let lines = event.data.text.split('\n');
             processData = Array(lines.length);
 
@@ -1821,13 +1856,13 @@ export default () => {
         }
 
         const pipeline = event.data.pipeline;
-        const unit = Math.ceil(100 / pipeline.length);
+        const unit = Math.ceil(100 / pipeline.length);  // Definice prirustku na ukazateli prubehu s kazdym nastrojem
 
         if (pipeline.length > 0) {
-            postMessage({type: "progress", data: 0});
+            postMessage({type: "progress", data: 0});   // Odeslani zpravy se zapocetim prevodu
         }
         
-        for (var i = 0; i < pipeline.length; i++) {
+        for (var i = 0; i < pipeline.length; i++) {     // Zpracovani vsech aktivnich nastroju
         	if (pipeline[i].active === true) {
                 if (event.data.inspectMode === false) {
                     processData = processTool(processData, pipeline[i]);
@@ -1840,7 +1875,7 @@ export default () => {
             postMessage({type: "progress", data: (i + 1) === pipeline.length ? 100 : (i + 1) * unit});
         }
 
-        if (event.data.inspectMode === true) {
+        if (event.data.inspectMode === true) {      // Extrakce textu ze struktury v rezimu ladeni
             let lines = [];
             let tempData = [];
             console.log(processData);
@@ -1868,6 +1903,6 @@ export default () => {
             processData = temp.join('\n');
         }*/
 
-        postMessage({type: "result", data: processData});
+        postMessage({type: "result", data: processData});   // Odeslani vysledku
     });
 }

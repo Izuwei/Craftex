@@ -14,8 +14,8 @@ const EditorOut = React.memo(forwardRef(({ content, wrap }, ref) => {
   	const aceOut = useRef(null);
   
 	/**
-	 * Propojeni funkci z nadrazene komponenty do editoru
-	 */
+     * Zpristupneni instanci nadrazene komponente
+     */
   	useImperativeHandle(ref, () => ({
   		find(expression, properties) {
   			aceOut.current.editor.find(expression, properties);
