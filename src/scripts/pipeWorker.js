@@ -7,7 +7,11 @@ export default () => {
 
     /**
      * Funkce escapuje specialni znaky v regularnim vyrazu.
-     * https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
+     * 
+     * Prevzato z: https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
+     * Autor: Mathias Bynens
+     * Datum zverejneni: 16.2.2012
+     * 
      * @param regex string s regularnim vyrazem
      * @returns string s escapovanym regularnim vyrazem
      */
@@ -1836,6 +1840,8 @@ export default () => {
 
     /**
      * Chovani web workera (po prijeti zpravy).
+     * Inspirovano z: https://medium.com/prolanceer/optimizing-react-app-performance-using-web-workers-79266afd4a7
+     * 
      * @param event prijata udalost
      */
     self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals

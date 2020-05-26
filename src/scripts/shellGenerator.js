@@ -3,12 +3,16 @@
  * @author Jakub Sadilek
  */
 
- /**
-  * Funkce escapuje specialni znaky v regularnim vyrazu.
-  * https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
-  * @param regex string s regularnim vyrazem
-  * @returns string s escapovanym regularnim vyrazem
-  */
+/**
+ * Funkce escapuje specialni znaky v regularnim vyrazu.
+ * 
+ * Prevzato z: https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
+ * Autor: Mathias Bynens
+ * Datum zverejneni: 16.2.2012
+ * 
+ * @param regex string s regularnim vyrazem
+ * @returns string s escapovanym regularnim vyrazem
+ */
 function regexEscape(regex) {
     return regex.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
@@ -364,7 +368,12 @@ function convertCaseCommand(tool) {
 
 /**
  * Funkce vytvori shell command pro nastroj trim.
- * https://unix.stackexchange.com/questions/102008/how-do-i-trim-leading-and-trailing-whitespace-from-each-line-of-some-output
+ * 
+ * Prevzato z: https://unix.stackexchange.com/questions/102008/how-do-i-trim-leading-and-trailing-whitespace-from-each-line-of-some-output
+ * Autor: slm
+ * Editovano od: cuonglm
+ * Datum zverejneni: 21.11.2013
+ * 
  * @param tool konfigurace nastroje
  * @returns string s prikazem
  */

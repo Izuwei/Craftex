@@ -59,8 +59,11 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
     }, [setWrap]);
 
     /**
-     * Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
      * Funkce nastavuje velikost editoru pri zmene velikosti okna nebo panelu
+     * 
+     * Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
+     * Autor: BernardoFBBarga
+     * Datum zverejneni: 6. cervence 2018
      */
     const handleResize = useCallback(() => {
         const draggedSize = split.current.state.draggedSize;
@@ -115,6 +118,10 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
     
     /**
      * Pri montovani komponenty nastavi naslouchani eventu pri zmene velikosti okna
+     * 
+     * Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
+     * Autor: BernardoFBBarga
+     * Datum zverejneni: 6. cervence 2018
      */
     useEffect(() => {
         const windowUpdate = (e) => {
@@ -130,6 +137,10 @@ const SplitEditor = React.memo(({ editorContent, editText, editorResult, showAle
 
     /**
      * Pri zmene okna prepocita velikost editoru
+     * 
+     * Inspirovano: https://github.com/tomkp/react-split-pane/issues/57
+     * Autor: BernardoFBBarga
+     * Datum zverejneni: 6. cervence 2018
      */
     useEffect(() => {
         if (windowResize === true) {

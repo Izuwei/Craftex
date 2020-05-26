@@ -45,6 +45,9 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * Funkce nastavi obsah zpravy
+ * 
+ * Inspirovano z: https://material-ui.com/components/snackbars/
+ * Autor: Material-UI
  */
 function CustomSnackbarContent(props) {
     const classes = useStyles();
@@ -105,6 +108,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
 
     /**
      * Funkce zpracuje dalsi pozadavek na zpravu ve fronte
+     * 
+     * Inspirovano z: https://material-ui.com/components/snackbars/
+     * Autor: Material-UI
      */
     const processSnackbarQueue = () => {
         if (snackbarQueue.current.length > 0) {
@@ -115,6 +121,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
     
     /**
      * Uzavreni zpravy
+     * 
+     * Inspirovano z: https://material-ui.com/components/snackbars/
+     * Autor: Material-UI
      */
     const closeSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -125,6 +134,9 @@ const Alerts = React.memo(forwardRef(({ prop }, ref) => {
     
     /**
      * Po uzavreni zpravy
+     * 
+     * Inspirovano z: https://material-ui.com/components/snackbars/
+     * Autor: Material-UI
      */
     const handleExited = () => {
         processSnackbarQueue();

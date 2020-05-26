@@ -83,7 +83,10 @@ const useStyles = makeStyles(theme => ({
   	},
 }));
 
-// Inspirovano: https://material-ui.com/components/app-bar/
+/**
+ * Inspirovano z: https://material-ui.com/components/app-bar/
+ * Autor: Material-UI
+ */ 
 const DenseAppBar = React.memo(() => {
   	const classes = useStyles();
   	const [anchorEl, setAnchorEl] = React.useState(null);

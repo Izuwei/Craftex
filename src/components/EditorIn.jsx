@@ -44,8 +44,11 @@ const EditorIn = React.memo(forwardRef(({ content, edit, wrap, toggleBreakpoint,
 	}));
 
 	/**
-	 * https://ourcodeworld.com/articles/read/1052/how-to-add-toggle-breakpoints-on-the-ace-editor-gutter
 	 * Funkce nastavi breakpoint podle udalosti od uzivatele
+	 * 
+	 * Prevzato z: https://ourcodeworld.com/articles/read/1052/how-to-add-toggle-breakpoints-on-the-ace-editor-gutter
+	 * Autor: Carlos Delgado
+	 * Datum zverejneni: 7. rijna 2019
      */
 	useEffect(() => {
   		aceIn.current.editor.on("guttermousedown", function(e) {
