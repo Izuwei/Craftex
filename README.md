@@ -1,44 +1,29 @@
-Instalační manuál - Následující kroky nainstalují potřebný software stejných verzí, které byly použity při implementaci, přestože mohou fungovat i jiné. Aplikace je také dostupná na webovém portálu izuwei.github.io/Craftex.
+[![License badge](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Izuwei/Detection-of-violators/blob/master/LICENSE)
+[![NodeJS badge](https://img.shields.io/badge/Node-v12.13.0-026e00.svg)](https://nodejs.org/en/download/releases)
+[![NPM badge](https://img.shields.io/badge/npm-6.12.0-cc3534.svg)](https://www.npmjs.com/package/npm/v/8.1.0)
 
-Testováno na Linux Ubuntu 20.04 LTS
+# Craftex
 
-Instalace Node.js verze v12.13.0:
-	1) sudo apt-get update
+Web application for advanced text filtration with the option of easy prototyping and tuning, without the necessity to know programming techniques. The basic principle is the choice of text tools and their inserting into the sequence, so called pipeline, which is typical for shell, from which the application draws inspiration. Tools can be also additionally edited or swapped. Another way of tuning is realized using so called breakpoints, through which it is easy to quickly focus on chosen lines of the text. This way, the application offers functionality in two separated modes, between which the users can switch anytime according to their needs. Also it is possible to generate equivalent shell expression.
 
-	Pro instalaci specifické verze Node.js je zapotřebí Node Version Manager (NVM).
-	2) sudo apt install curl
-	3) curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-	4) Nyní je nutné zavřít a znovu otevřít terminál, tím bude povoleno NVM.
+- The application is available at: https://izuwei.github.io/craftex
+- Demonstration video: https://www.youtube.com/watch?v=KA4wxr-8vKk&ab_channel=Izuwei
 
-	Kontrola nainstalované verze NVM.
-	5) nvm --version
+## Installation
 
-	Následujícím příkazem bude provedena instalace požadované verze Node.js (v12.13.0).
-	6) nvm install 12.13.0
+1. Download and install Node.js v12.13.0 from https://nodejs.org/en/download/releases
 
-	Kontrola nainstalované aktuální verze Node.js.
-	7) node -v
+2. In the root directory run:
+	```
+	npm install
+	npm start
+	```
 
-	(Poznámka) V případě používané jiné verze je potřeba provést kontrolu již nainstalovaných verzí a vybrat v12.13.0 následujícími příkazy:
-		nvm ls
-		nvm use 12.13.0
+3. Application will be available in the browser at http://localhost:3000
 
-Instalace NPM verze 6.12.0:
-	Po úspěšné instalaci Node.js verze v12.13.0, automaticky by měl být dostupný NPM verze 6.12.0, který je aktuálně vyžadován. Kontrolu nainstalované verze lze provést následujícím příkazem:	
-	1) npm -v
+## License
 
-	(Poznámka) V případě odlišné verze NPM lze provést instalaci požadované verze následujícím příkazem:
-		sudo npm install -g npm@6.12.0
+Licensed under the MIT license - see [LICENSE](https://github.com/Izuwei/craftex/blob/master/LICENSE "License").
 
-Instalace aplikace:
-	1) Otevřít kořenový adresář aplikace.
-
-	Následujícím příkazem proběhne instalace závislostí aplikace.
-	2) npm install
-	    (Poznámka) Zobrazení zranitelností po instalaci není nutné věnovat pozornost, v době odevzdání byly v pořádku a přibývají poměrně pravidelně a spousta z nich jich je stále neopravena NPM. V následujícím odkaze si lze zobrazit přehled: https://www.npmjs.com/advisories.
-
-	Spuštění aplikace (může chvíli trvat).
-	3) npm start
-		(Poznámka) V případě potíží je nutné použít právo root uživatele (sudo npm start).
-
-	Aplikace bude poté dostupná přes webový prohlížeč na adrese http://localhost:3000/. V tomto případě kód běžící na dev serveru není optimalizovaný a aplikace může být pomalejší. Pro vygenerování optimalizovaného kódu je potřebné spustit "npm run build". Optimalizovaný kód bude poté umístěn v adresáři "/build".
+## Screenshot
+![Alt text](./screenshot.png?raw=true)
